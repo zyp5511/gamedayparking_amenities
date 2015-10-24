@@ -1,0 +1,13 @@
+{% load staticfiles%}
+<link rel="stylesheet" href="{% static 'bower_components/bootstrap/dist/css/bootstrap.min.css' %}" />
+
+
+<html>
+<h1>WHOOO PARKING</h1>
+<h1> {{message}} </h1>
+<body>
+{% for i in array %}
+<p>{{i}} </p>
+{% endfor %}
+</body>
+</html>
