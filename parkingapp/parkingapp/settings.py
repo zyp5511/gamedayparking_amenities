@@ -37,12 +37,16 @@ INSTALLED_APPS = (
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'django.contrib.sites',
     'django.contrib.gis',
+    'allauth.account',
+    'allauth',
     'userprof',
     'parkingspot',
     'review',
+    'allauth.socialaccount',
 )
-
+SITE_ID = 1
 MIDDLEWARE_CLASSES = (
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
@@ -88,8 +92,10 @@ WSGI_APPLICATION = 'parkingapp.wsgi.application'
 DATABASES = {
     'default': {
         #'ENGINE': 'django.db.backends.postgresql_psycopg2',
-        'ENGINE': 'django.contrib.gis.db.backends.postgis', # Add 'postgresql_psycopg2', 'mysql', 'sqlite3' or 'oracle'.
-        'NAME': 'testdb',                      # Or path to database file if using sqlite3.
+        'ENGINE': 'django.contrib.gis.db.backends.postgis',
+        #'ENGINE': 'django.db.backends.postgresql_psycopg2',
+          # Add 'postgresql_psycopg2', 'mysql', 'sqlite3' or 'oracle'.
+        'NAME': 'parkingdb',                      # Or path to database file if using sqlite3.
         # The following settings are not used with sqlite3:
         'USER': 'mdallman2570',
         'PASSWORD': 'test',
@@ -97,7 +103,16 @@ DATABASES = {
         'PORT': '', 
 }
 }
+LOGIN_REDIRECT_URL = '/accounts/logout'
+AUTHENTICATION_BACKENDS = (
+    
+    # Needed to login by username in Django admin, regardless of `allauth`
+    'django.contrib.auth.backends.ModelBackend',
 
+    # `allauth` specific authentication methods, such as login by e-mail
+    'allauth.account.auth_backends.AuthenticationBackend',
+ 
+)
 EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
 # Internationalization
 # https://docs.djangoproject.com/en/1.8/topics/i18n/

@@ -7,7 +7,7 @@ from django.conf import settings
 # Create your models here.
 
 class ParkingSpot(models.Model):
-  street_address = models.CharField(max_length=80, blank=True)
+  street_address = models.CharField(max_length=70, blank=True)
   city = models.CharField(max_length = 30, blank = True)
   state = models.CharField(max_length = 2, blank = True)
   zipcode = models.IntegerField(blank=True)
