@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+{% load staticfiles %}
+
+<html lang="en">
+<head>
+    <link rel="stylesheet" href="{% static "bower_components/bootstrap/dist/css/bootstrap.min.css" %}">
+</head>
+
+<body>
+    {% block nav_bar %}{% endblock %}
+
+
+ 
+<div class="parking container">
+  <h2>Parking Spots</h2>
+    {% for x in parkingspots %}
+    <div class="row">
+        <section class="col-xs-6 col-sm-6 col-md-4 col-lg-2">
+          <h3>{{ x.address }}</h3>
+          <p>{{ x.description }}</p>
+        </section>
+    </div>
+    {% endfor %}
+</div>
+    <script src="{% static "bower_components/jquery/dist/jquery.min.js" %}"></script>
+    <script src="{% static "bower_components/boostrap/dist/js/bootsrap.min.js" %}"></script>
+</body>
+
+</html>
