@@ -9,8 +9,10 @@
 <body>
     {% block nav_bar %}{% endblock %}
 
+<p id="test_json"></p>
+<button onclick="get_parking_spots()">Get Parking Spots</button>
 
- 
+
 <div class="parking container">
   <h2>Parking Spots</h2>
     {% for x in parkingspots %}
@@ -22,6 +24,18 @@
     </div>
     {% endfor %}
 </div>
+
+    <script type="text/javascript">
+        function get_parking_spots() {
+            var parkingspots = {{ json_parkingspots|safe }};
+            var content = "";
+            for (i = 0; i < parkingspots.length; i++) {
+                content += parkingspots[i].fields.city + "\t" + parkingspots[i].fields.description;
+                content += "<br/>";
+            }
+            document.getElementById("test_json").innerHTML = content;
+        }
+    </script>
     <script src="{% static "bower_components/jquery/dist/jquery.min.js" %}"></script>
     <script src="{% static "bower_components/boostrap/dist/js/bootsrap.min.js" %}"></script>
 </body>
