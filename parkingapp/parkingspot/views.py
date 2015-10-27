@@ -11,4 +11,4 @@ def home(request):
         'parkingspots' : parkingspots,
         'json_parkingspots' : json_parkingspots
     }
-    return render(request, 'base.html', context)
+    return render(request, 'test_base.html', context)
