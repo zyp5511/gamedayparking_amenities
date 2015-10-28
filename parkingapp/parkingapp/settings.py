@@ -99,18 +99,22 @@ DATABASES = {
         'USER': 'test',
         'PASSWORD': 'test',
         'HOST': 'localhost',                      # Empty for localhost through domain sockets or '127.0.0.1' for localhost through TCP.
-        'PORT': '', 
+        'PORT': '',
+    }
 }
-}
+
+# Location Needed for GeoIP Support
+GEOIP_PATH = os.path.join(PROJECT_DIRECTORY, 'GeoLiteCity.dat')
+
 LOGIN_REDIRECT_URL = '/accounts/logout'
 AUTHENTICATION_BACKENDS = (
-    
+
     # Needed to login by username in Django admin, regardless of `allauth`
     'django.contrib.auth.backends.ModelBackend',
 
     # `allauth` specific authentication methods, such as login by e-mail
     'allauth.account.auth_backends.AuthenticationBackend',
- 
+
 )
 EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
 # Internationalization
@@ -130,7 +134,7 @@ STATICFILES_DIRS = (
     os.path.join(PROJECT_DIRECTORY,'templates/static/'),)
     # Put strings here, like "/home/html/static" or "C:/www/django/static".
     # Always use forward slashes, even on Windows.
-    # 
+    #
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/1.8/howto/static-files/
 
