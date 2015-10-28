@@ -35,3 +35,11 @@ To Start Developing:
     python manage.py runserver
 
 
+
+Some system packages may be required as well. Install with apt-get for ubuntu, or use homebrew for Mac
+python-dev
+postgis
+postgresql
+postgresql-9.3-postgis-2.1 (ubuntu only)
+xcode-selct --instal (mac only <- not with brew, just from commandline)
+
