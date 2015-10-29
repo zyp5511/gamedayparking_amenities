@@ -37,7 +37,6 @@ def home(request):
             city = "Madison"
             state = "WI"
 
-    # query database for parkign spots within 50 miles of user
     context = {
         'location' : "{}, {}".format(city, state)
     }

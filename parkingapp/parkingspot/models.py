@@ -16,11 +16,10 @@ class ParkingSpot(models.Model):
     description = models.CharField(max_length=256)
     amenities = ArrayField(models.CharField(max_length=80, blank=True), blank=True, null=True, size=7)
     photos = models.ImageField(default='%s/default.png' % settings.MEDIA_URL)
-    # reviews are a one-to-many relationship
-    #reviews = ArrayField(models.CharField(max_length=80,blank=True), blank=True, null=True)
     objects = models.GeoManager()
 
-
+    def __str__(self):
+        return self.street_address
 
 
 
