@@ -1,8 +1,9 @@
 from django.db import models
 from django.contrib.postgres.fields import ArrayField
 from django.contrib.gis.db import models
+from django.contrib.gis.geos import Point
 from userprof.models import AdminUser
-#from review.models import Review
+from geopy.geocoders import GoogleV3
 from django.conf import settings
 # Create your models here.
 
@@ -17,6 +18,15 @@ class ParkingSpot(models.Model):
     amenities = ArrayField(models.CharField(max_length=80, blank=True), blank=True, null=True, size=7)
     photos = models.ImageField(default='%s/default.png' % settings.MEDIA_URL)
     objects = models.GeoManager()
+
+
+    # override save method to interpret location field base on address
+    def save(self, *args, **kwargs):
+        g = GoogleV3()
+        p = g.geocode("{}, {}, {} {}".format(self.street_address, self.city, self.state, self.zipcode))
+        self.location = Point(p.longitude, p.latitude)
+        super(ParkingSpot, self).save(*args, **kwargs)
+
 
     def __str__(self):
         return self.street_address

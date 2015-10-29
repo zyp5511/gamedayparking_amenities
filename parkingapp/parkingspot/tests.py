@@ -3,6 +3,7 @@ from django.test import TestCase
 from parkingspot.models import ParkingSpot
 from django.contrib.gis.geos import Point
 from django.contrib.gis.measure import D
+from geopy.geocoders import GoogleV3
 from userprof.models import AdminUser
 
 class ParkingSpotTests(TestCase):
@@ -11,7 +12,7 @@ class ParkingSpotTests(TestCase):
         self.user = AdminUser.objects.create(name="Ryan")
 
         self.test_spot1 = ParkingSpot.objects.create(
-            street_address = "1234 Short Address Lane",
+            street_address = "400 Morning Oaks Ct",
             city = "Ellisville",
             state = "MO",
             zipcode = 63021,
@@ -23,23 +24,24 @@ class ParkingSpotTests(TestCase):
 
 
         self.test_spot2 = ParkingSpot.objects.create(
-            street_address = "1234 Short Address Lane",
+            street_address = "1440 Monroe Street",
             city = "Madison",
             state = "WI",
             zipcode = 53703,
-            location = Point(-89.411784,43.069817),
             owner = self.user,
-            description = "Madison Parking Spot",
+            description = "Madison Parking Spot. Location Field should be automatically populated",
             amenities =(["test1", "test2", "test3"]),
         )
 
     def test_city_filter(self):
-        """Address Should Match the first 70 chars"""
+        """Filters Based On City"""
         spot = ParkingSpot.objects.filter(city="Ellisville")
         self.assertEqual(len(spot), 1)
         self.assertEqual(spot[0].pk, self.test_spot1.pk)
 
     def test_geos(self):
+        """Tests the auto fill of location parking spot field
+        and the filtering of objects close to camp randall"""
         point = Point(-89.412613, 43.069722) #Camp Randall
         spots = ParkingSpot.objects.filter(location__distance_lte=(point, D(mi=10)))
         self.assertEqual(len(spots), 1)
