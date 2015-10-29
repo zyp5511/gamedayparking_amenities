@@ -8,10 +8,3 @@ python-openid==2.2.5
 requests==2.8.1
 requests-oauthlib==0.5.0
 wheel==0.24.0
-
-# the following packages may be required to be previously installed with apt-get
-# postgresql
-# libpq-dev
-# python-dev
-# postgis
-# postgresql-9.3-postgis-2.1 
