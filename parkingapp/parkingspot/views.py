@@ -65,7 +65,7 @@ def search(request):
     for parkingspot in parkingspots:
         distance = parkingspot['location'].distance(point)
         parkingspot.update({'distance': distance})
-        location = "SRID={};POINT ({} {}))".format(point.srid, point.coords[0], point.coords[1])
+        location = {'latitude': point.coords[0], 'longitude':point.coords[1]}
         parkingspot.update({'location': location})
 
     json_parkingspots = json.dumps(list(parkingspots)) 
