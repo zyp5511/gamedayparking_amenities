@@ -24,6 +24,7 @@ class ParkingSpot(models.Model):
     default_num_spots = models.IntegerField(default=0)
     parking_spot_avail = JSONField(default={"dates":{}})
     objects = models.GeoManager()
+    distance = None
 
     """Opens a date and makes it available for users to get parking"""
     def open_date(self, date):

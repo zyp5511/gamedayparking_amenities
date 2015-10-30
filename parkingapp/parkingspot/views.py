@@ -1,4 +1,4 @@
-from django.core import serializers
+import json
 from django.shortcuts import render, redirect
 from django.shortcuts import render_to_response
 from django.contrib.gis.measure import D
@@ -61,9 +61,17 @@ def search(request):
             point = Point(-89.411784,43.069817)
         point = Point(-89.411784,43.069817)
 
+    print(dir(point))
     # query database for parkign spots within 50 miles of user
-    parkingspots = ParkingSpot.objects.filter(location__distance_lte=(point, D(mi=50)))
-    json_parkingspots = serializers.serialize("json", parkingspots)
+    parkingspots = ParkingSpot.objects.values().filter(location__distance_lte=(point, D(mi=50)))
+    for parkingspot in parkingspots:
+        distance = parkingspot['location'].distance(point)
+        parkingspot.update({'distance': distance})
+        location = "SRID={};POINT ({} {}))".format(point.srid, point.coords[0], point.coords[1])
+        parkingspot.update({'location': location})
+        print(parkingspot)
+
+    json_parkingspots = json.dumps(list(parkingspots)) 
     context = {
         'parkingspots' : parkingspots,
         'json_parkingspots' : json_parkingspots
