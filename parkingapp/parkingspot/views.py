@@ -38,7 +38,7 @@ def home(request):
             state = "WI"
 
     context = {
-        'location' : "{}, {}".format(city, state)
+        'location' : "{}, {}".format(city, state),
     }
     return render(request, 'home.html', context)
 
