@@ -6,6 +6,8 @@ from localflavor.us.us_states import STATE_CHOICES
 from userprof.models import AdminUser
 from geopy.geocoders import GoogleV3
 from django.conf import settings
+from jsonfield import JSONField
+
 # Create your models here.
 
 class ParkingSpot(models.Model):
@@ -19,7 +21,45 @@ class ParkingSpot(models.Model):
     amenities = ArrayField(models.CharField(max_length=80, blank=True), blank=True, null=True, size=7)
     cost = models.IntegerField(blank=True, null=True, default=5)
     photos = models.ImageField(default='%s/default.png' % settings.MEDIA_URL)
+    default_num_spots = models.IntegerField(default=0)
+    parking_spot_avail = JSONField(default={"dates":{}})
     objects = models.GeoManager()
+
+    """Opens a date and makes it available for users to get parking"""
+    def open_date(self, date):
+        try:
+            self.parking_spot_avail["dates"][date]
+            return -1
+        except KeyError:
+            self.parking_spot_avail["dates"][date] = {"max" : self.default_num_spots, "res": []}
+            self.save()
+            return 0      
+
+
+    """Gets number of spots remaining"""
+    def get_num_spots(self, date):
+        try:
+            maxp = self.parking_spot_avail["dates"][date]["max"]
+            booked = len(self.parking_spot_avail["dates"][date]["res"])
+            return maxp-booked
+        except KeyError:
+            return -1
+
+    """Allows a user to reserve a spot"""
+    def reserve_spot(self, user, date):
+        try:
+            if self.get_num_spots(date) > 0:
+                self.parking_spot_avail["dates"][date]["res"].append(user)
+                self.save()
+                return 0
+            else:
+                return -1
+        except KeyError:
+            return -1
+
+
+    #def alter_spots_for_date(self, date):
+
 
 
     # override save method to interpret location field base on address
@@ -32,6 +72,7 @@ class ParkingSpot(models.Model):
 
     def __str__(self):
         return self.street_address
+            
 
 
 

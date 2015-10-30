@@ -1,3 +1,4 @@
+
 from django.core.files import File
 from django.test import TestCase
 from parkingspot.models import ParkingSpot
