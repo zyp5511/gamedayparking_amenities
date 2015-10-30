@@ -9,6 +9,11 @@
     {% block nav_bar %}{% endblock %}
     <h1>Gameday Amenites Finder</h1>
     <h2>Search Box Default Text: {{location}}</h2>
+    <form action="../search/" method="get">
+        <label for="location">Location: </label>
+        <input id="location" type="text" name="location" value="{{ location }}">
+        <input type="submit" value="OK">
+    </form>
 
     <script src="{% static "bower_components/jquery/dist/jquery.min.js" %}"></script>
     <script src="{% static "bower_components/bootstrap/dist/js/bootstrap.min.js" %}"></script>
