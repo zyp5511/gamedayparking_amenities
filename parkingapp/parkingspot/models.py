@@ -18,7 +18,7 @@ class ParkingSpot(models.Model):
     location = models.PointField(null=True,blank=True)
     owner = models.ForeignKey(AdminUser)
     description = models.CharField(max_length=256)
-    amenities = ArrayField(models.CharField(max_length=80, blank=True), blank=True, null=True, size=7)
+    amenities = JSONField(default='{"bathroom":false,"yard":false,"grill":false,"table":false,"electricity":false}')
     cost = models.IntegerField(blank=True, null=True, default=5)
     photos = models.ImageField(default='%s/default.png' % settings.MEDIA_URL)
     default_num_spots = models.IntegerField(default=0)
@@ -34,7 +34,7 @@ class ParkingSpot(models.Model):
         except KeyError:
             self.parking_spot_avail["dates"][date] = {"max" : self.default_num_spots, "res": []}
             self.save()
-            return 0      
+            return 0
 
 
     """Gets number of spots reserved"""

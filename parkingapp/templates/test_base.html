@@ -17,6 +17,16 @@
 <button onclick="sort_dist_low()">Sort By Low to High Distance</button>
 <p id="dist_high"></p>
 <button onclick="sort_dist_high()">Sort By High to Low Distance</button>
+<p id="filter_grill"></p>
+<button onclick="filter_grill()">Filter By Grill</button>
+<p id="filter_bathroom"></p>
+<button onclick="filter_bathroom()">Filter By Bathroom</button>
+<p id="filter_yard"></p>
+<button onclick="filter_yard()">Filter By Yard</button>
+<p id="filter_table"></p>
+<button onclick="filter_table()">Filter By Table</button>
+<p id="filter_electricity"></p>
+<button onclick="filter_electricity()">Filter By Electricity</button>
 
 <div class="parking container">
   <h2>Parking Spots</h2>
@@ -70,6 +80,56 @@
                 content += "<br/>";
             }
             document.getElementById("dist_high").innerHTML = content;
+        }
+        function filter_grill() {
+            var parkingspots = {{ json_parkingspots|safe }};
+            new_list = parkingspots.filter(filter_by_grill);
+            var content = "";
+            for (i = 0; i < new_list.length; i++) {
+                content += JSON.stringify(new_list[i]);
+                content += "<br/>";
+            }
+            document.getElementById("filter_grill").innerHTML = content;
+        }
+        function filter_bathroom() {
+            var parkingspots = {{ json_parkingspots|safe }};
+            new_list = parkingspots.filter(filter_by_bathroom);
+            var content = "";
+            for (i = 0; i < new_list.length; i++) {
+                content += JSON.stringify(new_list[i]);
+                content += "<br/>";
+            }
+            document.getElementById("filter_bathroom").innerHTML = content;
+        }
+        function filter_yard() {
+            var parkingspots = {{ json_parkingspots|safe }};
+            new_list = parkingspots.filter(filter_by_yard);
+            var content = "";
+            for (i = 0; i < new_list.length; i++) {
+                content += JSON.stringify(new_list[i]);
+                content += "<br/>";
+            }
+            document.getElementById("filter_yard").innerHTML = content;
+        }
+        function filter_table() {
+            var parkingspots = {{ json_parkingspots|safe }};
+            new_list = parkingspots.filter(filter_by_table);
+            var content = "";
+            for (i = 0; i < new_list.length; i++) {
+                content += JSON.stringify(new_list[i]);
+                content += "<br/>";
+            }
+            document.getElementById("filter_table").innerHTML = content;
+        }
+        function filter_electricity() {
+            var parkingspots = {{ json_parkingspots|safe }};
+            new_list = parkingspots.filter(filter_by_electricity);
+            var content = "";
+            for (i = 0; i < new_list.length; i++) {
+                content += JSON.stringify(new_list[i]);
+                content += "<br/>";
+            }
+            document.getElementById("filter_electricity").innerHTML = content;
         }
     </script>
     <script src="{% static "bower_components/jquery/dist/jquery.min.js" %}"></script>

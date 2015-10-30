@@ -67,6 +67,8 @@ def search(request):
         parkingspot.update({'distance': distance})
         location = {'latitude': point.coords[0], 'longitude':point.coords[1]}
         parkingspot.update({'location': location})
+        amenities = json.loads(parkingspot['amenities'])
+        parkingspot.update({'amenities': amenities})
 
     json_parkingspots = json.dumps(list(parkingspots)) 
     context = {

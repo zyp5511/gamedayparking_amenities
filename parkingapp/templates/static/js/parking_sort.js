@@ -30,3 +30,18 @@ function sort_by_high_distance(a, b) {
 	return 0
 }
 
+function filter_by_bathroom(a) {
+    return a.amenities.bathroom;
+}
+function filter_by_yard(a) {
+    return a.amenities.yard;
+}
+function filter_by_grill(a) {
+    return a.amenities.grill;
+}
+function filter_by_electricity(a) {
+    return a.amenities.electricity;
+}
+function filter_by_table(a) {
+    return a.amenities.table;
+}
