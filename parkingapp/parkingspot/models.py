@@ -36,11 +36,15 @@ class ParkingSpot(models.Model):
             return 0      
 
 
+    """Gets number of spots reserved"""
+    def get_num_spots_reserved(self, date):
+        return len(self.parking_spot_avail["dates"][date]["res"])
+
     """Gets number of spots remaining"""
     def get_num_spots(self, date):
         try:
             maxp = self.parking_spot_avail["dates"][date]["max"]
-            booked = len(self.parking_spot_avail["dates"][date]["res"])
+            booked = self.get_num_spots_reserved(date)
             return maxp-booked
         except KeyError:
             return -1
@@ -58,7 +62,22 @@ class ParkingSpot(models.Model):
             return -1
 
 
-    #def alter_spots_for_date(self, date):
+    """Cancels a user's reservation"""
+    def cancel_reservation(self, user, date):
+        self.parking_spot_avail["dates"][date]["res"].remove(user)
+        self.save()
+
+
+    """Allows user to alter max spots available on a certain day"""
+    def alter_max_spots(self, date, number):
+        try:
+            if self.get_num_spots_reserved(date) > number:
+                return -1
+            else:
+                self.parking_spot_avail["dates"][date]["max"] = number
+                self.save()
+        except KeyError:
+            return -1
 
 
 

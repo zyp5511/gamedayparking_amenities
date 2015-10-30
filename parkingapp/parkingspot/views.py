@@ -43,19 +43,6 @@ def home(request):
     return render(request, 'home.html', context)
 
 
-# def test(request):
-#   pspot = ParkingSpot.objects.get(id=1)
-#   date = "12-03-2015"
-#   pspot.open_date(date)
-#   user = 1234
-#   print "GOT HERE"
-#   suc = pspot.reserve_spot(user, date)
-#   if suc == 0:
-#     "RESERVED"
-#   else:
-#     "nah"
-#   print pspot.parking_spot_avail
-
 def search(request):
     location = request.GET['location']
     g = GoogleV3()
