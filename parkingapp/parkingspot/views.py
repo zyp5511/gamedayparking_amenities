@@ -13,7 +13,6 @@ def home(request):
     # get Point from request IP address
     g = GeoIP()
     ip = request.META.get('REMOTE_ADDR', None)
-    print(ip)
     if ip:
         point = g.geos(ip)
         # if ip can't be mapped to location (e.g. 127.0.0.*), use default camp randall
@@ -61,7 +60,6 @@ def search(request):
             point = Point(-89.411784,43.069817)
         point = Point(-89.411784,43.069817)
 
-    print(dir(point))
     # query database for parkign spots within 50 miles of user
     parkingspots = ParkingSpot.objects.values().filter(location__distance_lte=(point, D(mi=50)))
     for parkingspot in parkingspots:
@@ -69,7 +67,6 @@ def search(request):
         parkingspot.update({'distance': distance})
         location = "SRID={};POINT ({} {}))".format(point.srid, point.coords[0], point.coords[1])
         parkingspot.update({'location': location})
-        print(parkingspot)
 
     json_parkingspots = json.dumps(list(parkingspots)) 
     context = {

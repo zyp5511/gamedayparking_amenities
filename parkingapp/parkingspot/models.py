@@ -22,7 +22,7 @@ class ParkingSpot(models.Model):
     cost = models.IntegerField(blank=True, null=True, default=5)
     photos = models.ImageField(default='%s/default.png' % settings.MEDIA_URL)
     default_num_spots = models.IntegerField(default=0)
-    parking_spot_avail = JSONField(default={"dates":{}})
+    parking_spot_avail = JSONField(default='{"dates":{}}')
     objects = models.GeoManager()
     distance = None
 
