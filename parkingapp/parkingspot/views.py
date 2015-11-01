@@ -73,6 +73,8 @@ def search(request):
     json_parkingspots = json.dumps(list(parkingspots)) 
     context = {
         'parkingspots' : parkingspots,
-        'json_parkingspots' : json_parkingspots
+        'json_parkingspots' : json_parkingspots,
+        'center_lat' : point.coords[0],
+        'center_lon' : point.coords[1]
     }
     return render(request, 'test_base.html', context)
