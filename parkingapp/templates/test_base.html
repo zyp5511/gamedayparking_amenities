@@ -149,19 +149,19 @@
                 var infowindow = new google.maps.InfoWindow();
                 
                 // if i add this scentence the map wont show up
-                //var parkingspots = {{json_parkingspots|safe }};
+                var parkingspots = {{ json_parkingspots|safe }};
                 
                 
                 //var parkingspotsLocation = [[]]
                 
                 // i used a test location
-                var parkingspotsLocation = [
-                                 [ 43.068637, -89.408313,"AAAAA"],
-                                 [ 43.071932, -89.408327,"BBBBB"],
-                                 [ 43.074048, -89.412962,"CCCCC"],
-                                 [ 43.068467, -89.407705,"DDDDD"],
-                                 [ 43.067213, -89.410065,"EEEEE"]
-                                 ];
+                //var parkingspotsLocation = [
+                //                 [ 43.068637, -89.408313,"AAAAA"],
+                //                 [ 43.071932, -89.408327,"BBBBB"],
+                //                 [ 43.074048, -89.412962,"CCCCC"],
+                //               [ 43.068467, -89.407705,"DDDDD"],
+                //               [ 43.067213, -89.410065,"EEEEE"]
+                //               ];
 
                 
                 
@@ -174,15 +174,15 @@
                 //    }
             
                 
-                   for (i = 0; i < parkingspotsLocation.length; i++) {
+                   for (i = 0; i < parkingspots.length; i++) {
                        marker = new google.maps.Marker({
-                       position: new google.maps.LatLng(parkingspotsLocation[i][0], parkingspotsLocation[i][1]),
+                       position: new google.maps.LatLng(parkingspots[i].location.longitude, parkingspots[i].location.latitude),
                         map: map
                     });
                 
                      google.maps.event.addListener(marker, 'click', (function(marker, i) {
                         return function() {
-                        infowindow.setContent(parkingspotsLocation[i][2]);
+                        infowindow.setContent(parkingspots[i].description);
                         infowindow.open(map, marker);
                         }
                        })(marker, i));
