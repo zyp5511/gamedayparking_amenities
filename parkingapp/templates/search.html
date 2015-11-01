@@ -1,110 +1,81 @@
 <!DOCTYPE html>
 {% load staticfiles %}
 
-<html lang="en">
+<html lang="en" style="height:100%;">
     <head>
         {% include "header.html" %}
         <link   rel="stylesheet" 
                 href="{% static "bower_components/bootstrap/dist/css/bootstrap.min.css" %}">
-        <script src="http://maps.google.com/maps/api/js?sensor=false" type="text/javascript"></script>
+        <script src="http://maps.google.com/maps/api/js?sensor=false" 
+                type="text/javascript"></script>
     </head>
     
-    <body>
+    <body style="width:100%; min-height:100%;">
         {% block nav_bar %}{% endblock %}
-        
-        <p id="cost_low"></p>
-        <button onclick="sort_cost_low()">Sort By Cost Low to High</button>
-        <p id="cost_high"></p>
-        <button onclick="sort_cost_high()">Sort By Cost High To Low</button>
-        <p id="dist_low"></p>
-        <button onclick="sort_dist_low()">Sort By Low to High Distance</button>
-        <p id="dist_high"></p>
-        <button onclick="sort_dist_high()">Sort By High to Low Distance</button>
-        <p id="filter_grill"></p>
-        <button onclick="filter_grill()">Filter By Grill</button>
-        <p id="filter_bathroom"></p>
-        <button onclick="filter_bathroom()">Filter By Bathroom</button>
-        <p id="filter_yard"></p>
-        <button onclick="filter_yard()">Filter By Yard</button>
-        <p id="filter_table"></p>
-        <button onclick="filter_table()">Filter By Table</button>
-        <p id="filter_electricity"></p>
-        <button onclick="filter_electricity()">Filter By Electricity</button>
-        
-        <div class="parking container">
-            <h2>Parking Spots</h2>
-            {% for x in parkingspots %}
-            <div class="row">
-                <section class="col-xs-6 col-sm-6 col-md-4 col-lg-2">
-                    <h3>{{ x.address }}</h3>
-                    <p>{{ x.description }}</p>
-                </section>
+        <div id="bodyContainer" style="width:100%; height:800px; margin-top:-20px;">
+            <div id="filterContainer" style="width: 100%; height: 50px; padding-top:10px; padding-bottom:10px; text-align:center;">
+                <button id="cost_low" onclick="sort_cost_low()">Sort By Cost Low to High</button>
+                <button id="cost_high" onclick="sort_cost_high()">Sort By Cost High To Low</button>
+                <button id="dist_low" onclick="sort_dist_low()">Sort By Low to High Distance</button>
+                <button id="dist_high" onclick="sort_dist_high()">Sort By High to Low Distance</button>
+                <button id="filter_grill" onclick="filter_grill()">Filter By Grill</button>
+                <button id="filter_bathroom" onclick="filter_bathroom()">Filter By Bathroom</button>
+                <button id="filter_yard" onclick="filter_yard()">Filter By Yard</button>
+                <button id="filter_table" onclick="filter_table()">Filter By Table</button>
+                <button id="filter_electricity" onclick="filter_electricity()">Filter By Electricity</button>
             </div>
-            {% endfor %}
+
+            <div id="mapContainer" style="width:45%; height:100%; float:right; padding-top:10px;">
+                <div id="map" style="height:100%; width:100%;"></div>
+
+                <!-- Script to implement googe maps block -->
+                <script>    
+                    var map = new google.maps.Map(document.getElementById('map'), {
+                            zoom: 10,
+                            center: new google.maps.LatLng({{center_lon}},{{center_lat}}),
+                            mapTypeId: google.maps.MapTypeId.ROADMAP
+                    });
+                    
+                    var infowindow = new google.maps.InfoWindow();
+                    var parkingspots = {{ json_parkingspots|safe }};
+                    var i, marker;
+                   
+                    for (i = 0; i < parkingspots.length; i++) {
+                           marker = new google.maps.Marker({
+                           position: new google.maps.LatLng(parkingspots[i].location.longitude, parkingspots[i].location.latitude),
+                           map: map
+                        });
+                    
+                        google.maps.event.addListener(marker, 'click', (function(marker, i) {
+                            return function() {
+                            infowindow.setContent(parkingspots[i].description);
+                            infowindow.open(map, marker);
+                            }
+                        })(marker, i));
+                    }
+                </script>
+            </div>
+            
+            <div id="parkingSpotsContainer" style="width:50%; height:100%; float:left; padding-top:10px;">
+                <div class="parking container">
+                    <p>Parking Spots</p>
+                    
+                    {% for x in parkingspots %}
+
+                    <div class="row">
+                        <section class="col-xs-6 col-sm-6 col-md-4 col-lg-2">
+                            <h3>{{ x.address }}</h3>
+                            <p>{{ x.description }}</p>
+                        </section>
+                    </div>
+
+                    {% endfor %}
+                </div>
+            </div>
         </div>
-        
-        <div align="right" id="map" style="height: 400px; width: 500px;"></div>
 
         <!-- Prints footer -->
         {% include "footer.html" %}
-
-        <!--
-        Script to implement googe maps block
-
-        TODO - 
-        1) Mine data from json parking spots array
-        -->
-        <script>
-            
-            var map = new google.maps.Map(document.getElementById('map'), {
-                    zoom: 10,
-                    center: new google.maps.LatLng(43.069659, -89.412404),
-                    //center: new google.maps.LatLng({{lat}}, {{lon}}),
-                    mapTypeId: google.maps.MapTypeId.ROADMAP
-                });
-            
-            var infowindow = new google.maps.InfoWindow();
-            
-            // if i add this scentence the map wont show up
-            //var parkingspots = {{json_parkingspots|safe }};
-            
-            
-            //var parkingspotsLocation = [[]]
-            
-            // i used a test location
-            var parkingspotsLocation = [
-                             [ 43.068637, -89.408313,"AAAAA"],
-                             [ 43.071932, -89.408327,"BBBBB"],
-                             [ 43.074048, -89.412962,"CCCCC"],
-                             [ 43.068467, -89.407705,"DDDDD"],
-                             [ 43.067213, -89.410065,"EEEEE"]
-                             ];
-
-            
-            
-             var i, marker;
-            
-             
-            // for(i=0; i<parkingspots.length;i++){
-            //      parkingspotsLocation[i][0] = parkingspots[i].location.latitude;
-            //        parkingspotsLocation[i][1] = parkingspots[i].location.longitude;
-            //    }
-        
-            
-               for (i = 0; i < parkingspotsLocation.length; i++) {
-                   marker = new google.maps.Marker({
-                   position: new google.maps.LatLng(parkingspotsLocation[i][0], parkingspotsLocation[i][1]),
-                    map: map
-                });
-            
-                 google.maps.event.addListener(marker, 'click', (function(marker, i) {
-                    return function() {
-                    infowindow.setContent(parkingspotsLocation[i][2]);
-                    infowindow.open(map, marker);
-                    }
-                   })(marker, i));
-               }
-        </script>
 
         <!--
         Script to implement Filter functions:

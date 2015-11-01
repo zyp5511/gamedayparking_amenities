@@ -77,4 +77,4 @@ def search(request):
         'center_lat' : point.coords[0],
         'center_lon' : point.coords[1]
     }
-    return render(request, 'test_base.html', context)
+    return render(request, 'search.html', context)
