@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+{% load staticfiles %}
+
+<html lang="en">
+    <head>
+        <link   rel="stylesheet" 
+                href="{% static "bower_components/bootstrap/dist/css/bootstrap.min.css" %}">
+        <script src="http://maps.google.com/maps/api/js?sensor=false" type="text/javascript"></script>
+    </head>
+    
+    <body>
+        {% block nav_bar %}{% endblock %}
+        
+        <p id="cost_low"></p>
+        <button onclick="sort_cost_low()">Sort By Cost Low to High</button>
+        <p id="cost_high"></p>
+        <button onclick="sort_cost_high()">Sort By Cost High To Low</button>
+        <p id="dist_low"></p>
+        <button onclick="sort_dist_low()">Sort By Low to High Distance</button>
+        <p id="dist_high"></p>
+        <button onclick="sort_dist_high()">Sort By High to Low Distance</button>
+        <p id="filter_grill"></p>
+        <button onclick="filter_grill()">Filter By Grill</button>
+        <p id="filter_bathroom"></p>
+        <button onclick="filter_bathroom()">Filter By Bathroom</button>
+        <p id="filter_yard"></p>
+        <button onclick="filter_yard()">Filter By Yard</button>
+        <p id="filter_table"></p>
+        <button onclick="filter_table()">Filter By Table</button>
+        <p id="filter_electricity"></p>
+        <button onclick="filter_electricity()">Filter By Electricity</button>
+        
+        <div class="parking container">
+            <h2>Parking Spots</h2>
+            {% for x in parkingspots %}
+            <div class="row">
+                <section class="col-xs-6 col-sm-6 col-md-4 col-lg-2">
+                    <h3>{{ x.address }}</h3>
+                    <p>{{ x.description }}</p>
+                </section>
+            </div>
+            {% endfor %}
+        </div>
+
+        
+        
+        <div align="right" id="map" style="height: 400px; width: 500px;">
+
+        </div>
+        
+            <script>
+                
+                var map = new google.maps.Map(document.getElementById('map'), {
+                        zoom: 10,
+                        center: new google.maps.LatLng(43.069659, -89.412404),
+                        //center: new google.maps.LatLng({{lat}}, {{lon}}),
+                        mapTypeId: google.maps.MapTypeId.ROADMAP
+                    });
+                
+                var infowindow = new google.maps.InfoWindow();
+                
+                // if i add this scentence the map wont show up
+                //var parkingspots = {{json_parkingspots|safe }};
+                
+                
+                //var parkingspotsLocation = [[]]
+                
+                // i used a test location
+                var parkingspotsLocation = [
+                                 [ 43.068637, -89.408313,"AAAAA"],
+                                 [ 43.071932, -89.408327,"BBBBB"],
+                                 [ 43.074048, -89.412962,"CCCCC"],
+                                 [ 43.068467, -89.407705,"DDDDD"],
+                                 [ 43.067213, -89.410065,"EEEEE"]
+                                 ];
+
+                
+                
+                 var i, marker;
+                
+                 
+                // for(i=0; i<parkingspots.length;i++){
+                //      parkingspotsLocation[i][0] = parkingspots[i].location.latitude;
+                //        parkingspotsLocation[i][1] = parkingspots[i].location.longitude;
+                //    }
+            
+                
+                   for (i = 0; i < parkingspotsLocation.length; i++) {
+                       marker = new google.maps.Marker({
+                       position: new google.maps.LatLng(parkingspotsLocation[i][0], parkingspotsLocation[i][1]),
+                        map: map
+                    });
+                
+                     google.maps.event.addListener(marker, 'click', (function(marker, i) {
+                        return function() {
+                        infowindow.setContent(parkingspotsLocation[i][2]);
+                        infowindow.open(map, marker);
+                        }
+                       })(marker, i));
+                   }
+                    </script>
+            </div>
+            <div id="map"></div>
+        </div>
+
+        <script type="text/javascript">
+            function sort_cost_low() {
+                var parkingspots = {{ json_parkingspots|safe }};
+                parkingspots.sort(sort_by_low_cost);
+                var content = "";
+                for (i = 0; i < parkingspots.length; i++) {
+                    content += JSON.stringify(parkingspots[i]);
+                    content += "<br/>";
+                }
+                document.getElementById("cost_low").innerHTML = content;
+            }
+        function sort_cost_high() {
+            var parkingspots = {{ json_parkingspots|safe }};
+            parkingspots.sort(sort_by_high_cost);
+            var content = "";
+            for (i = 0; i < parkingspots.length; i++) {
+                content += JSON.stringify(parkingspots[i]);
+                content += "<br/>";
+            }
+            document.getElementById("cost_high").innerHTML = content;
+        }
+        function sort_dist_low() {
+            var parkingspots = {{ json_parkingspots|safe }};
+            parkingspots.sort(sort_by_low_distance);
+            var content = "";
+            for (i = 0; i < parkingspots.length; i++) {
+                content += JSON.stringify(parkingspots[i]);
+                content += "<br/>";
+            }
+            document.getElementById("dist_low").innerHTML = content;
+        }
+        
+        function sort_dist_high() {
+            var parkingspots = {{ json_parkingspots|safe }};
+            parkingspots.sort(sort_by_high_distance);
+            var content = "";
+            for (i = 0; i < parkingspots.length; i++) {
+                content += JSON.stringify(parkingspots[i]);
+                content += "<br/>";
+            }
+            document.getElementById("dist_high").innerHTML = content;
+        }
+        function filter_grill() {
+            var parkingspots = {{ json_parkingspots|safe }};
+            new_list = parkingspots.filter(filter_by_grill);
+            var content = "";
+            for (i = 0; i < new_list.length; i++) {
+                content += JSON.stringify(new_list[i]);
+                content += "<br/>";
+            }
+            document.getElementById("filter_grill").innerHTML = content;
+        }
+        function filter_bathroom() {
+            var parkingspots = {{ json_parkingspots|safe }};
+            new_list = parkingspots.filter(filter_by_bathroom);
+            var content = "";
+            for (i = 0; i < new_list.length; i++) {
+                content += JSON.stringify(new_list[i]);
+                content += "<br/>";
+            }
+            document.getElementById("filter_bathroom").innerHTML = content;
+        }
+        function filter_yard() {
+            var parkingspots = {{ json_parkingspots|safe }};
+            new_list = parkingspots.filter(filter_by_yard);
+            var content = "";
+            for (i = 0; i < new_list.length; i++) {
+                content += JSON.stringify(new_list[i]);
+                content += "<br/>";
+            }
+            document.getElementById("filter_yard").innerHTML = content;
+        }
+        function filter_table() {
+            var parkingspots = {{ json_parkingspots|safe }};
+            new_list = parkingspots.filter(filter_by_table);
+            var content = "";
+            for (i = 0; i < new_list.length; i++) {
+                content += JSON.stringify(new_list[i]);
+                content += "<br/>";
+            }
+            document.getElementById("filter_table").innerHTML = content;
+        }
+        function filter_electricity() {
+            var parkingspots = {{ json_parkingspots|safe }};
+            new_list = parkingspots.filter(filter_by_electricity);
+            var content = "";
+            for (i = 0; i < new_list.length; i++) {
+                content += JSON.stringify(new_list[i]);
+                content += "<br/>";
+            }
+            document.getElementById("filter_electricity").innerHTML = content;
+        }
+        </script>
+
+        <script src="{% static "bower_components/jquery/dist/jquery.min.js" %}"></script>
+        <script src="{% static "bower_components/bootstrap/dist/js/bootstrap.min.js" %}"></script>
+        <script src="{% static "js/parking_sort.js" %}"></script>
+    </body>
+    
+</html>
