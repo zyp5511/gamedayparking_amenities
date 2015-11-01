@@ -58,19 +58,15 @@
                 </script>
             </div>
             
-            <div id="parkingSpotsContainer" style="width:50%; height:100%; float:left; padding-top:10px;">
-                <div class="parking container">
-                    <p>Parking Spots</p>
-                    
+            <div id="parkingSpotsContainer" style="width:50%; height:100%; float:left; padding-top:10px; padding-left:20px;">
+                <div id="parkingContainer">
                     {% for x in parkingspots %}
-
-                    <div class="row">
-                        <section class="col-xs-6 col-sm-6 col-md-4 col-lg-2">
-                            <h3>{{ x.address }}</h3>
-                            <p>{{ x.description }}</p>
-                        </section>
-                    </div>
-
+                        <div class="row">
+                            <section class="col-xs-6 col-sm-6 col-md-4 col-lg-2">
+                                <h3>{{ x.street_address }}</h3>
+                                <p>{{ x.description }}</p>
+                            </section>
+                        </div>
                     {% endfor %}
                 </div>
             </div>
@@ -98,10 +94,14 @@
                 parkingspots.sort(sort_by_low_cost);
                 var content = "";
                 for (i = 0; i < parkingspots.length; i++) {
-                    content += JSON.stringify(parkingspots[i]);
-                    content += "<br/>";
+                    content += "<div class='row'>";
+                    content += "<section class='col-xs-6 col-sm-6 col-md-4 col-lg-2'>";
+                    content += "<h3>" + parkingspots[i].street_address + "</h3>";
+                    content += "<p>" + parkingspots[i].description + "</p>";
+                    content += "</section>";
+                    content += "</div>";
                 }
-                document.getElementById("cost_low").innerHTML = content;
+                document.getElementById("parkingContainer").innerHTML = content;
             }
         function sort_cost_high() {
             var parkingspots = {{ json_parkingspots|safe }};
