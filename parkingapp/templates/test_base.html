@@ -134,50 +134,27 @@
         }
         </script>
         
-        <div align="right" id="map" style="height: 400px; width: 500px;">
+        <div id="map" style="height: 400px; width: 500px; position: fixed-right">
         </div>
         
             <script>
                 
                 var map = new google.maps.Map(document.getElementById('map'), {
                         zoom: 10,
-                        center: new google.maps.LatLng(43.069659, -89.412404),
-                        //center: new google.maps.LatLng({{lat}}, {{lon}}),
+                        center: new google.maps.LatLng({{center_lon}},{{center_lat}}),
                         mapTypeId: google.maps.MapTypeId.ROADMAP
                     });
                 
                 var infowindow = new google.maps.InfoWindow();
                 
-                // if i add this scentence the map wont show up
                 var parkingspots = {{ json_parkingspots|safe }};
-                
-                
-                //var parkingspotsLocation = [[]]
-                
-                // i used a test location
-                //var parkingspotsLocation = [
-                //                 [ 43.068637, -89.408313,"AAAAA"],
-                //                 [ 43.071932, -89.408327,"BBBBB"],
-                //                 [ 43.074048, -89.412962,"CCCCC"],
-                //               [ 43.068467, -89.407705,"DDDDD"],
-                //               [ 43.067213, -89.410065,"EEEEE"]
-                //               ];
-
-                
-                
-                 var i, marker;
-                
-                 
-                // for(i=0; i<parkingspots.length;i++){
-                //      parkingspotsLocation[i][0] = parkingspots[i].location.latitude;
-                //        parkingspotsLocation[i][1] = parkingspots[i].location.longitude;
-                //    }
             
-                
-                   for (i = 0; i < parkingspots.length; i++) {
+                var i, marker;
+               
+                for (i = 0; i < parkingspots.length; i++) {
                        marker = new google.maps.Marker({
                        position: new google.maps.LatLng(parkingspots[i].location.longitude, parkingspots[i].location.latitude),
-                        map: map
+                       map: map
                     });
                 
                      google.maps.event.addListener(marker, 'click', (function(marker, i) {
@@ -187,10 +164,10 @@
                         }
                        })(marker, i));
                    }
-                    </script>
-            </div>
+                </script>
             <div id="map"></div>
-        </div>
+        
+        {% include "footer.html" %}
         <script src="{% static "bower_components/jquery/dist/jquery.min.js" %}"></script>
         <script src="{% static "bower_components/bootstrap/dist/js/bootstrap.min.js" %}"></script>
         <script src="{% static "js/parking_sort.js" %}"></script>
