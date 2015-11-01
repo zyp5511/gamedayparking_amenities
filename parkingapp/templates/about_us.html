@@ -2,7 +2,10 @@
 {% load staticfiles %}
 
 <html lang="en">
-	<head> </head>
+	<head> 
+		{% include "header.html" %}
+  		<link rel="stylesheet" href="{% static "bower_components/bootstrap/dist/css/bootstrap.min.css" %}">
+	</head>
 
 	<body>
 	 	{% block nav_bar %}{% endblock %}
@@ -24,6 +27,6 @@
 	 		<p>In the second iteration, we will add additional features to the web interface and refine it, and reate web interfaces to edit database models.</p>
 	 		<p>In the thrid iteration, we will complete full test suite, and add reach goals that have no dependencies on them (e-commerce, mobile app, etc).</p>
 	 	</div>  
-
+	 	{% include "footer.html" %}
 	</body>
 </html>
