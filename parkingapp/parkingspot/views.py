@@ -78,3 +78,6 @@ def search(request):
         'center_lon' : point.coords[1]
     }
     return render(request, 'search.html', context)
+
+def about(request):
+    return render(request, 'about_us.html')
