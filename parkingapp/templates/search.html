@@ -3,6 +3,7 @@
 
 <html lang="en">
     <head>
+        {% include "header.html" %}
         <link   rel="stylesheet" 
                 href="{% static "bower_components/bootstrap/dist/css/bootstrap.min.css" %}">
         <script src="http://maps.google.com/maps/api/js?sensor=false" type="text/javascript"></script>
@@ -43,7 +44,9 @@
         </div>
         
         <div align="right" id="map" style="height: 400px; width: 500px;"></div>
-        <div id="map"></div>
+
+        <!-- Prints footer -->
+        {% include "footer.html" %}
 
         <!--
         Script to implement googe maps block
