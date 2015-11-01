@@ -41,68 +41,81 @@
             </div>
             {% endfor %}
         </div>
-
         
-        
-        <div align="right" id="map" style="height: 400px; width: 500px;">
+        <div align="right" id="map" style="height: 400px; width: 500px;"></div>
+        <div id="map"></div>
 
-        </div>
-        
-            <script>
-                
-                var map = new google.maps.Map(document.getElementById('map'), {
-                        zoom: 10,
-                        center: new google.maps.LatLng(43.069659, -89.412404),
-                        //center: new google.maps.LatLng({{lat}}, {{lon}}),
-                        mapTypeId: google.maps.MapTypeId.ROADMAP
-                    });
-                
-                var infowindow = new google.maps.InfoWindow();
-                
-                // if i add this scentence the map wont show up
-                //var parkingspots = {{json_parkingspots|safe }};
-                
-                
-                //var parkingspotsLocation = [[]]
-                
-                // i used a test location
-                var parkingspotsLocation = [
-                                 [ 43.068637, -89.408313,"AAAAA"],
-                                 [ 43.071932, -89.408327,"BBBBB"],
-                                 [ 43.074048, -89.412962,"CCCCC"],
-                                 [ 43.068467, -89.407705,"DDDDD"],
-                                 [ 43.067213, -89.410065,"EEEEE"]
-                                 ];
+        <!--
+        Script to implement googe maps block
 
-                
-                
-                 var i, marker;
-                
-                 
-                // for(i=0; i<parkingspots.length;i++){
-                //      parkingspotsLocation[i][0] = parkingspots[i].location.latitude;
-                //        parkingspotsLocation[i][1] = parkingspots[i].location.longitude;
-                //    }
+        TODO - 
+        1) Mine data from json parking spots array
+        -->
+        <script>
             
-                
-                   for (i = 0; i < parkingspotsLocation.length; i++) {
-                       marker = new google.maps.Marker({
-                       position: new google.maps.LatLng(parkingspotsLocation[i][0], parkingspotsLocation[i][1]),
-                        map: map
-                    });
-                
-                     google.maps.event.addListener(marker, 'click', (function(marker, i) {
-                        return function() {
-                        infowindow.setContent(parkingspotsLocation[i][2]);
-                        infowindow.open(map, marker);
-                        }
-                       })(marker, i));
-                   }
-                    </script>
-            </div>
-            <div id="map"></div>
-        </div>
+            var map = new google.maps.Map(document.getElementById('map'), {
+                    zoom: 10,
+                    center: new google.maps.LatLng(43.069659, -89.412404),
+                    //center: new google.maps.LatLng({{lat}}, {{lon}}),
+                    mapTypeId: google.maps.MapTypeId.ROADMAP
+                });
+            
+            var infowindow = new google.maps.InfoWindow();
+            
+            // if i add this scentence the map wont show up
+            //var parkingspots = {{json_parkingspots|safe }};
+            
+            
+            //var parkingspotsLocation = [[]]
+            
+            // i used a test location
+            var parkingspotsLocation = [
+                             [ 43.068637, -89.408313,"AAAAA"],
+                             [ 43.071932, -89.408327,"BBBBB"],
+                             [ 43.074048, -89.412962,"CCCCC"],
+                             [ 43.068467, -89.407705,"DDDDD"],
+                             [ 43.067213, -89.410065,"EEEEE"]
+                             ];
 
+            
+            
+             var i, marker;
+            
+             
+            // for(i=0; i<parkingspots.length;i++){
+            //      parkingspotsLocation[i][0] = parkingspots[i].location.latitude;
+            //        parkingspotsLocation[i][1] = parkingspots[i].location.longitude;
+            //    }
+        
+            
+               for (i = 0; i < parkingspotsLocation.length; i++) {
+                   marker = new google.maps.Marker({
+                   position: new google.maps.LatLng(parkingspotsLocation[i][0], parkingspotsLocation[i][1]),
+                    map: map
+                });
+            
+                 google.maps.event.addListener(marker, 'click', (function(marker, i) {
+                    return function() {
+                    infowindow.setContent(parkingspotsLocation[i][2]);
+                    infowindow.open(map, marker);
+                    }
+                   })(marker, i));
+               }
+        </script>
+
+        <!--
+        Script to implement Filter functions:
+
+        1) Sort by Low Cost First
+        2) Sort by High Cost First
+        3) Sort by Closest Distance
+        4) Sort by Furthest Distance
+        5) Sort by Grill Availability
+        6) Sort by Bathroom Availability
+        7) Sort by Yard availability
+        8) Sort by Table availability
+        9) Sort by Electricity availability
+        -->
         <script type="text/javascript">
             function sort_cost_low() {
                 var parkingspots = {{ json_parkingspots|safe }};
