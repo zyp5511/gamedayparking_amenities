@@ -9,16 +9,10 @@
     {% block nav_bar %}{% endblock %}
     <h1 align="center">
         <p style="margin-top: 0; margin-bottom: 0; padding-top: 0 !important; padding-bottom: 42px; font-weight: 600; font-size: 45px; line-height: 1;">
-            Gameday Amenites Finder
+            Gameday Amenities Finder
         </p>
     </h1>
-    <h2 align="center">
-        <p style="width: 60%; margin-left: auto; margin-right: auto; font-size: 22px; font-weight: 300;">
-            Search Box Default Text: {{location}}
-        </p>
-        
-    </h2>
-    <form align="center" action="../search/" method="get">
+    <form align="center" action="../search/" method="get" name="search_bar">
         <label for="location">Location: </label>
         <input id="location" type="text" name="location" value="{{ location }}">
         <input type="submit" value="OK">
