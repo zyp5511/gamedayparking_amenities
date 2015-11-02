@@ -24,6 +24,7 @@ urlpatterns = [
     url(r'^home/', 'parkingspot.views.home'),
     url(r'^$', 'parkingspot.views.home'),
     url(r'^detail/', 'parkingspot.views.detail'),
-    url(r'^about/', 'parkingspot.views.about')
+    url(r'^about/', 'parkingspot.views.about'),
+    url(r'^contact/', 'parkingspot.views.contact')
 
 ]
