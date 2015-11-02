@@ -1,4 +1,5 @@
 import time
+import json
 
 from selenium.webdriver.firefox.webdriver import WebDriver
 from django.contrib.staticfiles.testing import StaticLiveServerTestCase
@@ -125,7 +126,7 @@ class SeleniumTests(StaticLiveServerTestCase):
             cost = 10,
             owner = admin_user,
             description = "has bathroom, highest cost",
-            amenities = '{"bathroom":bathroom,"yard":false,"grill":true,"table":false,"electricity":false}'
+            amenities = '{"bathroom":true,"yard":false,"grill":true,"table":false,"electricity":false}'
         )
         self.test_spot3.save()
 
@@ -138,15 +139,18 @@ class SeleniumTests(StaticLiveServerTestCase):
             cost = 0,
             owner = admin_user,
             description = "has yard, lowest cost",
-            amenities = '{"bathroom":bathroom,"yard":true,"grill":true,"table":false,"electricity":false}'
+            amenities = '{"bathroom":false,"yard":true,"grill":true,"table":false,"electricity":false}'
         )
         self.test_spot4.save()
 
         self.madison_spots = [self.test_spot2, self.test_spot3, self.test_spot4]
+
+
     @classmethod
     def tearDownClass(cls):
         cls.selenium.quit()
         super(SeleniumTests, cls).tearDownClass()
+
 
     def test_home_nav_bar(self):
         # test brand link
@@ -170,6 +174,7 @@ class SeleniumTests(StaticLiveServerTestCase):
         title = self.selenium.find_element_by_tag_name("h2")
         self.assertEqual(title.text, u'Computer Science 506 Game Day Parking and Amenities Finder Team')
 
+
     def test_home_search(self):
         self.selenium.get("{}{}".format(self.live_server_url, '/home/'))
         search_input =  self.selenium.find_element_by_name("location")
@@ -180,6 +185,7 @@ class SeleniumTests(StaticLiveServerTestCase):
         spots = [x.text for x in self.selenium.find_elements_by_tag_name("h3")]
         test_spots = [x.street_address for x in self.madison_spots]
         self.assertTrue(all(x in spots for x in test_spots))
+
 
     def test_search_nav_bar(self):
         # test brand link
@@ -198,12 +204,22 @@ class SeleniumTests(StaticLiveServerTestCase):
         title = self.selenium.find_element_by_tag_name("h2")
         self.assertEqual(title.text, u'What does Gameday Parking do?')
         # test contact us link
-        # link does nothing yet
+        self.selenium.get("{}{}".format(self.live_server_url, '/home/'))
+        self.selenium.find_element_by_link_text("Contact Us").click()
+        title = self.selenium.find_element_by_tag_name("h2")
+        self.assertEqual(title.text, u'Computer Science 506 Game Day Parking and Amenities Finder Team')
+
 
     def test_search_filter(self):
-        # test filtering the spots
+        # test filtering by bathroom 
         self.selenium.get("{}{}".format(self.live_server_url, '/search/?location=Madison%2C+WI'))
+        bathroom_filtered = [x for x in self.madison_spots if json.loads(x.amenities)['bathroom']]
+        grill_filtered = [x for x in self.madison_spots if json.loads(x.amenities)['grill']]
+        yard_filtered = [x for x in self.madison_spots if json.loads(x.amenities)['yard']]
+        electricity_filtered = [x for x in self.madison_spots if json.loads(x.amenities)['electricity']]
+        table_filtered = [x for x in self.madison_spots if json.loads(x.amenities)['table']]
         # filter buttons not working yet
+
 
     def test_search_sort(self):
         # test sorting cost low to high
