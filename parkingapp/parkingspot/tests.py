@@ -44,7 +44,7 @@ class ParkingSpotTests(TestCase):
 
 
         self.test_spot2 = ParkingSpot.objects.create(
-            street_address = "1440 Monroe Street",
+            street_address = "4 N Park Street",
             city = "Madison",
             state = "WI",
             zipcode = 53703,
@@ -105,7 +105,7 @@ class SeleniumTests(StaticLiveServerTestCase):
         self.test_spot1.save()
 
         self.test_spot2 = ParkingSpot.objects.create(
-            street_address = "1440 Monroe Street",
+            street_address = "4 N Park Street",
             city = "Madison",
             state = "WI",
             zipcode = 53703,
@@ -165,7 +165,10 @@ class SeleniumTests(StaticLiveServerTestCase):
         title = self.selenium.find_element_by_tag_name("h2")
         self.assertEqual(title.text, u'What does Gameday Parking do?')
         # test contact us link
-        # link does nothing yet
+        self.selenium.get("{}{}".format(self.live_server_url, '/home/'))
+        self.selenium.find_element_by_link_text("Contact Us").click()
+        title = self.selenium.find_element_by_tag_name("h2")
+        self.assertEqual(title.text, u'Computer Science 506 Game Day Parking and Amenities Finder Team')
 
     def test_home_search(self):
         self.selenium.get("{}{}".format(self.live_server_url, '/home/'))
@@ -173,7 +176,7 @@ class SeleniumTests(StaticLiveServerTestCase):
         search_input.clear()
         search_input.send_keys("Camp Randall")
         search_input.submit()
-        # verify three of four parkingspots appear
+        # verify three madison parkingspots appear
         spots = [x.text for x in self.selenium.find_elements_by_tag_name("h3")]
         test_spots = [x.street_address for x in self.madison_spots]
         self.assertTrue(all(x in spots for x in test_spots))
@@ -200,10 +203,41 @@ class SeleniumTests(StaticLiveServerTestCase):
     def test_search_filter(self):
         # test filtering the spots
         self.selenium.get("{}{}".format(self.live_server_url, '/search/?location=Madison%2C+WI'))
+        # filter buttons not working yet
 
     def test_search_sort(self):
-        pass
+        # test sorting cost low to high
+        self.selenium.get("{}{}".format(self.live_server_url, '/search/?location=Camp+Randall'))
+        self.selenium.find_element_by_id("cost_low").click()
+        sorted_low_to_high = sorted(self.madison_spots, key=lambda x: x.cost)
+        spots = [x.text for x in self.selenium.find_elements_by_tag_name("h3")]
+        for i in range(len(sorted_low_to_high)):
+            self.assertEqual(spots[i], sorted_low_to_high[i].street_address)
 
+        # test sorting cost high to low
+        self.selenium.find_element_by_id("cost_high").click()
+        sorted_high_to_low = sorted(self.madison_spots, key=lambda x: x.cost, reverse=True)
+        spots = [x.text for x in self.selenium.find_elements_by_tag_name("h3")]
+        for i in range(len(sorted_high_to_low)):
+            self.assertEqual(spots[i], sorted_high_to_low[i].street_address)
+
+        # view calculates distance, do same calcultion for test spots 
+        point = Point(-89.412613, 43.069722) #Camp Randall
+        for x in self.madison_spots:
+            x.distance =  x.location.distance(point)
+        # test sorting distance low to high
+        self.selenium.find_element_by_id("dist_low").click()
+        sorted_low_to_high = sorted(self.madison_spots, key=lambda x: x.distance)
+        spots = [x.text for x in self.selenium.find_elements_by_tag_name("h3")]
+        for i in range(len(sorted_low_to_high)):
+            self.assertEqual(spots[i], sorted_low_to_high[i].street_address)
+
+        # test sorting distance high to low
+        self.selenium.find_element_by_id("dist_high").click()
+        sorted_high_to_low = sorted(self.madison_spots, key=lambda x: x.distance, reverse=True)
+        spots = [x.text for x in self.selenium.find_elements_by_tag_name("h3")]
+        for i in range(len(sorted_high_to_low)):
+            self.assertEqual(spots[i], sorted_high_to_low[i].street_address)
 
     def test_search_filter_and_sort(self):
         pass
