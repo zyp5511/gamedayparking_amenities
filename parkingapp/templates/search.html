@@ -64,11 +64,29 @@
                            position: new google.maps.LatLng(parkingspots[i].location.longitude, parkingspots[i].location.latitude),
                            map: map
                         });
-                    
+                    var listAmenities =parkingspots[i].amenities;
+                    var amenitiesPopUp=''
+                    for(var k in listAmenities)
+                    {
+                        if(listAmenities[k]==true)
+                        {
+                            amenitiesPopUp+=k+' ';
+                        }
+                    }
                         google.maps.event.addListener(marker, 'click', (function(marker, i) {
                             return function() {
-                            infowindow.setContent('<h5>'+parkingspots[i].street_address+'</h5></br>' +
-                                                  '<p>' + parkingspots[i].description+'</p>'
+                              infowindow.setContent(
+
+                                                    //not responsive
+                                                   '<div id="popContainer" style="width: 400px; min-height: 300px;">'+
+                                                  '<img src="./static/media/ab.jpg">'+
+                                                   '<h4>' + parkingspots[i].street_address+'</h4>'+
+                                                   '<p><b>Cost:</b></p>'+
+                                                    '<p>$' + parkingspots[i].cost+'</p>'+
+                                                    '<p><b>Amenities:</b></p>'+
+                                                    '<p>' + amenitiesPopUp+'</p>'+
+                                                   '<p><b>Description:</b></p>'+
+                                                    '<p>' + parkingspots[i].description+'</p>'
                                                   );
                             infowindow.open(map, marker);
                             }
