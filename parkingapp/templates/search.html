@@ -17,23 +17,23 @@
                 top: 0;
                 left: 0;
                 display: none;
-                position: absolute;
-                background-color: #cccccc;
+                position: fixed;
+                background-color: #C0C0C0;
                 color: #aaaaaa;
-                opacity: .4;
+                opacity: .9;
                 filter: alpha(opacity = 50);
             }
         #popup {
-            width: 300px;
-            height: 200px;
+            width: 500px;
+            height: 400px;
             position: absolute;
             color: #000000;
             background-color: #ffffff;
             /* To align popup window at the center of screen*/
             top: 50%;
             left: 50%;
-            margin-top: -100px;
-            margin-left: -150px;
+            margin-top: -200px;
+            margin-left: -250px;
         }
         </style>
         
@@ -151,37 +151,31 @@
                         <div class="row">
                             <section class="col-xs-6 col-sm-6 col-md-4 col-lg-2">
                                  <a href="#" onClick="pop('popDiv')"><h3>{{ x.street_address }}</h3></a>
-                                <h3>{{ x.street_address }}</h3>
                                 <p>{{ x.description }}</p>
+                                <div id="popDiv" class="ontop" align="center">
+                                    <div id="popup">
+                                    <h4> {{x.street_address}}</h4>
+                                                   <p><b>Cost:</b></p>
+                                                    <p>{{x.cost}}</p>
+                                                   <p><b>Description:</b></p>
+                                                    <p>{{x.description}}</p>
+                                                <a href="#" onClick="hide('popDiv')">Close</a>
+                                            </div>
+                                    <!--<table border="1" id="popup">
+                                        <tr>
+                                            <td>
+                                                Click Close OR escape button to close it
+                                                
+                                            </td>
+                                            </tr>
+                                    </table>-->
+                                </div>
                             </section>
                         </div>
                     {% endfor %}
                 </div>
             </div>
         </div>
-
-
-
-
-
-<div id="popDiv" class="ontop">
-    <table border="1" id="popup">
-        <tr>
-            <td>
-                This is can be used as a popup window
-            </td>
-        </tr>
-        <tr>
-            <td>
-                Click Close OR escape button to close it
-                <a href="#" onClick="hide('popDiv')">Close</a>
-            </td>
-        </tr>
-    </table>
-</div>
-
-
-
 
         <!-- Prints footer -->
         {% include "footer.html" %}
