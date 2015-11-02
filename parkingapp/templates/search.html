@@ -13,16 +13,35 @@
     <body style="width:100%; min-height:100%;">
         {% block nav_bar %}{% endblock %}
         <div id="bodyContainer" style="width:100%; height:800px; margin-top:-20px;">
-            <div id="filterContainer" style="width: 100%; height: 50px; padding-top:10px; padding-bottom:10px; text-align:center;">
-                <button id="cost_low" onclick="sort_cost_low()">Sort By Cost Low to High</button>
-                <button id="cost_high" onclick="sort_cost_high()">Sort By Cost High To Low</button>
-                <button id="dist_low" onclick="sort_dist_low()">Sort By Low to High Distance</button>
-                <button id="dist_high" onclick="sort_dist_high()">Sort By High to Low Distance</button>
-                <button id="filter_grill" onclick="filter_grill()">Filter By Grill</button>
+            <div id="filterContainer" style="width: 100%; height: 70px; padding-top:10px; padding-bottom:10px; text-align:center;">
+                <button id="cost_low" onclick="sort_cost_low()">Cost Low to High</button>
+                <button id="cost_high" onclick="sort_cost_high()">Cost High To Low</button>
+                <button id="dist_low" onclick="sort_dist_low()">Distance Low to High</button>
+                <button id="dist_high" onclick="sort_dist_high()">Distance High to Low</button>
+                
+                <div>
+                <FORM NAME="amenities" style="width:400px;">
+                    <INPUT TYPE="checkbox" id="grill" name="grill" onClick="" style="display:inline-block; vertical-align:middle;" /> 
+                    <label for="grill" style="display:inline-block; vertical-align:middle;">Grill</label>
+
+                    <INPUT TYPE="checkbox" id="bathroom" name="bathroom" onClick="" style="display:inline-block; vertical-align:middle;" />
+                    <label for="bathroom" style="display:inline-block; vertical-align:middle;">Bathroom</label>
+
+                    <INPUT TYPE="checkbox" id="yard" name="yard" onClick="" style="display:inline-block; vertical-align:middle;" />
+                    <label for="yard" style="display:inline-block; vertical-align:middle;">Yard</label>
+
+                    <INPUT TYPE="checkbox" id="table" name="table" onClick="" style="display:inline-block; vertical-align:middle;" />
+                    <label for="table" style="display:inline-block; vertical-align:middle;">Table</label>
+
+                    <INPUT TYPE="checkbox" id="electricity" name="electricity" onClick="" style="display:inline-block; vertical-align:middle;" /> 
+                    <label for="electricity" style="display:inline-block; vertical-align:middle;">Electricity</label>
+                </FORM>
+                </div>
+                <!--<button id="filter_grill" onclick="filter_grill()">Filter By Grill</button>
                 <button id="filter_bathroom" onclick="filter_bathroom()">Filter By Bathroom</button>
                 <button id="filter_yard" onclick="filter_yard()">Filter By Yard</button>
                 <button id="filter_table" onclick="filter_table()">Filter By Table</button>
-                <button id="filter_electricity" onclick="filter_electricity()">Filter By Electricity</button>
+                <button id="filter_electricity" onclick="filter_electricity()">Filter By Electricity</button>-->
             </div>
 
             <div id="mapContainer" style="width:45%; height:100%; float:right; padding-top:10px;">
@@ -103,87 +122,98 @@
                 }
                 document.getElementById("parkingContainer").innerHTML = content;
             }
-        function sort_cost_high() {
-            var parkingspots = {{ json_parkingspots|safe }};
-            parkingspots.sort(sort_by_high_cost);
-            var content = "";
-            for (i = 0; i < parkingspots.length; i++) {
-                content += JSON.stringify(parkingspots[i]);
-                content += "<br/>";
+            function sort_cost_high() {
+                var parkingspots = {{ json_parkingspots|safe }};
+                parkingspots.sort(sort_by_high_cost);
+                var content = "";
+                for (i = 0; i < parkingspots.length; i++) {
+                    content += "<div class='row'>";
+                    content += "<section class='col-xs-6 col-sm-6 col-md-4 col-lg-2'>";
+                    content += "<h3>" + parkingspots[i].street_address + "</h3>";
+                    content += "<p>" + parkingspots[i].description + "</p>";
+                    content += "</section>";
+                    content += "</div>";
+                }
+                document.getElementById("parkingContainer").innerHTML = content;
             }
-            document.getElementById("cost_high").innerHTML = content;
-        }
-        function sort_dist_low() {
-            var parkingspots = {{ json_parkingspots|safe }};
-            parkingspots.sort(sort_by_low_distance);
-            var content = "";
-            for (i = 0; i < parkingspots.length; i++) {
-                content += JSON.stringify(parkingspots[i]);
-                content += "<br/>";
+            function sort_dist_low() {
+                var parkingspots = {{ json_parkingspots|safe }};
+                parkingspots.sort(sort_by_low_distance);
+                var content = "";
+                for (i = 0; i < parkingspots.length; i++) {
+                    content += "<div class='row'>";
+                    content += "<section class='col-xs-6 col-sm-6 col-md-4 col-lg-2'>";
+                    content += "<h3>" + parkingspots[i].street_address + "</h3>";
+                    content += "<p>" + parkingspots[i].description + "</p>";
+                    content += "</section>";
+                    content += "</div>";
+                }
+                document.getElementById("parkingContainer").innerHTML = content;
             }
-            document.getElementById("dist_low").innerHTML = content;
-        }
-        
-        function sort_dist_high() {
-            var parkingspots = {{ json_parkingspots|safe }};
-            parkingspots.sort(sort_by_high_distance);
-            var content = "";
-            for (i = 0; i < parkingspots.length; i++) {
-                content += JSON.stringify(parkingspots[i]);
-                content += "<br/>";
+            function sort_dist_high() {
+                var parkingspots = {{ json_parkingspots|safe }};
+                parkingspots.sort(sort_by_high_distance);
+                var content = "";
+                for (i = 0; i < parkingspots.length; i++) {
+                    content += "<div class='row'>";
+                    content += "<section class='col-xs-6 col-sm-6 col-md-4 col-lg-2'>";
+                    content += "<h3>" + parkingspots[i].street_address + "</h3>";
+                    content += "<p>" + parkingspots[i].description + "</p>";
+                    content += "</section>";
+                    content += "</div>";
+                }
+                document.getElementById("parkingContainer").innerHTML = content;
             }
-            document.getElementById("dist_high").innerHTML = content;
-        }
-        function filter_grill() {
-            var parkingspots = {{ json_parkingspots|safe }};
-            new_list = parkingspots.filter(filter_by_grill);
-            var content = "";
-            for (i = 0; i < new_list.length; i++) {
-                content += JSON.stringify(new_list[i]);
-                content += "<br/>";
+            function filter_grill() {
+                var parkingspots = {{ json_parkingspots|safe }};
+                new_list = parkingspots.filter(filter_by_grill);
+                var content = "";
+                for (i = 0; i < new_list.length; i++) {
+                    content += JSON.stringify(new_list[i]);
+                    content += "<br/>";
+                }
+                document.getElementById("filter_grill").innerHTML = content;
             }
-            document.getElementById("filter_grill").innerHTML = content;
-        }
-        function filter_bathroom() {
-            var parkingspots = {{ json_parkingspots|safe }};
-            new_list = parkingspots.filter(filter_by_bathroom);
-            var content = "";
-            for (i = 0; i < new_list.length; i++) {
-                content += JSON.stringify(new_list[i]);
-                content += "<br/>";
+            function filter_bathroom() {
+                var parkingspots = {{ json_parkingspots|safe }};
+                new_list = parkingspots.filter(filter_by_bathroom);
+                var content = "";
+                for (i = 0; i < new_list.length; i++) {
+                    content += JSON.stringify(new_list[i]);
+                    content += "<br/>";
+                }
+                document.getElementById("filter_bathroom").innerHTML = content;
             }
-            document.getElementById("filter_bathroom").innerHTML = content;
-        }
-        function filter_yard() {
-            var parkingspots = {{ json_parkingspots|safe }};
-            new_list = parkingspots.filter(filter_by_yard);
-            var content = "";
-            for (i = 0; i < new_list.length; i++) {
-                content += JSON.stringify(new_list[i]);
-                content += "<br/>";
+            function filter_yard() {
+                var parkingspots = {{ json_parkingspots|safe }};
+                new_list = parkingspots.filter(filter_by_yard);
+                var content = "";
+                for (i = 0; i < new_list.length; i++) {
+                    content += JSON.stringify(new_list[i]);
+                    content += "<br/>";
+                }
+                document.getElementById("filter_yard").innerHTML = content;
             }
-            document.getElementById("filter_yard").innerHTML = content;
-        }
-        function filter_table() {
-            var parkingspots = {{ json_parkingspots|safe }};
-            new_list = parkingspots.filter(filter_by_table);
-            var content = "";
-            for (i = 0; i < new_list.length; i++) {
-                content += JSON.stringify(new_list[i]);
-                content += "<br/>";
+            function filter_table() {
+                var parkingspots = {{ json_parkingspots|safe }};
+                new_list = parkingspots.filter(filter_by_table);
+                var content = "";
+                for (i = 0; i < new_list.length; i++) {
+                    content += JSON.stringify(new_list[i]);
+                    content += "<br/>";
+                }
+                document.getElementById("filter_table").innerHTML = content;
             }
-            document.getElementById("filter_table").innerHTML = content;
-        }
-        function filter_electricity() {
-            var parkingspots = {{ json_parkingspots|safe }};
-            new_list = parkingspots.filter(filter_by_electricity);
-            var content = "";
-            for (i = 0; i < new_list.length; i++) {
-                content += JSON.stringify(new_list[i]);
-                content += "<br/>";
+            function filter_electricity() {
+                var parkingspots = {{ json_parkingspots|safe }};
+                new_list = parkingspots.filter(filter_by_electricity);
+                var content = "";
+                for (i = 0; i < new_list.length; i++) {
+                    content += JSON.stringify(new_list[i]);
+                    content += "<br/>";
+                }
+                document.getElementById("filter_electricity").innerHTML = content;
             }
-            document.getElementById("filter_electricity").innerHTML = content;
-        }
         </script>
 
         <script src="{% static "bower_components/jquery/dist/jquery.min.js" %}"></script>
