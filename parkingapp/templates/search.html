@@ -23,40 +23,35 @@
                 opacity: .9;
                 filter: alpha(opacity = 50);
             }
-        #popup {
-            width: 500px;
-            height: 400px;
-            position: absolute;
-            color: #000000;
-            background-color: #ffffff;
-            /* To align popup window at the center of screen*/
-            top: 50%;
-            left: 50%;
-            margin-top: -200px;
-            margin-left: -250px;
-        }
+            #popup {
+                width: 500px;
+                height: 400px;
+                position: absolute;
+                color: #000000;
+                background-color: #ffffff;
+                /* To align popup window at the center of screen*/
+                top: 50%;
+                left: 50%;
+                margin-top: -200px;
+                margin-left: -250px;
+            }
         </style>
-        
-        
         
         <script type="text/javascript">
             function pop(div) {
                 document.getElementById(div).style.display = 'block';
             }
-        function hide(div) {
-            document.getElementById(div).style.display = 'none';
-        }
-        //To detect escape button
-        document.onkeydown = function(evt) {
-            evt = evt || window.event;
-            if (evt.keyCode == 27) {
-                hide('popDiv');
+            function hide(div) {
+                document.getElementById(div).style.display = 'none';
             }
-        };
+            //To detect escape button
+            document.onkeydown = function(evt) {
+                evt = evt || window.event;
+                if (evt.keyCode == 27) {
+                    hide('popDiv');
+                }
+            };
         </script>
-        
-        
-        
     </head>
     
     <body style="width:100%; min-height:100%;">
@@ -72,19 +67,19 @@
                 <button id="dist_high" onclick="sort_dist_high()" style="margin-left:5px;">Distance High to Low</button>
                 
                 <FORM NAME="amenities" style="display:inline-block; margin-left:30px;">
-                    <INPUT TYPE="checkbox" id="grill" name="grill" onClick="filter_grill()" style="display:inline-block;" /> 
+                    <INPUT TYPE="checkbox" id="filter_grill" name="grill" onClick="filter_and_sort_list()" style="display:inline-block;" /> 
                     <label for="grill" style="display:inline-block; vertical-align:middle; margin-right:10px;">Grill</label>
 
-                    <INPUT TYPE="checkbox" id="bathroom" name="bathroom" onClick="filter_bathroom()" style="display:inline-block;" />
+                    <INPUT TYPE="checkbox" id="filter_bathroom" name="bathroom" onClick="filter_and_sort_list()" style="display:inline-block;" />
                     <label for="bathroom" style="display:inline-block; vertical-align:middle; margin-right:10px;">Bathroom</label>
 
-                    <INPUT TYPE="checkbox" id="yard" name="yard" onClick="filter_yard()" style="display:inline-block;" />
+                    <INPUT TYPE="checkbox" id="filter_yard" name="yard" onClick="filter_and_sort_list()" style="display:inline-block;" />
                     <label for="yard" style="display:inline-block; vertical-align:middle; margin-right:10px;">Yard</label>
 
-                    <INPUT TYPE="checkbox" id="table" name="table" onClick="filter_table" style="display:inline-block;" />
+                    <INPUT TYPE="checkbox" id="filter_table" name="table" onClick="filter_and_sort_list()" style="display:inline-block;" />
                     <label for="table" style="display:inline-block; vertical-align:middle; margin-right:10px;">Table</label>
 
-                    <INPUT TYPE="checkbox" id="electricity" name="electricity" onClick="filter_electricity" style="display:inline-block;" /> 
+                    <INPUT TYPE="checkbox" id="filter_electricity" name="electricity" onClick="filter_and_sort_list()" style="display:inline-block;" /> 
                     <label for="electricity" style="display:inline-block; vertical-align:middle; margin-right:10px;">Electricity</label>
                 </FORM>
                 <!--<button id="filter_grill" onclick="filter_grill()">Filter By Grill</button>
@@ -187,118 +182,80 @@
         2) Sort by High Cost First
         3) Sort by Closest Distance
         4) Sort by Furthest Distance
-        5) Sort by Grill Availability
-        6) Sort by Bathroom Availability
-        7) Sort by Yard availability
-        8) Sort by Table availability
-        9) Sort by Electricity availability
+        5) Filter by Grill Availability
+        6) Filter by Bathroom Availability
+        7) Filter by Yard availability
+        8) Filter by Table availability
+        9) Filter by Electricity availability
         -->
         <script type="text/javascript">
-            function sort_cost_low() {
-                var parkingspots = {{ json_parkingspots|safe }};
-                parkingspots.sort(sort_by_low_cost);
+            var last_sort = "sort_dist_low";
+            var global_list = {{ json_parkingspots|safe }}
+            function filter_and_sort_list() {
+                curr_list = global_list.slice(); //used to copy global_list
+                // get checkbox values
+                filter_yard = document.getElementById("filter_yard").checked
+                filter_bathroom = document.getElementById("filter_bathroom").checked
+                filter_table = document.getElementById("filter_table").checked
+                filter_electricity = document.getElementById("filter_electricity").checked
+                filter_grill = document.getElementById("filter_grill").checked
+
+                if (filter_yard)
+                    curr_list = curr_list.filter(filter_by_yard)
+                if (filter_bathroom)
+                    curr_list = curr_list.filter(filter_by_bathroom)
+                if (filter_table) 
+                    curr_list = curr_list.filter(filter_by_table)
+                if (filter_electricity)
+                    curr_list = curr_list.filter(filtber_by_electricity)
+                if (filter_grill)
+                    curr_list = curr_list.filter(filter_by_grill)
+
+                switch (last_sort) {
+                case "sort_cost_low":
+                    curr_list.sort(sort_by_low_cost);
+                    break;
+                case "sort_cost_high":
+                    curr_list.sort(sort_by_high_cost);
+                    break;
+                case "sort_dist_low":
+                    curr_list.sort(sort_by_low_distance);
+                    break;
+                case "sort_dist_high":
+                    curr_list.sort(sort_by_high_distance);
+                    break;
+                default:
+                    document.write("No last sort");
+                }
+                
                 var content = "";
-                for (i = 0; i < parkingspots.length; i++) {
+                for (i = 0; i < curr_list.length; i++) {
                     content += "<div class='row'>";
                     content += "<section class='col-xs-6 col-sm-6 col-md-4 col-lg-2'>";
-                    content += "<h3>" + parkingspots[i].street_address + "</h3>";
-                    content += "<p>" + parkingspots[i].description + "</p>";
+                    content += "<h3>" + curr_list[i].street_address + "</h3>";
+                    content += "<p>" + curr_list[i].description + "</p>";
                     content += "</section>";
                     content += "</div>";
                 }
                 document.getElementById("parkingContainer").innerHTML = content;
             }
-            function sort_cost_high() {
-                var parkingspots = {{ json_parkingspots|safe }};
-                parkingspots.sort(sort_by_high_cost);
-                var content = "";
-                for (i = 0; i < parkingspots.length; i++) {
-                    content += "<div class='row'>";
-                    content += "<section class='col-xs-6 col-sm-6 col-md-4 col-lg-2'>";
-                    content += "<h3>" + parkingspots[i].street_address + "</h3>";
-                    content += "<p>" + parkingspots[i].description + "</p>";
-                    content += "</section>";
-                    content += "</div>";
-                }
-                document.getElementById("parkingContainer").innerHTML = content;
+
+
+            function sort_cost_low(curr_list) {
+                last_sort = "sort_cost_low"
+                filter_and_sort_list();
             }
-            function sort_dist_low() {
-                var parkingspots = {{ json_parkingspots|safe }};
-                parkingspots.sort(sort_by_low_distance);
-                var content = "";
-                for (i = 0; i < parkingspots.length; i++) {
-                    content += "<div class='row'>";
-                    content += "<section class='col-xs-6 col-sm-6 col-md-4 col-lg-2'>";
-                    content += "<h3>" + parkingspots[i].street_address + "</h3>";
-                    content += "<p>" + parkingspots[i].description + "</p>";
-                    content += "</section>";
-                    content += "</div>";
-                }
-                document.getElementById("parkingContainer").innerHTML = content;
+            function sort_cost_high(curr_list) {
+                last_sort = "sort_cost_high"
+                filter_and_sort_list();
             }
-            function sort_dist_high() {
-                var parkingspots = {{ json_parkingspots|safe }};
-                parkingspots.sort(sort_by_high_distance);
-                var content = "";
-                for (i = 0; i < parkingspots.length; i++) {
-                    content += "<div class='row'>";
-                    content += "<section class='col-xs-6 col-sm-6 col-md-4 col-lg-2'>";
-                    content += "<h3>" + parkingspots[i].street_address + "</h3>";
-                    content += "<p>" + parkingspots[i].description + "</p>";
-                    content += "</section>";
-                    content += "</div>";
-                }
-                document.getElementById("parkingContainer").innerHTML = content;
+            function sort_dist_low(curr_list) {
+                last_sort = "sort_dist_low"
+                filter_and_sort_list();
             }
-            function filter_grill() {
-                var parkingspots = {{ json_parkingspots|safe }};
-                new_list = parkingspots.filter(filter_by_grill);
-                var content = "";
-                for (i = 0; i < new_list.length; i++) {
-                    content += JSON.stringify(new_list[i]);
-                    content += "<br/>";
-                }
-                document.getElementById("grill").innerHTML = content;
-            }
-            function filter_bathroom() {
-                var parkingspots = {{ json_parkingspots|safe }};
-                new_list = parkingspots.filter(filter_by_bathroom);
-                var content = "";
-                for (i = 0; i < new_list.length; i++) {
-                    content += JSON.stringify(new_list[i]);
-                    content += "<br/>";
-                }
-                document.getElementById("bathroom").innerHTML = content;
-            }
-            function filter_yard() {
-                var parkingspots = {{ json_parkingspots|safe }};
-                new_list = parkingspots.filter(filter_by_yard);
-                var content = "";
-                for (i = 0; i < new_list.length; i++) {
-                    content += JSON.stringify(new_list[i]);
-                    content += "<br/>";
-                }
-                document.getElementById("yard").innerHTML = content;
-            }
-            function filter_table() {
-                var parkingspots = {{ json_parkingspots|safe }};
-                new_list = parkingspots.filter(filter_by_table);
-                var content = "";
-                for (i = 0; i < new_list.length; i++) {
-                    content += JSON.stringify(new_list[i]);
-                    content += "<br/>";
-                }
-                document.getElementById("table").innerHTML = content;
-            }
-            function filter_electricity() {
-                var parkingspots = {{ json_parkingspots|safe }};
-                new_list = parkingspots.filter(filter_by_electricity);
-                var content = "";
-                for (i = 0; i < new_list.length; i++) {
-                    content += JSON.stringify(new_list[i]);
-                    content += "<br/>";
-                }
-                document.getElementById("electricity").innerHTML = content;
+            function sort_dist_high(curr_list) {
+                last_sort = "sort_dist_high"
+                filter_and_sort_list();
             }
         </script>
 
