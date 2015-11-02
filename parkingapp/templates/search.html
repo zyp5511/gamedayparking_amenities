@@ -232,8 +232,17 @@
                 for (i = 0; i < curr_list.length; i++) {
                     content += "<div class='row'>";
                     content += "<section class='col-xs-6 col-sm-6 col-md-4 col-lg-2'>";
-                    content += "<h3>" + curr_list[i].street_address + "</h3>";
-                    content += "<p>" + curr_list[i].description + "</p>";
+                    content += "<a href='#' onClick=\"pop('popDiv')\"><h3>" + curr_list[i].street_address + "</h3></a>"
+                    content += "<p>" + curr_list[i].description + "</p>"
+                    content += "<div id='popDiv' class='ontop' align='center'>"
+                    content += "<div id='popup'>"
+                    content += "<h4>" + curr_list[i].street_address + "</h4>"
+                    content += "<p><b>Cost:</b></p>"
+                    content += "<p>" + curr_list[i].cost + "</p>"
+                    content += "<p><b>Description:</b></p>"
+                    content += "<p>" + curr_list[i].description + "</p>"
+                    content += "<a href='#' onClick=\"hide('popDiv')\">Close</a>"
+                    content += "</div></div>"
                     content += "</section>";
                     content += "</div>";
                 }
