@@ -13,30 +13,31 @@
     <body style="width:100%; min-height:100%;">
         {% block nav_bar %}{% endblock %}
         <div id="bodyContainer" style="width:100%; height:800px; margin-top:-20px;">
-            <div id="filterContainer" style="width: 100%; height: 70px; padding-top:10px; padding-bottom:10px; text-align:center;">
-                <button id="cost_low" onclick="sort_cost_low()">Cost Low to High</button>
-                <button id="cost_high" onclick="sort_cost_high()">Cost High To Low</button>
-                <button id="dist_low" onclick="sort_dist_low()">Distance Low to High</button>
-                <button id="dist_high" onclick="sort_dist_high()">Distance High to Low</button>
+            <div id="filterContainer" style="background-color:lightgrey; width:100%; height:70px; padding-top:22px; padding-bottom:10px; text-align:center; border-style:inset; border-width:1px; border-right-width:0px; border-left-width:0px; border-color:lightgrey;">
+                <button id="cost_low" onclick="sort_cost_low()" style="margin-right:5px;">Cost Low to High</button>
+
+                <button id="cost_high" onclick="sort_cost_high()" style="margin-right:5px; margin-left:5px;">Cost High To Low</button>
+
+                <button id="dist_low" onclick="sort_dist_low()" style="margin-right:5px; margin-left:5px;">Distance Low to High</button>
+
+                <button id="dist_high" onclick="sort_dist_high()" style="margin-left:5px;">Distance High to Low</button>
                 
-                <div>
-                <FORM NAME="amenities" style="width:400px;">
-                    <INPUT TYPE="checkbox" id="grill" name="grill" onClick="" style="display:inline-block; vertical-align:middle;" /> 
-                    <label for="grill" style="display:inline-block; vertical-align:middle;">Grill</label>
+                <FORM NAME="amenities" style="display:inline-block; margin-left:30px;">
+                    <INPUT TYPE="checkbox" id="grill" name="grill" onClick="filter_grill()" style="display:inline-block;" /> 
+                    <label for="grill" style="display:inline-block; vertical-align:middle; margin-right:10px;">Grill</label>
 
-                    <INPUT TYPE="checkbox" id="bathroom" name="bathroom" onClick="" style="display:inline-block; vertical-align:middle;" />
-                    <label for="bathroom" style="display:inline-block; vertical-align:middle;">Bathroom</label>
+                    <INPUT TYPE="checkbox" id="bathroom" name="bathroom" onClick="filter_bathroom()" style="display:inline-block;" />
+                    <label for="bathroom" style="display:inline-block; vertical-align:middle; margin-right:10px;">Bathroom</label>
 
-                    <INPUT TYPE="checkbox" id="yard" name="yard" onClick="" style="display:inline-block; vertical-align:middle;" />
-                    <label for="yard" style="display:inline-block; vertical-align:middle;">Yard</label>
+                    <INPUT TYPE="checkbox" id="yard" name="yard" onClick="filter_yard()" style="display:inline-block;" />
+                    <label for="yard" style="display:inline-block; vertical-align:middle; margin-right:10px;">Yard</label>
 
-                    <INPUT TYPE="checkbox" id="table" name="table" onClick="" style="display:inline-block; vertical-align:middle;" />
-                    <label for="table" style="display:inline-block; vertical-align:middle;">Table</label>
+                    <INPUT TYPE="checkbox" id="table" name="table" onClick="filter_table" style="display:inline-block;" />
+                    <label for="table" style="display:inline-block; vertical-align:middle; margin-right:10px;">Table</label>
 
-                    <INPUT TYPE="checkbox" id="electricity" name="electricity" onClick="" style="display:inline-block; vertical-align:middle;" /> 
-                    <label for="electricity" style="display:inline-block; vertical-align:middle;">Electricity</label>
+                    <INPUT TYPE="checkbox" id="electricity" name="electricity" onClick="filter_electricity" style="display:inline-block;" /> 
+                    <label for="electricity" style="display:inline-block; vertical-align:middle; margin-right:10px;">Electricity</label>
                 </FORM>
-                </div>
                 <!--<button id="filter_grill" onclick="filter_grill()">Filter By Grill</button>
                 <button id="filter_bathroom" onclick="filter_bathroom()">Filter By Bathroom</button>
                 <button id="filter_yard" onclick="filter_yard()">Filter By Yard</button>
@@ -44,7 +45,7 @@
                 <button id="filter_electricity" onclick="filter_electricity()">Filter By Electricity</button>-->
             </div>
 
-            <div id="mapContainer" style="width:45%; height:100%; float:right; padding-top:10px;">
+            <div id="mapContainer" style="width:45%; height:100%; margin-top:1px; float:right;">
                 <div id="map" style="height:100%; width:100%;"></div>
 
                 <!-- Script to implement googe maps block -->
@@ -172,7 +173,7 @@
                     content += JSON.stringify(new_list[i]);
                     content += "<br/>";
                 }
-                document.getElementById("filter_grill").innerHTML = content;
+                document.getElementById("grill").innerHTML = content;
             }
             function filter_bathroom() {
                 var parkingspots = {{ json_parkingspots|safe }};
@@ -182,7 +183,7 @@
                     content += JSON.stringify(new_list[i]);
                     content += "<br/>";
                 }
-                document.getElementById("filter_bathroom").innerHTML = content;
+                document.getElementById("bathroom").innerHTML = content;
             }
             function filter_yard() {
                 var parkingspots = {{ json_parkingspots|safe }};
@@ -192,7 +193,7 @@
                     content += JSON.stringify(new_list[i]);
                     content += "<br/>";
                 }
-                document.getElementById("filter_yard").innerHTML = content;
+                document.getElementById("yard").innerHTML = content;
             }
             function filter_table() {
                 var parkingspots = {{ json_parkingspots|safe }};
@@ -202,7 +203,7 @@
                     content += JSON.stringify(new_list[i]);
                     content += "<br/>";
                 }
-                document.getElementById("filter_table").innerHTML = content;
+                document.getElementById("table").innerHTML = content;
             }
             function filter_electricity() {
                 var parkingspots = {{ json_parkingspots|safe }};
@@ -212,7 +213,7 @@
                     content += JSON.stringify(new_list[i]);
                     content += "<br/>";
                 }
-                document.getElementById("filter_electricity").innerHTML = content;
+                document.getElementById("electricity").innerHTML = content;
             }
         </script>
 
