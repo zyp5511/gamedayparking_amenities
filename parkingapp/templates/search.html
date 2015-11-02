@@ -80,8 +80,7 @@
 
                                                     //not responsive
                                                    '<div id="popContainer" style="width: 400px; min-height: 300px;">'+
-                                                  '<img src="/static/media/1.jpg">'+
-                                                    //'<img src="' + parkingspots[i].photos+ '">'+
+                                                  '<img src="/static/media/'+parkingspots[i].photos.substring(2)+'" height="50%" width="50%">'+
                                                    '<h4>' + parkingspots[i].street_address+'</h4>'+
                                                    '<p><b>Cost:</b></p>'+
                                                     '<p>$' + parkingspots[i].cost+'</p>'+
