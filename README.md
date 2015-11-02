@@ -50,6 +50,11 @@ These commands can be ran from the command line with the following file:
 $ sudo -u postgres psql -f database_setup.sql
 ```
 
+Import the database
+```sh
+$ sudo -u postgres psql -U postgres testdb < dbexport.pgsql
+```
+
 **Enter the developer python environment**
 ```sh
 $ source develop.sh
