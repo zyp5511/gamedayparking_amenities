@@ -15,6 +15,8 @@ from django.contrib.auth.models import User
 from userprof.models import AdminUser, ExtendedUser
 from userprof.tests import create_allauth_user
 
+from jsonfield import JSONField
+
 class ParkingSpotTests(TestCase):
 
     def setUp(self):
@@ -210,20 +212,30 @@ class SeleniumTests(StaticLiveServerTestCase):
         self.assertEqual(title.text, u'Computer Science 506 Game Day Parking and Amenities Finder Team')
 
 
+    # not working with ameniteies JSONField. Somehow view isn't passing correct JSON and
+    # is escaping quotes? Can see problem by viewing source of page during test
     def test_search_filter(self):
         # test filtering by bathroom 
         self.selenium.get("{}{}".format(self.live_server_url, '/search/?location=Madison%2C+WI'))
-        bathroom_filtered = [x for x in self.madison_spots if json.loads(x.amenities)['bathroom']]
-        grill_filtered = [x for x in self.madison_spots if json.loads(x.amenities)['grill']]
+
+        bathroom_filtered = [x.street_address for x in self.madison_spots if json.loads(x.amenities)['bathroom']]
+        grill_filtered = [x.street_address for x in self.madison_spots if json.loads(x.amenities)['grill']]
         yard_filtered = [x for x in self.madison_spots if json.loads(x.amenities)['yard']]
         electricity_filtered = [x for x in self.madison_spots if json.loads(x.amenities)['electricity']]
         table_filtered = [x for x in self.madison_spots if json.loads(x.amenities)['table']]
-        # filter buttons not working yet
 
+        # filter buttons
+        self.selenium.find_element_by_id("filter_grill").click()
+        displayed = [x.text for x in self.selenium.find_elements_by_tag_name("h3")]
+
+        # assert all displayed. order doesn't matter
+        self.assertTrue(all(x in displayed for x in grill_filtered))
 
     def test_search_sort(self):
         # test sorting cost low to high
         self.selenium.get("{}{}".format(self.live_server_url, '/search/?location=Camp+Randall'))
+
+        # test sorting cost low to high
         self.selenium.find_element_by_id("cost_low").click()
         sorted_low_to_high = sorted(self.madison_spots, key=lambda x: x.cost)
         spots = [x.text for x in self.selenium.find_elements_by_tag_name("h3")]
@@ -256,6 +268,10 @@ class SeleniumTests(StaticLiveServerTestCase):
             self.assertEqual(spots[i], sorted_high_to_low[i].street_address)
 
     def test_search_filter_and_sort(self):
-        pass
+        self.selenium.get("{}{}".format(self.live_server_url, '/search/?location=Camp+Randall'))
 
+        # sort by cost low to high for predictable outpu
+        self.selenium.find_element_by_id("cost_low").click()
+        sorted_low_to_high = sorted(self.madison_spots, key=lambda x: x.cost)
 
+        # test filtering results
