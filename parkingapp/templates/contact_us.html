@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+{% load staticfiles %}
+
+<html lang="en">
+	<head> 
+		{% include "header.html" %}
+  		<link rel="stylesheet" href="{% static "bower_components/bootstrap/dist/css/bootstrap.min.css" %}">
+	</head>
+
+	<body>
+	 	{% block nav_bar %}{% endblock %}
+
+	 	<div class="Introduction">
+	 		<h2>Computer Science 506 Game Day Parking and Amenities Finder Team</h2>
+	 		<ul>
+	 			<li>Fang Wang</li>
+	 			<li>Zihan Zhang</li>
+	 			<li>Marco Prouve</li>
+	 			<li>Matt Dallman</li>
+	 			<li>Ryan Schaefer</li>
+	 			<li>Yipeng Zhang</li>
+	 			<li>Zhefeng Li</li>
+	 		</ul>
+	 	</div>
+	 	{% include "footer.html" %}
+	</body>
+</html>
