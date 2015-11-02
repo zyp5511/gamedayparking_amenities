@@ -124,7 +124,7 @@
 
                                                     //not responsive
                                                    '<div id="popContainer" style="width: 400px; min-height: 300px;">'+
-                                                  '<img src="/static/media/'+parkingspots[i].photos.substring(2)+'" height="50%" width="50%">'+
+                                                  '<img src="/static'+parkingspots[i].photos +'" height="50%" width="50%">'+
                                                    '<h4>' + parkingspots[i].street_address+'</h4>'+
                                                    '<p><b>Cost:</b></p>'+
                                                     '<p>$' + parkingspots[i].cost+'</p>'+
@@ -188,6 +188,8 @@
         8) Filter by Table availability
         9) Filter by Electricity availability
         -->
+        // this could be optimized with a check for narrow or widen scope on filter, 
+        // and always using the current list, which shouldn't have to be resorted (unless widen scope)
         <script type="text/javascript">
             var last_sort = "sort_dist_low";
             var global_list = {{ json_parkingspots|safe }}
@@ -248,7 +250,6 @@
                 }
                 document.getElementById("parkingContainer").innerHTML = content;
             }
-
 
             function sort_cost_low(curr_list) {
                 last_sort = "sort_cost_low"
