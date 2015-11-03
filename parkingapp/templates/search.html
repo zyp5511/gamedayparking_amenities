@@ -82,14 +82,9 @@
                     <INPUT TYPE="checkbox" id="filter_electricity" name="electricity" onClick="filter_and_sort_list()" style="display:inline-block;" /> 
                     <label for="electricity" style="display:inline-block; vertical-align:middle; margin-right:10px;">Electricity</label>
                 </FORM>
-                <!--<button id="filter_grill" onclick="filter_grill()">Filter By Grill</button>
-                <button id="filter_bathroom" onclick="filter_bathroom()">Filter By Bathroom</button>
-                <button id="filter_yard" onclick="filter_yard()">Filter By Yard</button>
-                <button id="filter_table" onclick="filter_table()">Filter By Table</button>
-                <button id="filter_electricity" onclick="filter_electricity()">Filter By Electricity</button>-->
             </div>
 
-            <div id="mapContainer" style="width:45%; height:100%; margin-top:1px; float:right;">
+            <div id="mapContainer" style="width:47%; height:100%; margin-top:1px; float:right;">
                 <div id="map" style="height:100%; width:100%;"></div>
 
                 <!-- Script to implement googe maps block -->
@@ -140,22 +135,28 @@
                 </script>
             </div>
             
-            <div id="parkingSpotsContainer" style="width:50%; height:100%; float:left; padding-top:10px; padding-left:20px;">
-                <div id="parkingContainer">
+            <div id="parkingSpotsContainer" style="width:53%; height:100%; float:left; padding-top:10px;">
+                <div id="parkingContainer" style="text-align:center;">
                     {% for x in parkingspots %}
-                        <div class="row">
-                            <section class="col-xs-6 col-sm-6 col-md-4 col-lg-2">
-                                 <a href="#" onClick="pop('popDiv')"><h3>{{ x.street_address }}</h3></a>
-                                <p>{{ x.description }}</p>
+                        <div class="row" style="display:inline-block; width:350px; margin-bottom:30px;">
+                            <section class="col-xs-6 col-sm-6 col-md-12 col-lg-12">
+                                <!--<img src="static/media/default.png" + "alt="Parking Space Picture" height=50% width=50%"> -->
+                                <p style="display:inline-block; width:100px; height:100px; float:left;">
+                                    <img src="{% static "media/default.png" %}" alt="Parking Image" style="width:100px; height:100px; display:inline-block; float:left;">
+                                </p>
+                                <a href="#" onClick="pop('popDiv')">
+                                    <h4 style="position:relative; width:250px;">{{ x.street_address }}</h4>
+                                </a>
+                                <p style="display:inline-block; width:100%;">{{ x.description }}</p>
                                 <div id="popDiv" class="ontop" align="center">
                                     <div id="popup">
-                                    <h4> {{x.street_address}}</h4>
-                                                   <p><b>Cost:</b></p>
-                                                    <p>{{x.cost}}</p>
-                                                   <p><b>Description:</b></p>
-                                                    <p>{{x.description}}</p>
-                                                <a href="#" onClick="hide('popDiv')">Close</a>
-                                            </div>
+                                        <h4> {{x.street_address}}</h4>
+                                        <p><b>Cost:</b></p>
+                                        <p>{{x.cost}}</p>
+                                        <p><b>Description:</b></p>
+                                        <p>{{x.description}}</p>
+                                        <a href="#" onClick="hide('popDiv')">Close</a>
+                                    </div>
                                     <!--<table border="1" id="popup">
                                         <tr>
                                             <td>
@@ -175,8 +176,7 @@
         <!-- Prints footer -->
         {% include "footer.html" %}
 
-        <!--
-        Script to implement Filter functions:
+        <!-- Script to implement Filter functions:
 
         1) Sort by Low Cost First
         2) Sort by High Cost First
@@ -188,8 +188,9 @@
         8) Filter by Table availability
         9) Filter by Electricity availability
         -->
-        // this could be optimized with a check for narrow or widen scope on filter, 
-        // and always using the current list, which shouldn't have to be resorted (unless widen scope)
+
+        <!-- this could be optimized with a check for narrow or widen scope on filter, 
+         and always using the current list, which shouldn't have to be resorted (unless widen scope) -->
         <script type="text/javascript">
             var last_sort = "sort_dist_low";
             var global_list = {{ json_parkingspots|safe }}
