@@ -14,11 +14,13 @@
                 width:100%;
                 min-height:100%;
             }
+
             #bodyContainer {
                 width:100%;
                 height:800px;
                 margin-top:-20px;
             }
+
             #filterContainer {
                 background-color:lightgrey;
                 width:100%;
@@ -32,61 +34,97 @@
                 border-left-width:0px;
                 border-color:lightgrey;
             }
+
             .filterCheckBox {
                 display:inline-block;
             }
+
             .filterCheckBoxContainer {
                 display:inline-block; 
                 vertical-align:middle; 
                 margin-right:10px;
             }
+
             #mapContainer {
                 width:47%; 
                 height:100%; 
                 margin-top:1px; 
                 float:right;
             }
+
             #cost_low {
                 margin-right:5px;
             }
+
             #cost_high, #dist_low {
                 margin-right:5px; 
                 margin-left:5px;
             }
+
             #dist_high {
                 margin-left:5px;
             }
+
             #map {
                 height:100%; 
                 width:100%;
             }
+
             #parkingSpotsContainer {
                 width:53%; 
                 height:100%; 
                 float:left; 
             }
+
             #parkingContainer {
                 text-align:center;
                 margin-top:30px;
+                width:100%;
             }
-            .row {
-                display:inline-block; 
-                width:350px; 
+
+            .parkingSpots {
+                display:inline-block;
+                width:325px; 
                 margin-bottom:30px;
+                margin-right:10px;
+                margin-left:10px;
+                border-style:solid;
+                border-color:grey;
+                border-width:1px;
             }
+
             .parkingImageContainer, .parkingImage {
                 display:inline-block; 
-                width:100px; 
-                height:100px; 
+                width:100%; 
+                height:200px; 
                 float:left;
+                border-style:solid;
+                border-color:lightgrey;
+                border-width:0px;
+                border-bottom-width:1px;
             }
-            .streetAddressHeader {
-                position:relative; 
-                width:250px;
+
+            .streetAddress {
+                float:left;
+                padding-left:10px;
+                text-decoration:underline;
+            }
+
+            .popUpLink:visited  {color:black; text-decoration:none; background-color:none;}
+            .popUpLink:link     {color:black; text-decoration:none; background-color:none;}
+            .popUpLink:hover    {color:blue; text-decoration:none; background-color:none;}
+            .popUpLink:active   {color:red; text-decoration:underline; background-color:none;}
+
+            .reviewRating {
+                float:left;
+                clear:left;
+                padding-left:10px;
             }
             .descriptionContainer {
-                display:inline-block; 
-                width:100%;
+                float:left;
+                clear:left;
+                padding-left:10px;
+                font-style:italic;
             }
 
             .ontop {
@@ -98,15 +136,16 @@
                 display: none;
                 position: fixed;
                 background-color: #C0C0C0;
-                color: #aaaaaa;
+                color: #000000;
                 opacity: .9;
                 filter: alpha(opacity = 50);
             }
+
             #popup {
                 width: 500px;
                 height: 400px;
                 position: absolute;
-                color: #000000;
+                color: #aaaaaa;
                 background-color: #ffffff;
                 /* To align popup window at the center of screen*/
                 top: 50%;
@@ -223,34 +262,33 @@
             <div id="parkingSpotsContainer">
                 <div id="parkingContainer">
                     {% for x in parkingspots %}
-                        <div class="row">
-                            <section class="col-xs-6 col-sm-6 col-md-12 col-lg-12">
-                                <p class="parkingImageContainer">
-                                    <img class="parkingImage" src="{% static "media/default.png" %}" alt="Parking Image">
-                                </p>
-                                <a href="#" onClick="pop('popDiv')">
-                                    <h4 class="streetAddressHeader">{{ x.street_address }}</h4>
-                                </a>
-                                <p class="descriptionContainer">{{ x.description }}</p>
-                                <div id="popDiv" class="ontop">
-                                    <div id="popup">
-                                        <h4> {{x.street_address}}</h4>
-                                        <p><b>Cost:</b></p>
-                                        <p>{{x.cost}}</p>
-                                        <p><b>Description:</b></p>
-                                        <p>{{x.description}}</p>
-                                        <a href="#" onClick="hide('popDiv')">Close</a>
-                                    </div>
-                                    <!--<table border="1" id="popup">
-                                        <tr>
-                                            <td>
-                                                Click Close OR escape button to close it
-                                                
-                                            </td>
-                                            </tr>
-                                    </table>-->
+                        <div class="parkingSpots">
+                            <p class="parkingImageContainer">
+                                <img class="parkingImage" src="{% static "media/default.png" %}" alt="Parking Image">
+                            </p>
+                            <a class="popUpLink" href="#" onClick="pop('popDiv')">
+                                <p class="streetAddress">{{ x.street_address }}, {{ x.city }}, {{ x.state }}</p>
+                            </a>
+                            <p class="reviewRating"><b>Review:&nbsp</b></p>
+                            <p class="descriptionContainer">{{ x.description }}</p>
+                            <div id="popDiv" class="ontop">
+                                <div id="popup">
+                                    <h4> {{x.street_address}}</h4>
+                                    <p><b>Cost:</b></p>
+                                    <p>{{x.cost}}</p>
+                                    <p><b>Description:</b></p>
+                                    <p>{{x.description}}</p>
+                                    <a href="#" onClick="hide('popDiv')">Close</a>
                                 </div>
-                            </section>
+                                <!--<table border="1" id="popup">
+                                    <tr>
+                                        <td>
+                                            Click Close OR escape button to close it
+                                            
+                                        </td>
+                                    </tr>
+                                </table>-->
+                            </div>
                         </div>
                     {% endfor %}
                 </div>
@@ -307,24 +345,22 @@
                 
                 var content = "";
                 for (i = 0; i < curr_list.length; i++) {
-                    content += "<div class='row'>";
-                    content += "<section class='col-xs-6 col-sm-6 col-md-12 col-lg-12'>";
+                    content += "<div class='parkingSpots'>";
                     content += "<p class='parkingImageContainer'>";
-                    content += "<img class='parkingImage' src=\"/static" + parkingspots[i].photos + '\" alt="Parking Image>"</p>';
+                    content += "<img class='parkingImage' src=\"/static" + parkingspots[i].photos + '\" alt="Parking Image"></p>';
                     content += "<a href='#' onClick=\"pop('popDiv')\">";
-                    content += "<h4 class='streetAddressHeader'>" + curr_list[i].street_address + "</h4></a>";
-                    content += "<p class='descriptionContainer'>" + curr_list[i].description + "</p>"
-                    content += "<div id='popDiv' class='ontop' align='center'>"
-                    content += "<div id='popup'>"
-                    content += "<h4>" + curr_list[i].street_address + "</h4>"
-                    content += "<p><b>Cost:</b></p>"
-                    content += "<p>" + curr_list[i].cost + "</p>"
-                    content += "<p><b>Description:</b></p>"
-                    content += "<p>" + curr_list[i].description + "</p>"
-                    content += "<a href='#' onClick=\"hide('popDiv')\">Close</a>"
-                    content += "</div></div>"
-                    content += "</section>";
-                    content += "</div>";
+                    content += "<p class='streetAddress' style='color:black;'>" + curr_list[i].street_address + ",&nbsp" + curr_list[i].city + ",&nbsp" + curr_list[i].state + "</p></a>";
+                    content += "<p class='reviewRating'><b>Review:&nbsp</b></p>";
+                    content += "<p class='descriptionContainer'>" + curr_list[i].description + "</p>";
+                    content += "<div id='popDiv' class='ontop' align='center'>";
+                    content += "<div id='popup'>";
+                    content += "<h4>" + curr_list[i].street_address + "</h4>";
+                    content += "<p><b>Cost:</b></p>";
+                    content += "<p>" + curr_list[i].cost + "</p>";
+                    content += "<p><b>Description:</b></p>";
+                    content += "<p>" + curr_list[i].description + "</p>";
+                    content += "<a href='#' onClick=\"hide('popDiv')\">Close</a>";
+                    content += "</div></div></div>";
                 }
                 document.getElementById("parkingContainer").innerHTML = content;
             }
