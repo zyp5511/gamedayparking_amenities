@@ -10,6 +10,48 @@
                 type="text/javascript"></script>
         
         <style>
+            body {
+                width:100%;
+                min-height:100%;
+            }
+            #bodyContainer {
+                width:100%;
+                height:800px;
+                margin-top:-20px;
+            }
+            #filterContainer {
+                background-color:lightgrey;
+                width:100%;
+                height:70px;
+                padding-top:22px;
+                padding-bottom:10px;
+                text-align:center;
+                border-style:inset;
+                border-width:1px;
+                border-right-width:0px;
+                border-left-width:0px;
+                border-color:lightgrey;
+            }
+            .row {
+                display:inline-block; 
+                width:350px; 
+                margin-bottom:30px;
+            }
+            .parkingImageContainer, .parkingImage {
+                display:inline-block; 
+                width:100px; 
+                height:100px; 
+                float:left;
+            }
+            .streetAddressHeader {
+                position:relative; 
+                width:250px;
+            }
+            .descriptionContainer {
+                display:inline-block; 
+                width:100%;
+            }
+
             .ontop {
                 z-index: 999;
                 width: 100%;
@@ -36,28 +78,12 @@
                 margin-left: -250px;
             }
         </style>
-        
-        <script type="text/javascript">
-            function pop(div) {
-                document.getElementById(div).style.display = 'block';
-            }
-            function hide(div) {
-                document.getElementById(div).style.display = 'none';
-            }
-            //To detect escape button
-            document.onkeydown = function(evt) {
-                evt = evt || window.event;
-                if (evt.keyCode == 27) {
-                    hide('popDiv');
-                }
-            };
-        </script>
     </head>
     
-    <body style="width:100%; min-height:100%;">
+    <body>
         {% block nav_bar %}{% endblock %}
-        <div id="bodyContainer" style="width:100%; height:800px; margin-top:-20px;">
-            <div id="filterContainer" style="background-color:lightgrey; width:100%; height:70px; padding-top:22px; padding-bottom:10px; text-align:center; border-style:inset; border-width:1px; border-right-width:0px; border-left-width:0px; border-color:lightgrey;">
+        <div id="bodyContainer">
+            <div id="filterContainer">
                 <button id="cost_low" onclick="sort_cost_low()" style="margin-right:5px;">Cost Low to High</button>
 
                 <button id="cost_high" onclick="sort_cost_high()" style="margin-right:5px; margin-left:5px;">Cost High To Low</button>
@@ -138,17 +164,16 @@
             <div id="parkingSpotsContainer" style="width:53%; height:100%; float:left; padding-top:10px;">
                 <div id="parkingContainer" style="text-align:center;">
                     {% for x in parkingspots %}
-                        <div class="row" style="display:inline-block; width:350px; margin-bottom:30px;">
+                        <div class="row">
                             <section class="col-xs-6 col-sm-6 col-md-12 col-lg-12">
-                                <!--<img src="static/media/default.png" + "alt="Parking Space Picture" height=50% width=50%"> -->
-                                <p style="display:inline-block; width:100px; height:100px; float:left;">
-                                    <img src="{% static "media/default.png" %}" alt="Parking Image" style="width:100px; height:100px; display:inline-block; float:left;">
+                                <p class="parkingImageContainer">
+                                    <img class="parkingImage" src="{% static "media/default.png" %}" alt="Parking Image">
                                 </p>
                                 <a href="#" onClick="pop('popDiv')">
-                                    <h4 style="position:relative; width:250px;">{{ x.street_address }}</h4>
+                                    <h4 class="streetAddressHeader">{{ x.street_address }}</h4>
                                 </a>
-                                <p style="display:inline-block; width:100%;">{{ x.description }}</p>
-                                <div id="popDiv" class="ontop" align="center">
+                                <p class="descriptionContainer">{{ x.description }}</p>
+                                <div id="popDiv" class="ontop">
                                     <div id="popup">
                                         <h4> {{x.street_address}}</h4>
                                         <p><b>Cost:</b></p>
@@ -176,21 +201,11 @@
         <!-- Prints footer -->
         {% include "footer.html" %}
 
+        <!-- SCRIPTS BEGIN-->
+
         <!-- Script to implement Filter functions:
-
-        1) Sort by Low Cost First
-        2) Sort by High Cost First
-        3) Sort by Closest Distance
-        4) Sort by Furthest Distance
-        5) Filter by Grill Availability
-        6) Filter by Bathroom Availability
-        7) Filter by Yard availability
-        8) Filter by Table availability
-        9) Filter by Electricity availability
-        -->
-
-        <!-- this could be optimized with a check for narrow or widen scope on filter, 
-         and always using the current list, which shouldn't have to be resorted (unless widen scope) -->
+        This could be optimized with a check for narrow or widen scope on filter, 
+        and always using the current list, which shouldn't have to be resorted (unless widen scope) -->
         <script type="text/javascript">
             var last_sort = "sort_dist_low";
             var global_list = {{ json_parkingspots|safe }}
@@ -234,9 +249,12 @@
                 var content = "";
                 for (i = 0; i < curr_list.length; i++) {
                     content += "<div class='row'>";
-                    content += "<section class='col-xs-6 col-sm-6 col-md-4 col-lg-2'>";
-                    content += "<a href='#' onClick=\"pop('popDiv')\"><h3>" + curr_list[i].street_address + "</h3></a>"
-                    content += "<p>" + curr_list[i].description + "</p>"
+                    content += "<section class='col-xs-6 col-sm-6 col-md-12 col-lg-12'>";
+                    content += "<p class='parkingImageContainer'>";
+                    content += "<img class='parkingImage' src=\"/static" + parkingspots[i].photos + '\" alt="Parking Image>"</p>';
+                    content += "<a href='#' onClick=\"pop('popDiv')\">";
+                    content += "<h4 class='streetAddressHeader'>" + curr_list[i].street_address + "</h4></a>";
+                    content += "<p class='descriptionContainer'>" + curr_list[i].description + "</p>"
                     content += "<div id='popDiv' class='ontop' align='center'>"
                     content += "<div id='popup'>"
                     content += "<h4>" + curr_list[i].street_address + "</h4>"
@@ -270,9 +288,27 @@
             }
         </script>
 
+        <script type="text/javascript">
+            function pop(div) {
+                document.getElementById(div).style.display = 'block';
+            }
+            function hide(div) {
+                document.getElementById(div).style.display = 'none';
+            }
+            //To detect escape button
+            document.onkeydown = function(evt) {
+                evt = evt || window.event;
+                if (evt.keyCode == 27) {
+                    hide('popDiv');
+                }
+            };
+        </script>
+
         <script src="{% static "bower_components/jquery/dist/jquery.min.js" %}"></script>
         <script src="{% static "bower_components/bootstrap/dist/js/bootstrap.min.js" %}"></script>
         <script src="{% static "js/parking_sort.js" %}"></script>
+
+        <!-- SCRIPTS END -->
     </body>
     
 </html>
