@@ -238,14 +238,14 @@ class SeleniumTests(StaticLiveServerTestCase):
         # test sorting cost low to high
         self.selenium.find_element_by_id("cost_low").click()
         sorted_low_to_high = sorted(self.madison_spots, key=lambda x: x.cost)
-        spots = [x.text for x in self.selenium.find_elements_by_tag_name("h4")]
+        spots = [x.text for x in self.selenium.find_elements_by_class_name("streetAddressHeader")]
         for i in range(len(sorted_low_to_high)):
             self.assertEqual(spots[i], sorted_low_to_high[i].street_address)
 
         # test sorting cost high to low
         self.selenium.find_element_by_id("cost_high").click()
         sorted_high_to_low = sorted(self.madison_spots, key=lambda x: x.cost, reverse=True)
-        spots = [x.text for x in self.selenium.find_elements_by_tag_name("h4")]
+        spots = [x.text for x in self.selenium.find_elements_by_class_name("streetAddressHeader")]
         for i in range(len(sorted_high_to_low)):
             self.assertEqual(spots[i], sorted_high_to_low[i].street_address)
 
@@ -256,14 +256,14 @@ class SeleniumTests(StaticLiveServerTestCase):
         # test sorting distance low to high
         self.selenium.find_element_by_id("dist_low").click()
         sorted_low_to_high = sorted(self.madison_spots, key=lambda x: x.distance)
-        spots = [x.text for x in self.selenium.find_elements_by_tag_name("h4")]
+        spots = [x.text for x in self.selenium.find_elements_by_class_name("streetAddressHeader")]
         for i in range(len(sorted_low_to_high)):
             self.assertEqual(spots[i], sorted_low_to_high[i].street_address)
 
         # test sorting distance high to low
         self.selenium.find_element_by_id("dist_high").click()
         sorted_high_to_low = sorted(self.madison_spots, key=lambda x: x.distance, reverse=True)
-        spots = [x.text for x in self.selenium.find_elements_by_tag_name("h4")]
+        spots = [x.text for x in self.selenium.find_elements_by_class_name("streetAddressHeader")]
         for i in range(len(sorted_high_to_low)):
             self.assertEqual(spots[i], sorted_high_to_low[i].street_address)
 
