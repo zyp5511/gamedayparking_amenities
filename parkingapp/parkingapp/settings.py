@@ -106,7 +106,7 @@ DATABASES = {
 # Location Needed for GeoIP Support
 GEOIP_PATH = os.path.join(PROJECT_DIRECTORY, 'GeoLiteCity.dat')
 
-LOGIN_REDIRECT_URL = '/accounts/logout'
+LOGIN_REDIRECT_URL = '/home'
 AUTHENTICATION_BACKENDS = (
 
     # Needed to login by username in Django admin, regardless of `allauth`

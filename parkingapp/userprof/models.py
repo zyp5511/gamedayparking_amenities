@@ -33,4 +33,4 @@ def do_stuff_after_sign_up(sender, **kwargs):
     new_user.save()
     user.save()
   except KeyError:
-    pass
+    pass 
