@@ -13,6 +13,7 @@ $ git clone https://github.com/rschaefer2/gameday_amenities.git && cd gameday_am
 
 Ubuntu:
 ```sh
+$ sudo apt-get update
 $ sudo apt-get install postgresql postgis postgresql-9.3-postgis-2.1 libpq-dev python-dev
 ```
 
@@ -27,12 +28,20 @@ $ xcode-select --install
 Links to the above packages and dependencies can be found here:
 
 - postgres   (http://www.postgresql.org/download/linux/)
+- postgis    (http://postgis.net/install)
 - geos       (http://trac.osgeo.org/geos/)
 - gdal       (https://trac.osgeo.org/gdal/wiki/DownloadingGdalBinaries)
 - libpq-dev  (https://packages.debian.org/sid/libpq-dev)
 - python-dev (http://packages.ubuntu.com/precise/python-dev)
 
 **Run the following postgres commands to setup database**
+
+This command will run a script of sql commands
+```sh
+$ sudo -u postgres psql -f database.sql
+```
+
+The commands the script runs are listed below
 ```sh
 # from ubuntu, start psql with the following. Mac - first command is "psql" only
 $ sudo -u postgres psql
@@ -45,12 +54,7 @@ testdb=# CREATE EXTENSION postgis_topology;
 testdb=#\q
 ```
 
-These commands can be ran from the command line with the following file:
-```sh
-$ sudo -u postgres psql -f database_setup.sql
-```
-
-Import the database
+Import the test database
 ```sh
 $ sudo -u postgres psql -U postgres testdb < dbexport.pgsql
 ```
@@ -68,4 +72,10 @@ In your webrowser, navigate to *localhost:8000/home* to access the home page.
 ***Congratulations!*** You can test out the application, and start developing.
 
 
+**Testing**
+From the top parkingapp direcotry (which contains manage.py), tests can be run using the following
+```sh
+$ python manage.py test
+```
 
+The code for testing can be found in parkingapp/parkingspot/tests.py
