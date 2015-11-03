@@ -184,7 +184,7 @@ class SeleniumTests(StaticLiveServerTestCase):
         search_input.send_keys("Camp Randall")
         search_input.submit()
         # verify three madison parkingspots appear
-        spots = [x.text for x in self.selenium.find_elements_by_tag_name("h3")]
+        spots = [x.text for x in self.selenium.find_elements_by_tag_name("h4")]
         test_spots = [x.street_address for x in self.madison_spots]
         self.assertTrue(all(x in spots for x in test_spots))
 
@@ -215,7 +215,7 @@ class SeleniumTests(StaticLiveServerTestCase):
     # not working with ameniteies JSONField. Somehow view isn't passing correct JSON and
     # is escaping quotes? Can see problem by viewing source of page during test
     def test_search_filter(self):
-        # test filtering by bathroom 
+        # test filtering by bathroom
         self.selenium.get("{}{}".format(self.live_server_url, '/search/?location=Madison%2C+WI'))
 
         bathroom_filtered = [x.street_address for x in self.madison_spots if json.loads(x.amenities)['bathroom']]
@@ -226,7 +226,7 @@ class SeleniumTests(StaticLiveServerTestCase):
 
         # filter buttons
         self.selenium.find_element_by_id("filter_grill").click()
-        displayed = [x.text for x in self.selenium.find_elements_by_tag_name("h3")]
+        displayed = [x.text for x in self.selenium.find_elements_by_tag_name("h4")]
 
         # assert all displayed. order doesn't matter
         self.assertTrue(all(x in displayed for x in grill_filtered))
@@ -238,32 +238,32 @@ class SeleniumTests(StaticLiveServerTestCase):
         # test sorting cost low to high
         self.selenium.find_element_by_id("cost_low").click()
         sorted_low_to_high = sorted(self.madison_spots, key=lambda x: x.cost)
-        spots = [x.text for x in self.selenium.find_elements_by_tag_name("h3")]
+        spots = [x.text for x in self.selenium.find_elements_by_tag_name("h4")]
         for i in range(len(sorted_low_to_high)):
             self.assertEqual(spots[i], sorted_low_to_high[i].street_address)
 
         # test sorting cost high to low
         self.selenium.find_element_by_id("cost_high").click()
         sorted_high_to_low = sorted(self.madison_spots, key=lambda x: x.cost, reverse=True)
-        spots = [x.text for x in self.selenium.find_elements_by_tag_name("h3")]
+        spots = [x.text for x in self.selenium.find_elements_by_tag_name("h4")]
         for i in range(len(sorted_high_to_low)):
             self.assertEqual(spots[i], sorted_high_to_low[i].street_address)
 
-        # view calculates distance, do same calcultion for test spots 
+        # view calculates distance, do same calcultion for test spots
         point = Point(-89.412613, 43.069722) #Camp Randall
         for x in self.madison_spots:
             x.distance =  x.location.distance(point)
         # test sorting distance low to high
         self.selenium.find_element_by_id("dist_low").click()
         sorted_low_to_high = sorted(self.madison_spots, key=lambda x: x.distance)
-        spots = [x.text for x in self.selenium.find_elements_by_tag_name("h3")]
+        spots = [x.text for x in self.selenium.find_elements_by_tag_name("h4")]
         for i in range(len(sorted_low_to_high)):
             self.assertEqual(spots[i], sorted_low_to_high[i].street_address)
 
         # test sorting distance high to low
         self.selenium.find_element_by_id("dist_high").click()
         sorted_high_to_low = sorted(self.madison_spots, key=lambda x: x.distance, reverse=True)
-        spots = [x.text for x in self.selenium.find_elements_by_tag_name("h3")]
+        spots = [x.text for x in self.selenium.find_elements_by_tag_name("h4")]
         for i in range(len(sorted_high_to_low)):
             self.assertEqual(spots[i], sorted_high_to_low[i].street_address)
 
