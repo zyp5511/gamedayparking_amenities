@@ -14,14 +14,15 @@ $ git clone https://github.com/rschaefer2/gameday_amenities.git && cd gameday_am
 Ubuntu:
 ```sh
 $ sudo apt-get update
-$ sudo apt-get install postgresql postgis postgresql-9.3-postgis-2.1 libpq-dev python-dev
+$ sudo apt-get install postgresql postgis postgresql-9.3-postgis-2.1 libpq-dev python-dev pip
+$ sudo pip install virtualenv
 ```
 
 Mac:
 ```sh
 # install homebrew package manager
 $ ruby -e "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install)"
-$ brew install postgresql postgis python-dev geoip
+$ brew install postgresql postgis python-dev geoip pip
 $ xcode-select --install
 ```
 
