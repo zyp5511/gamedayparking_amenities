@@ -1,26 +1,53 @@
 <!DOCTYPE html>
 {% load staticfiles %}
 <html lang="en">
-<head>
-  {% include "header.html" %}
-  <link rel="stylesheet" href="{% static "bower_components/bootstrap/dist/css/bootstrap.min.css" %}">
-</head>
-<body >
-    {% block nav_bar %}{% endblock %}
-    <h1 align="center">
-        <p style="margin-top: 0; margin-bottom: 0; padding-top: 0 !important; padding-bottom: 42px; font-weight: 600; font-size: 45px; line-height: 1;">
-            Gameday Amenities Finder
-        </p>
-    </h1>
-    <form align="center" action="../search/" method="get" name="search_bar">
-        <label for="location">Location: </label>
-        <input id="location" type="text" name="location" value="{{ location }}">
-        <input type="submit" value="OK">
-    </form>
+    <head>
+        {% include "header.html" %}
+        <link   rel="stylesheet" 
+                href="{% static "bower_components/bootstrap/dist/css/bootstrap.min.css" %}">
 
-    <script src="{% static "bower_components/jquery/dist/jquery.min.js" %}"></script>
-    <script src="{% static "bower_components/bootstrap/dist/js/bootstrap.min.js" %}"></script>
-    {% include "footer.html" %}
-</body>
+        <script type="text/javascript">
+            $("#location").keyup(function(event){
+                if(event.keyCode == 13){
+                    $("#id_of_button").click();
+                }
+            });
+        </script>
 
+        <style>
+            #homeTitle {
+                margin-top:150px; 
+                margin-bottom:0px; 
+                padding-top:0px !important; 
+                padding-bottom:42px; 
+                font-weight:600; 
+                font-size:45px; 
+                line-height:1;
+            }
+            #location {
+                background-color:rgba(0,0,0,.15);
+                border-radius:5px;
+                padding-left:10px;
+                height:40px;
+                width:400px;
+            }
+            input:focus {outline: none;}
+        </style>
+    </head>
+
+    <body>
+        {% block nav_bar %}{% endblock %}
+        <h1 align="center">
+            <p id="homeTitle">
+                Gameday Amenities Finder
+            </p>
+        </h1>
+        <form align="center" action="../search/" method="get" name="search_bar">
+            <input id="location" type="text" name="location" placeholder="E.g. {{ location }}">
+        </form>
+
+        <script src="{% static "bower_components/jquery/dist/jquery.min.js" %}"></script>
+        <script src="{% static "bower_components/bootstrap/dist/js/bootstrap.min.js" %}"></script>
+        {% include "footer.html" %}
+    </body>
 </html>
