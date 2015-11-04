@@ -206,7 +206,7 @@
                             TYPE="checkbox" 
                             id="filter_grill" 
                             name="grill" 
-                            onClick="filter_and_sort_list()" /> 
+                            onClick="filter_grill_func()" /> 
                     <label  class="filterCheckBoxLabel" 
                             for="grill">Grill</label>
 
@@ -214,7 +214,7 @@
                             TYPE="checkbox" 
                             id="filter_bathroom" 
                             name="bathroom" 
-                            onClick="filter_and_sort_list()" />
+                            onClick="filter_bathroom_func()" />
                     <label  class="filterCheckBoxLabel" 
                             for="bathroom">Bathroom</label>
 
@@ -222,7 +222,7 @@
                             TYPE="checkbox" 
                             id="filter_yard" 
                             name="yard" 
-                            onClick="filter_and_sort_list()" />
+                            onClick="filter_yard_func()" />
                     <label  class="filterCheckBoxLabel" 
                             for="yard">Yard</label>
 
@@ -230,7 +230,7 @@
                             TYPE="checkbox" 
                             id="filter_table" 
                             name="table" 
-                            onClick="filter_and_sort_list()" />
+                            onClick="filter_table_func()" />
                     <label  class="filterCheckBoxLabel" 
                             for="table">Table</label>
 
@@ -238,7 +238,7 @@
                             TYPE="checkbox" 
                             id="filter_electricity" 
                             name="electricity" 
-                            onClick="filter_and_sort_list()" /> 
+                            onClick="filter_electricity_func()" /> 
                     <label  class="filterCheckBoxLabel" 
                             for="electricity">Electricity</label>
                 </FORM>
@@ -342,24 +342,25 @@
         <script type="text/javascript">
             var last_sort = "sort_dist_low";
             var global_list = {{ json_parkingspots|safe }}
+            var curr_list = {{json_parkingspots|safe }}
             function filter_and_sort_list() {
                 curr_list = global_list.slice(); //used to copy global_list
                 // get checkbox values
-                filter_yard = document.getElementById("filter_yard").checked
-                filter_bathroom = document.getElementById("filter_bathroom").checked
-                filter_table = document.getElementById("filter_table").checked
-                filter_electricity = document.getElementById("filter_electricity").checked
-                filter_grill = document.getElementById("filter_grill").checked
+                yard_checked = document.getElementById("filter_yard").checked
+                bathroom_checked = document.getElementById("filter_bathroom").checked
+                table_checked = document.getElementById("filter_table").checked
+                electricity_checked = document.getElementById("filter_electricity").checked
+                grill_checked = document.getElementById("filter_grill").checked
 
-                if (filter_yard)
+                if (yard_checked)
                     curr_list = curr_list.filter(filter_by_yard)
-                if (filter_bathroom)
+                if (bathroom_checked)
                     curr_list = curr_list.filter(filter_by_bathroom)
-                if (filter_table) 
+                if (table_checked) 
                     curr_list = curr_list.filter(filter_by_table)
-                if (filter_electricity)
+                if (electricity_checked)
                     curr_list = curr_list.filter(filter_by_electricity)
-                if (filter_grill)
+                if (grill_checked)
                     curr_list = curr_list.filter(filter_by_grill)
 
                 switch (last_sort) {
@@ -375,10 +376,99 @@
                 case "sort_dist_high":
                     curr_list.sort(sort_by_high_distance);
                     break;
+                case "sort_rating_low":
+                    curr_list.sort(sort_by_low_rating);
+                    break;
+                case "sort_rating_high":
+                    curr_list.sort(sort_by_high_rating);
+                    break;
                 default:
                     document.write("No last sort");
                 }
-                
+                updateParkingList(curr_list);
+            }
+            
+            function filter_yard_func () {
+                filter_yard_check = document.getElementById("filter_yard").checked;
+                if (filter_yard_check) {
+                    curr_list = curr_list.filter(filter_by_yard);
+                    updateParkingList(curr_list);
+                }
+                else {
+                    filter_and_sort_list();
+                }
+            }
+            function filter_bathroom_func () {
+                filter_bathroom_check = document.getElementById("filter_bathroom").checked;
+                if (filter_bathroom_check) {
+                    curr_list = curr_list.filter(filter_by_bathroom);
+                    updateParkingList(curr_list);
+                }
+                else {
+                    filter_and_sort_list();
+                }
+            }
+            function filter_grill_func () {
+                filter_grill_check = document.getElementById("filter_grill").checked;
+                if (filter_grill_check) {
+                    curr_list = curr_list.filter(filter_by_grill);
+                    updateParkingList(curr_list);
+                }
+                else {
+                    filter_and_sort_list();
+                }
+            }
+            function filter_electricity_func () {
+                filter_electricity_check = document.getElementById("filter_electricity").checked;
+                if (filter_electricity_check) {
+                    curr_list = curr_list.filter(filter_by_electricity);
+                    updateParkingList(curr_list);
+                }
+                else {
+                    filter_and_sort_list();
+                }
+            }
+            function filter_table_func () {
+                filter_table_check = document.getElementById("filter_table").checked;
+                if (filter_table_check) {
+                    curr_list = curr_list.filter(filter_by_table);
+                    updateParkingList(curr_list);
+                }
+                else {
+                    filter_and_sort_list();
+                }
+            }
+            function sort_cost_low() {
+                last_sort = "sort_cost_low"
+                curr_list.sort(sort_by_low_cost)
+                updateParkingList(curr_list);
+            }
+            function sort_cost_high() {
+                last_sort = "sort_cost_high"
+                curr_list.sort(sort_by_high_cost)
+                updateParkingList(curr_list);
+            }
+            function sort_dist_low() {
+                last_sort = "sort_dist_low"
+                curr_list.sort(sort_by_low_distance)
+                updateParkingList(curr_list);
+            }
+            function sort_dist_high() {
+                last_sort = "sort_dist_high"
+                curr_list.sort(sort_by_high_distance)
+                updateParkingList(curr_list);
+            }
+            function sort_rating_low() {
+                last_sort = "sort_rating_low"
+                curr_list.sort(sort_by_low_rating)
+                updateParkingList(curr_list);
+            }
+            function sort_rating_high() {
+                last_sort = "sort_rating_high"
+                curr_list.sort(sort_by_high_rating)
+                updateParkingList(curr_list);
+            }
+            function updateParkingList(curr_list) {
                 var content = "";
                 for (i = 0; i < curr_list.length; i++) {
                     content += "<div class='parkingSpots'>";
@@ -399,23 +489,6 @@
                     content += "</div></div></div>";
                 }
                 document.getElementById("parkingContainer").innerHTML = content;
-            }
-
-            function sort_cost_low(curr_list) {
-                last_sort = "sort_cost_low"
-                filter_and_sort_list();
-            }
-            function sort_cost_high(curr_list) {
-                last_sort = "sort_cost_high"
-                filter_and_sort_list();
-            }
-            function sort_dist_low(curr_list) {
-                last_sort = "sort_dist_low"
-                filter_and_sort_list();
-            }
-            function sort_dist_high(curr_list) {
-                last_sort = "sort_dist_high"
-                filter_and_sort_list();
             }
         </script>
 
