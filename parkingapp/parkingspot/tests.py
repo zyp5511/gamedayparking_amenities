@@ -13,6 +13,7 @@ from geopy.geocoders import GoogleV3
 
 from django.contrib.auth.models import User
 from userprof.models import AdminUser, ExtendedUser
+from review.models import Review
 from userprof.tests import create_allauth_user
 
 from jsonfield import JSONField
@@ -23,12 +24,12 @@ class ParkingSpotTests(TestCase):
         user = User.objects.create()
         user.save()
         #allauth_user = create_allauth_user("rschaefer@wisc.edu")
-        extended_user = ExtendedUser.objects.create(
+        self.extended_user = ExtendedUser.objects.create(
             main_user = user,
         )
-        extended_user.save()
+        self.extended_user.save()
         admin_user = AdminUser.objects.create(
-            extended_user = extended_user
+            extended_user = self.extended_user
         )
         admin_user.save()
 
@@ -72,8 +73,49 @@ class ParkingSpotTests(TestCase):
         self.assertEqual(spots[0].pk, self.test_spot2.pk)
 
 
-    def test_review(self):
-        time.sleep(2)
+
+    def test_zero_ratings(self):
+        rating = self.test_spot1.get_avg_rating()
+        self.assertEqual(None, rating)
+
+
+    def test_one_rating(self):
+        review1 = Review(
+                    rating = 5,
+                    reviewer = self.extended_user,
+                    parkingspot= self.test_spot1
+                )
+        review1.save()
+        rating = self.test_spot1.get_avg_rating()
+        self.assertEqual(5, rating)
+        review1.delete()
+
+
+    def test_multiple_ratings(self):
+        review1 = Review(
+                    rating = 5,
+                    reviewer = self.extended_user,
+                    parkingspot= self.test_spot1
+                )
+        review2 = Review(
+                    rating = 4,
+                    reviewer = self.extended_user,
+                    parkingspot= self.test_spot1
+                )
+        review3 = Review(
+                    rating = 3,
+                    reviewer = self.extended_user,
+                    parkingspot= self.test_spot1
+                )
+        review1.save()
+        review2.save()
+        review3.save()
+        rating = self.test_spot1.get_avg_rating()
+        self.assertEqual(4, rating)
+        review1.delete()
+        review2.delete()
+        review3.delete()
+
 
 class SeleniumTests(StaticLiveServerTestCase):
 
