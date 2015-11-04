@@ -29,6 +29,20 @@ function sort_by_high_distance(a, b) {
 		return -1;
 	return 0
 }
+function sort_by_low_rating(a, b) {
+	if (a.rating < b.rating)
+		return -1;
+	else if (a.rating> b.rating)
+		return 1;
+	return 0
+}
+function sort_by_high_rating(a, b) {
+	if (a.rating < b.rating)
+		return 1;
+	else if (a.rating > b.rating)
+		return -1;
+	return 0
+}
 
 function filter_by_bathroom(a) {
     return a.amenities.bathroom;
