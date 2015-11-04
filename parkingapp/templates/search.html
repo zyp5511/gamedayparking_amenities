@@ -37,6 +37,7 @@
                 float:left;
                 margin-top:15px;
                 margin-left:20px;
+                margin-right:30px;
                 width:250px;
                 height:40px;
             }
@@ -53,36 +54,42 @@
 
             input:focus {outline: none;}
 
-            #cost_low {
-                margin-top:22px;
-                margin-right:5px;
-                margin-left: 20px;
+            .filterCouple {
+                display:inline-block;
+                text-align:center;
+                width:155px;
+                height:100%;
+                padding-top:5px;
+                padding-bottom:5px;
+                margin-left:20px;
+                margin-right:20px;
             }
 
-            #cost_high, #dist_low {
-                margin-top:22px;
-                margin-right:5px; 
-                margin-left:5px;
+            #cost_low, 
+            #dist_low,
+            #rat_low {
+                width:150px;
             }
 
-            #dist_high {
-                margin-top:22px;
-                margin-left:5px;
-            }
+            #cost_high,
+            #dist_high,
+            #rat_high {
+                width:150px;
+                margin-top:5px;
+            } 
 
             #checkboxForm {
-                display:inline-block; 
-                margin-top:22px;
-                margin-left:10px;
-            }
-
-            .filterCheckBox {
                 display:inline-block;
+                float:right;
+                width:500px;
+                height:100%;
+                padding-top:25px;
             }
 
             .filterCheckBoxLabel {
-                display:inline-block; 
-                vertical-align:middle; 
+                position:relative;
+                vertical-align:center;
+                bottom:1px;
                 margin-right:10px;
             }
 
@@ -196,13 +203,21 @@
                     <input id="searchBar" type="text" name="location" placeholder="E.g. Madison, WI">
                 </form>
 
-                <button id="cost_low" onclick="sort_cost_low()">Cost Low to High</button>
-                <button id="cost_high" onclick="sort_cost_high()">Cost High To Low</button>
-                <button id="dist_low" onclick="sort_dist_low()">Distance Low to High</button>
-                <button id="dist_high" onclick="sort_dist_high()">Distance High to Low</button>
-                
-                <FORM id="checkboxForm" NAME="amenities">
-                    <INPUT  class="filterCheckBox" 
+                <div class="filterCouple">
+                    <button id="cost_low" onclick="sort_cost_low()">Cost Low to High</button>
+                    <button id="cost_high" onclick="sort_cost_high()">Cost High To Low</button>
+                </div>
+                <div class="filterCouple">
+                    <button id="dist_low" onclick="sort_dist_low()">Distance Low to High</button>
+                    <button id="dist_high" onclick="sort_dist_high()">Distance High to Low</button>
+                </div>
+                <div class="filterCouple">
+                    <button id="rat_low" onclick="sort_rating_low()">Rating Low to High</button>
+                    <button id="rat_high" onclick="sort_rating_high()">Rating High to Low</button>
+                </div>
+
+                <form id="checkboxForm" NAME="amenities">
+                    <input  class="filterCheckBox" 
                             TYPE="checkbox" 
                             id="filter_grill" 
                             name="grill" 
@@ -210,7 +225,7 @@
                     <label  class="filterCheckBoxLabel" 
                             for="grill">Grill</label>
 
-                    <INPUT  class="filterCheckBox" 
+                    <input  class="filterCheckBox" 
                             TYPE="checkbox" 
                             id="filter_bathroom" 
                             name="bathroom" 
@@ -218,7 +233,7 @@
                     <label  class="filterCheckBoxLabel" 
                             for="bathroom">Bathroom</label>
 
-                    <INPUT  class="filterCheckBox" 
+                    <input  class="filterCheckBox" 
                             TYPE="checkbox" 
                             id="filter_yard" 
                             name="yard" 
@@ -226,7 +241,7 @@
                     <label  class="filterCheckBoxLabel" 
                             for="yard">Yard</label>
 
-                    <INPUT  class="filterCheckBox" 
+                    <input  class="filterCheckBox" 
                             TYPE="checkbox" 
                             id="filter_table" 
                             name="table" 
@@ -234,14 +249,14 @@
                     <label  class="filterCheckBoxLabel" 
                             for="table">Table</label>
 
-                    <INPUT  class="filterCheckBox" 
+                    <input  class="filterCheckBox" 
                             TYPE="checkbox" 
                             id="filter_electricity" 
                             name="electricity" 
                             onClick="filter_electricity_func()" /> 
                     <label  class="filterCheckBoxLabel" 
                             for="electricity">Electricity</label>
-                </FORM>
+                </form>
             </div>
 
             <div id="mapContainer">
