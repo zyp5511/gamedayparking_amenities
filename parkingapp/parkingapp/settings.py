@@ -44,7 +44,6 @@ INSTALLED_APPS = (
     'userprof',
     'parkingspot',
     'review',
-    'message',
     'allauth.socialaccount',
 )
 SITE_ID = 1
