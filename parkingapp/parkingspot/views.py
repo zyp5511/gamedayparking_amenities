@@ -64,16 +64,20 @@ def search(request, message=None):
         point = Point(-89.411784,43.069817)
 
     # query database for parkign spots within 50 miles of user
-    parkingspots = ParkingSpot.objects.values().filter(location__distance_lte=(point, D(mi=50)))
-    for parkingspot in parkingspots:
-        distance = parkingspot['location'].distance(point)
-        parkingspot.update({'distance': distance})
-        location = {'latitude': parkingspot['location'].coords[0], 'longitude':parkingspot['location'].coords[1]}
-        parkingspot.update({'location': location})
-        amenities = json.loads(parkingspot['amenities'])
-        parkingspot.update({'amenities': amenities})
+    parkingspots = ParkingSpot.objects.filter(location__distance_lte=(point, D(mi=25)))
+    parkingspot_vals = ParkingSpot.objects.values().filter(location__distance_lte=(point, D(mi=50)))
+    print(type(parkingspots))
+    for index, values in enumerate(parkingspot_vals):
+        distance = values['location'].distance(point)
+        values.update({'distance': distance})
+        rating = parkingspots[index].get_avg_rating()
+        values.update({'rating':rating})
+        location = {'latitude': values['location'].coords[0], 'longitude':values['location'].coords[1]}
+        values.update({'location': location})
+        amenities = json.loads(values['amenities'])
+        values.update({'amenities': amenities})
 
-    json_parkingspots = json.dumps(list(parkingspots)) 
+    json_parkingspots = json.dumps(list(parkingspot_vals))
     context = {
         'parkingspots' : parkingspots,
         'json_parkingspots' : json_parkingspots,
