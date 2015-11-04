@@ -80,6 +80,12 @@ class ParkingSpot(models.Model):
         except KeyError:
             return -1
 
+    def get_avg_rating(self):
+        ratings = [x.rating for x in self.review_set.all()]
+        if ratings:
+            return sum(ratings)/float(len(ratings))
+        else:
+            return None
 
 
     # override save method to interpret location field base on address
@@ -92,7 +98,7 @@ class ParkingSpot(models.Model):
 
     def __str__(self):
         return self.street_address
-            
+
 
 
 
