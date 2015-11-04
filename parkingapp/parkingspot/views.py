@@ -47,7 +47,10 @@ def home(request):
 
 
 def search(request, message=None):
-    location = request.GET['location']
+    try:
+        location = request.GET['location']
+    except:
+        location = "Madison, WI" #DEV
     g = GoogleV3()
     p = g.geocode(location)
     point = Point(p.longitude, p.latitude)
@@ -93,7 +96,10 @@ def reserve_request(request):
     if not request.user.is_authenticated():
         redirect('/accounts/login')
     current_user = request.user
-    parkingspot = ParkingSpot.objects.get(id=request.POST['reserve'])
+    try:
+        parkingspot = ParkingSpot.objects.get(id=request.POST['reserve'])
+    except:
+        return redirect('/search')
     parkingspot.open_date('12/01/2015') #DEV
     parkingspot.open_date('12/02/2015') #DEV
     parkingspot.open_date('12/03/2015') #DEV
