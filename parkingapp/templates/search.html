@@ -25,9 +25,6 @@
                 background-color:#EAEAEA;
                 width:100%;
                 height:70px;
-                padding-top:22px;
-                padding-bottom:10px;
-                text-align:center;
                 border-style:inset;
                 border-width:1px;
                 border-right-width:0px;
@@ -35,9 +32,45 @@
                 border-color:lightgrey;
             }
 
+            #searchBarForm {
+                display:inline-block;
+                float:left;
+                margin-top:15px;
+                margin-left:20px;
+                width:250px;
+                height:40px;
+            }
+
+            #searchBar {
+                width:100%;
+                height:100%;
+                padding-left:10px;
+                border-radius:5px;
+            }
+
+            input:focus {outline: none;}
+
+            #cost_low {
+                margin-top:22px;
+                margin-right:5px;
+                margin-left: 20px;
+            }
+
+            #cost_high, #dist_low {
+                margin-top:22px;
+                margin-right:5px; 
+                margin-left:5px;
+            }
+
+            #dist_high {
+                margin-top:22px;
+                margin-left:5px;
+            }
+
             #checkboxForm {
                 display:inline-block; 
-                margin-left:30px;
+                margin-top:22px;
+                margin-left:10px;
             }
 
             .filterCheckBox {
@@ -55,19 +88,6 @@
                 height:100%; 
                 margin-top:1px; 
                 float:right;
-            }
-
-            #cost_low {
-                margin-right:5px;
-            }
-
-            #cost_high, #dist_low {
-                margin-right:5px; 
-                margin-left:5px;
-            }
-
-            #dist_high {
-                margin-left:5px;
             }
 
             #map {
@@ -169,6 +189,10 @@
         {% block nav_bar %}{% endblock %}
         <div id="bodyContainer">
             <div id="filterContainer">
+                <form id="searchBarForm" action="../search/" method="get" name="search_bar">
+                    <input id="searchBar" type="text" name="location" placeholder="E.g. Madison, WI">
+                </form>
+
                 <button id="cost_low" onclick="sort_cost_low()">Cost Low to High</button>
                 <button id="cost_high" onclick="sort_cost_high()">Cost High To Low</button>
                 <button id="dist_low" onclick="sort_dist_low()">Distance Low to High</button>
