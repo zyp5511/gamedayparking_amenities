@@ -6,6 +6,9 @@ from django.contrib.gis.geos import Point
 from django.contrib.gis.geoip import GeoIP
 from geopy.geocoders import GoogleV3
 from parkingspot.models import ParkingSpot
+from message.models import Message, ResMessage
+from userprof.models import ExtendedUser, AdminUser
+from django.contrib.auth.models import User
 
 # Create your views here.
 def home(request):
@@ -42,7 +45,7 @@ def home(request):
     return render(request, 'home.html', context)
 
 
-def search(request):
+def search(request, message=None):
     location = request.GET['location']
     g = GoogleV3()
     p = g.geocode(location)
@@ -78,6 +81,28 @@ def search(request):
         'center_lon' : point.coords[1]
     }
     return render(request, 'search.html', context)
+
+
+
+def reserve_request(request):
+    if not request.user.is_authenticated():
+        redirect('/accounts/login')
+    current_user = request.user
+    parkingspot = ParkingSpot.objects.get(id=request.POST['reserve'])
+    #date = request.POST['date']
+    date = '12-02-2015' # Grab date
+    message = "Hello!  I'd like to reserve a parking spot on %s." % date
+    subject = "Reservation Request"
+    sender = current_user
+    receiver = parkingspot.owner.extended_user.main_user
+    message = Message.objects.create(message=message, subject=subject, is_reservation=True, sender=sender, receiver=receiver)
+    message.save()
+    res_message = ResMessage.objects.create(message=message, parkingspot=parkingspot, res_date=date)
+    res_message.save()
+    msg = "Parking Request Sent"
+    return redirect('parkingspot.views.search', message=msg)
+
+
 
 def about(request):
     return render(request, 'about_us.html')

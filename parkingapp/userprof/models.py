@@ -24,6 +24,8 @@ class AdminUser(models.Model):
   def __str__(self):
     return self.extended_user.main_user.username
 
+  def get_allauth_user(self):
+    return self.extended_user.main_user
 
 @receiver(user_signed_up)
 def do_stuff_after_sign_up(sender, **kwargs):
