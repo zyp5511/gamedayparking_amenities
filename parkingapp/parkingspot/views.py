@@ -1,4 +1,5 @@
 import json
+import datetime
 from django.shortcuts import render, redirect
 from django.shortcuts import render_to_response
 from django.contrib.gis.measure import D
@@ -93,8 +94,20 @@ def reserve_request(request):
         redirect('/accounts/login')
     current_user = request.user
     parkingspot = ParkingSpot.objects.get(id=request.POST['reserve'])
+    parkingspot.open_date('12/01/2015') #DEV
+    parkingspot.open_date('12/02/2015') #DEV
+    parkingspot.open_date('12/03/2015') #DEV
+    parkingspot.open_date('1/03/2090') #DEV
+    date_list = parkingspot.get_all_spots_available()
+    date_list.sort(key=lambda x: datetime.datetime.strptime(x[0], '%m/%d/%Y'))
+    context = {"parkingspot": parkingspot, 
+                "date_list": date_list}
+    return render(request, 'reserve.html', context)
+
+
+def finalize_reserve(request):
     #date = request.POST['date']
-    date = '12-02-2015' # Grab date
+    date = '12/02/2015' # Grab date
     message = "Hello!  I'd like to reserve a parking spot on %s." % date
     subject = "Reservation Request"
     sender = current_user

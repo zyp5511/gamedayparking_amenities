@@ -62,7 +62,6 @@ class ParkingSpot(models.Model):
         except KeyError:
             return -1
 
-
     """Cancels a user's reservation"""
     def cancel_reservation(self, user, date):
         self.parking_spot_avail["dates"][date]["res"].remove(user)
@@ -87,6 +86,13 @@ class ParkingSpot(models.Model):
         else:
             return None
 
+    def get_all_spots_available(self):
+        spots_avail = []
+        for date in self.parking_spot_avail["dates"]:
+            tmp = self.get_num_spots(date)
+            if tmp > 0:
+                spots_avail.append((date, tmp))
+        return spots_avail
 
     # override save method to interpret location field base on address
     def save(self, *args, **kwargs):

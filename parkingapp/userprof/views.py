@@ -8,7 +8,7 @@ from django.shortcuts import get_object_or_404
 
 
 
-def admin_page(request):
+def admin_page(request, message=None, success=None):
   if not request.user.is_authenticated():
     return redirect('/home')
   current_user = request.user
@@ -30,5 +30,38 @@ def profile(request):
   outgoing_requests = ResMessage.objects.filter(sender=current_user)
 
 def approve_request(request):
-  #TODO when i get to lab
-  return redirect('/home')
+  if request.method == 'POST':
+    value = request.POST['confirm']
+    res_msg = ResMessage.objects.get(id=value)
+    res_msg.is_approved = True
+    res_msg.has_responded = True
+    date = res_msg.res_date
+    pspot = res_msg.parkingspot
+    if pspot.get_num_spots(date) > 0:
+      pspot.reserve_spot(res_msg.message.sender,date)
+      subject = "Congratulations!  Your parking spot request has been approved."
+      message = "You've successfully booked a parking spot at %s %s, %s for the date: %s." % (pspot.street_address, pspot.city, pspot.state, date)
+      messageO = Message.objects.create(message=message, subject=subject, is_reservation=False, sender=res_msg.message.receiver, receiver=res_msg.message.sender)
+      messageO.save()
+      res_msg.save()
+      msg = "Parking spot approved"
+      success = True
+    else:
+      msg = "You've overbooked for that date, or you haven't opened that date for booking.  You can increase your number of spots available."
+      success = False
+    redirect('userprof.views.admin_page', message=msg, success=success)
+
+def deny_request(request):
+  if request.method == "POST":
+    value = request.POST['deny']
+    res_msg = ResMessage.objects.get(id=value)
+    res_msg.is_approved = False
+    res_msg.has_responded = True
+    subject = "Your request for a parking spot could not be fulfilled."
+    message = "We're sorry.  We were unable to book a parking spot at %s %s, %s for the date: %s." % (pspot.street_address, pspot.city, pspot.state, date)
+    messageO = Message.objects.create(message=message, subject=subject, is_reservation=False, sender=res_msg.message.receiver, receiver=res_msg.message.sender)
+    messageO.save()
+    res_msg.save()
+    msg = "Parking request denied."
+    success = True
+    redirect('userprof.views.admin_page', message=msg, success=success)

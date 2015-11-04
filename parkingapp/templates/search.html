@@ -165,6 +165,13 @@
                 padding-left:10px;
                 font-style:italic;
             }
+            .buttonContainer {
+                float:left;
+                clear:left;
+                padding-left:10px;
+                font-style:italic;
+                padding-bottom:5px;
+            }
 
             .ontop {
                 z-index:999;
@@ -309,7 +316,9 @@
                     }
                 </script>
             </div>
-            
+          
+            <form method="post"  onsubmit="" action='../reserve/' enctype="multipart/form-data" >
+            {% csrf_token %}
             <div id="parkingSpotsContainer">
                 <div id="parkingContainer">
                     {% for x in parkingspots %}
@@ -322,6 +331,9 @@
                             </a>
                             <p class="reviewRating"><b>Review:&nbsp</b></p>
                             <p class="descriptionContainer">{{ x.description }}</p>
+                            <div class="buttonContainer">
+                                <button name="reserve" type="submit" id="reserve" value="{{x.id}}" class="btn btn-primary btn-large">Reserve</button>
+                            </div>
                             <div id="popDiv" class="ontop">
                                 <div class="popup">
                                     <h4> {{x.street_address}}</h4>
@@ -344,6 +356,7 @@
                     {% endfor %}
                 </div>
             </div>
+            </form>
         </div>
 
         <!-- Prints footer -->

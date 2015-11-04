@@ -1,0 +1,7 @@
+<p>Blank page.  Fix me!  I should be a page for reserving the spot the user clicked on.</p>
+<p>{{parkingspot.street_address}}</p>
+<p>{{parkingspot.city}}</p>
+<p>{{parkingspot.zipcode}}</p>
+{% for dates in date_list%}
+<p>On {{dates.0}} I have {{dates.1}} spots available.</p>
+{% endfor %}

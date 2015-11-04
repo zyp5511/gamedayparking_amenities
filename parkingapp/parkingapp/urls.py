@@ -25,6 +25,7 @@ urlpatterns = [
     url(r'^$', 'parkingspot.views.home'),
     url(r'^detail/', 'parkingspot.views.detail'),
     url(r'^about/', 'parkingspot.views.about'),
-    url(r'^contact/', 'parkingspot.views.contact')
+    url(r'^contact/', 'parkingspot.views.contact'),
+    url(r'^reserve/', 'parkingspot.views.reserve_request')
 
 ]
