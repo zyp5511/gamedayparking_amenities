@@ -101,11 +101,13 @@ class ParkingSpot(models.Model):
 
     # override save method to interpret location field base on address
     def save(self, *args, **kwargs):
-        g = GoogleV3()
-        p = g.geocode("{}, {}, {} {}".format(self.street_address, self.city, self.state, self.zipcode))
-        self.location = Point(p.longitude, p.latitude)
+        # only update location if null. Edit parkingspot page can handle updating location.
+        if not self.location:
+            g = GoogleV3()
+            p = g.geocode("{}, {}, {} {}".format(self.street_address, self.city, self.state, self.zipcode))
+            self.location = Point(p.longitude, p.latitude)
+
         # hopefully solves the issue of django default string
-        
         if isinstance(self.amenities, str):
             self.amenities = json.loads(self.amenities)
         if isinstance(self.parking_spot_avail, str):
