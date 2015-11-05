@@ -45,6 +45,7 @@
             }
 
             #searchBar {
+                float:left;
                 width:100%;
                 height:100%;
                 padding-left:10px;
@@ -58,6 +59,7 @@
 
             .filterCouple {
                 display:inline-block;
+                float:left;
                 text-align:center;
                 width:155px;
                 height:100%;
@@ -69,21 +71,32 @@
             #cost_low, 
             #dist_low,
             #rat_low {
-                width:150px;
+                width:170px;
             }
 
             #cost_high,
             #dist_high,
             #rat_high {
-                width:150px;
+                width:170px;
                 margin-top:5px;
             } 
 
             #checkboxForm {
-                float:right;
-                width:400px;
+                float:left;
                 height:100%;
-                padding-top:25px;
+                width:250px;
+                padding-top:10px;
+            }
+
+            .checkboxGrid {
+                height:25%;
+                width:100%;
+            }
+
+            .checkboxGrid li {
+                display:inline-block;
+                float:left;
+                width:auto;
             }
 
             .filterCheckBoxLabel {
@@ -110,7 +123,7 @@
 
             .parkingSpots {
                 display:inline-block;
-                width:325px; 
+                width:42%; 
                 margin-bottom:30px;
                 margin-right:15px;
                 margin-left:15px;
@@ -135,6 +148,7 @@
 
             .streetAddress {
                 float:left;
+                clear:right;
                 padding-left:10px;
                 text-decoration:underline;
             }
@@ -214,16 +228,17 @@
                 background-color:#f5f5f5;  
             }
         
-        span.stars, span.stars>* {
-            display: inline-block;
-            background: url({% static "media/stars.png" %}) 0 -16px repeat-x;
-            width: 80px;
-            height: 16px;
-        }
-        span.stars>*{
-            max-width:80px;
-            background-position: 0 0;
-        }
+            span.stars, span.stars>* {
+                display: inline-block;
+                background: url({% static "media/stars.png" %}) 0 -16px repeat-x;
+                width: 80px;
+                height: 16px;
+            }
+
+            span.stars>*{
+                max-width:80px;
+                background-position: 0 0;
+            }
         
         </style>
     </head>
@@ -250,45 +265,58 @@
             </div>
 
             <form id="checkboxForm" NAME="amenities">
-                <input  class="filterCheckBox" 
-                        TYPE="checkbox" 
-                        id="filter_grill" 
-                        name="grill" 
-                        onClick="filter_grill_func()" /> 
-                <label  class="filterCheckBoxLabel" 
-                        for="grill">Grill</label>
+                <ul class="checkboxGrid">
+                    <li>
+                        <input  class="filterCheckBox" 
+                                TYPE="checkbox" 
+                                id="filter_grill" 
+                                name="grill" 
+                                onClick="filter_grill_func()" /> 
+                        <label  class="filterCheckBoxLabel" 
+                                for="grill">Grill</label>
+                    </li>
 
-                <input  class="filterCheckBox" 
-                        TYPE="checkbox" 
-                        id="filter_bathroom" 
-                        name="bathroom" 
-                        onClick="filter_bathroom_func()" />
-                <label  class="filterCheckBoxLabel" 
-                        for="bathroom">Bathroom</label>
+                    <li>
+                        <input  class="filterCheckBox" 
+                                TYPE="checkbox" 
+                                id="filter_bathroom" 
+                                name="bathroom" 
+                                onClick="filter_bathroom_func()" />
+                        <label  class="filterCheckBoxLabel" 
+                                for="bathroom">Bathroom</label>
+                    </li>
 
-                <input  class="filterCheckBox" 
-                        TYPE="checkbox" 
-                        id="filter_yard" 
-                        name="yard" 
-                        onClick="filter_yard_func()" />
-                <label  class="filterCheckBoxLabel" 
-                        for="yard">Yard</label>
+                    <li>
+                        <input  class="filterCheckBox" 
+                                TYPE="checkbox" 
+                                id="filter_yard" 
+                                name="yard" 
+                                onClick="filter_yard_func()" />
+                        <label  class="filterCheckBoxLabel" 
+                                for="yard">Yard</label>
+                    </li>
+                </ul>
+                <ul class="checkboxGrid">
+                    <li>
+                        <input  class="filterCheckBox" 
+                                TYPE="checkbox" 
+                                id="filter_table" 
+                                name="table" 
+                                onClick="filter_table_func()" />
+                        <label  class="filterCheckBoxLabel" 
+                                for="table">Table</label>
+                    </li>
 
-                <input  class="filterCheckBox" 
-                        TYPE="checkbox" 
-                        id="filter_table" 
-                        name="table" 
-                        onClick="filter_table_func()" />
-                <label  class="filterCheckBoxLabel" 
-                        for="table">Table</label>
-
-                <input  class="filterCheckBox" 
-                        TYPE="checkbox" 
-                        id="filter_electricity" 
-                        name="electricity" 
-                        onClick="filter_electricity_func()" /> 
-                <label  class="filterCheckBoxLabel" 
-                        for="electricity">Electricity</label>
+                    <li>
+                        <input  class="filterCheckBox" 
+                                TYPE="checkbox" 
+                                id="filter_electricity" 
+                                name="electricity" 
+                                onClick="filter_electricity_func()" /> 
+                        <label  class="filterCheckBoxLabel" 
+                                for="electricity">Electricity</label>
+                    </li>
+                </ul>
                 {% csrf_token %}
             </form>
         </div>
@@ -303,8 +331,9 @@
                         <a class="popUpLink" href="#" onClick="pop('popDiv')">
                             <p class="streetAddress">{{ x.street_address }}, {{ x.city }}, {{ x.state }}</p>
                         </a>
-                        <p class="reviewRating"><b>Review:&nbsp</b></p>
-                            <span class="stars">4.3</span>
+                        <p class="reviewRating"><b>Rating:&nbsp
+                            <span class="stars">4.3</span></b>
+                        </p>
                         <p class="descriptionContainer">{{ x.description }}</p>
                         <form method="post"  onsubmit="" action='../reserve/' enctype="multipart/form-data" >
                             <div class="reserveButtonContainer">
@@ -315,7 +344,7 @@
                         <div id="popDiv" class="ontop">
                             <div class="popup">
                                 <h4> {{x.street_address}}</h4>
-                                <img class="parkingImage" src='"/static'+'{{x.photos}}"'+ alt="Parking Image">
+                                <img class="parkingImage" src="{% static "media/default.png"%}" alt="Parking Image">
                                 <p><b>Cost:</b></p>
                                 <p>{{x.cost}}</p>
                                 <p><b>Amenities:</b></p><p>
@@ -527,11 +556,17 @@
                     content += "<img class='parkingImage' src=\"/static" + parkingspots[i].photos + '\" alt="Parking Image"></p>';
                     content += "<a href='#' onClick=\"pop('popDiv')\">";
                     content += "<p class='streetAddress' style='color:black;'>" + curr_list[i].street_address + ",&nbsp" + curr_list[i].city + ",&nbsp" + curr_list[i].state + "</p></a>";
-                    content += "<p class='reviewRating'><b>Review:&nbsp</b></p>";
+                    content += "<p class='reviewRating'><b>Rating:&nbsp</b>";
+                    content += "<span class='stars'>4.3</span></p>";
                     content += "<p class='descriptionContainer'>" + curr_list[i].description + "</p>";
+                    content += "<form method='post'  onsubmit='' action=\'../reserve/\' enctype='multipart/form-data'>";
+                    content += "<div class='reserveButtonContainer'>";
+                    content += "<button name='reserve' type='submit' id='reserve' value=\'" + curr_list[i].id + "\' class='btn btn-primary btn-large'>Reserve</button>";
+                    content += "</div>{% csrf_token %}</form>";
                     content += "<div id='popDiv' class='ontop' align='center'>";
-                    content += "<div id='popup'>";
+                    content += "<div id='popup' style='width:500px; height:450px; position:absolute; color:#000000; background-color:white; top:50%; left:50%; margin-top:-200px; margin-left:-250px;'>";
                     content += "<h4>" + curr_list[i].street_address + "</h4>";
+                    content += "<img class='parkingImage' src='/static" + curr_list[i].photos + "' alt='Parking Image'>";
                     content += "<p><b>Cost:</b></p>";
                     content += "<p>" + curr_list[i].cost + "</p>";
                     content += "<p><b>Description:</b></p>";
@@ -564,8 +599,6 @@
             };
             $('.stars').stars();
         </script>
-        
-        
 
         <script src="{% static "bower_components/jquery/dist/jquery.min.js" %}"></script>
         <script src="{% static "bower_components/bootstrap/dist/js/bootstrap.min.js" %}"></script>
