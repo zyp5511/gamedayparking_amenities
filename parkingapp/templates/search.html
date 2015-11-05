@@ -1,23 +1,28 @@
 <!DOCTYPE html>
 {% load staticfiles %}
 
-<html lang="en" style="height:100%;">
+<html lang="en">
     <head>
+        <title>Search Results</title>
+
         {% include "header.html" %}
+
         <link   rel="stylesheet" 
                 href="{% static "bower_components/bootstrap/dist/css/bootstrap.min.css" %}">
         <script src="http://maps.google.com/maps/api/js?sensor=false" 
                 type="text/javascript"></script>
         
         <style>
-            body {
+            html, body {
                 width:100%;
-                min-height:100%;
+                height:100%;
+                margin:0;
+                padding:0;
             }
 
             #bodyContainer {
                 width:100%;
-                height:800px;
+                height:100%;
                 margin-top:-20px;
             }
 
@@ -37,7 +42,7 @@
                 float:left;
                 margin-top:15px;
                 margin-left:20px;
-                margin-right:30px;
+                margin-right:25px;
                 width:250px;
                 height:40px;
             }
@@ -61,7 +66,6 @@
                 height:100%;
                 padding-top:5px;
                 padding-bottom:5px;
-                margin-left:20px;
                 margin-right:20px;
             }
 
@@ -81,7 +85,7 @@
             #checkboxForm {
                 display:inline-block;
                 float:right;
-                width:500px;
+                width:400px;
                 height:100%;
                 padding-top:25px;
             }
@@ -94,9 +98,10 @@
             }
 
             #mapContainer {
+                display:inline-block;
                 width:47%; 
                 height:100%; 
-                margin-top:1px; 
+                margin-top:0px; 
                 float:right;
             }
 
@@ -109,6 +114,7 @@
                 width:53%; 
                 height:100%; 
                 float:left; 
+                overflow-y:scroll;
             }
 
             #parkingContainer {
@@ -165,7 +171,8 @@
                 padding-left:10px;
                 font-style:italic;
             }
-            .buttonContainer {
+
+            .reserveButtonContainer {
                 float:left;
                 clear:left;
                 padding-left:10px;
@@ -199,6 +206,14 @@
                 margin-top:-200px;
                 margin-left:-250px;
             }
+
+            .footer { 
+                position:fixed;
+                height:60px;
+                width:100%;
+                bottom:0;
+                background-color:#f5f5f5;  
+            }
         </style>
     </head>
     
@@ -208,6 +223,7 @@
             <div id="filterContainer">
                 <form id="searchBarForm" action="../search/" method="get" name="search_bar">
                     <input id="searchBar" type="text" name="location" placeholder="E.g. Madison, WI">
+                    {% csrf_token %}
                 </form>
 
                 <div class="filterCouple">
@@ -263,16 +279,57 @@
                             onClick="filter_electricity_func()" /> 
                     <label  class="filterCheckBoxLabel" 
                             for="electricity">Electricity</label>
+                    {% csrf_token %}
                 </form>
+            </div>
+
+            <div id="parkingSpotsContainer">
+                <div id="parkingContainer">
+                    {% for x in parkingspots %}
+                        <div class="parkingSpots">
+                            <p class="parkingImageContainer">
+                                <img class="parkingImage" src="{% static "media/default.png" %}" alt="Parking Image">
+                            </p>
+                            <a class="popUpLink" href="#" onClick="pop('popDiv')">
+                                <p class="streetAddress">{{ x.street_address }}, {{ x.city }}, {{ x.state }}</p>
+                            </a>
+                            <p class="reviewRating"><b>Review:&nbsp</b></p>
+                            <p class="descriptionContainer">{{ x.description }}</p>
+                            <form method="post"  onsubmit="" action='../reserve/' enctype="multipart/form-data" >
+                                <div class="reserveButtonContainer">
+                                    <button name="reserve" type="submit" id="reserve" value="{{ x.id }}" class="btn btn-primary btn-large">Reserve</button>
+                                </div>
+                                {% csrf_token %}
+                            </form>
+                            <div id="popDiv" class="ontop">
+                                <div class="popup">
+                                    <h4> {{x.street_address}}</h4>
+                                    <p><b>Cost:</b></p>
+                                    <p>{{x.cost}}</p>
+                                    <p><b>Description:</b></p>
+                                    <p>{{x.description}}</p>
+                                    <a href="#" onClick="hide('popDiv')">Close</a>
+                                </div>
+                                <!--<table border="1" id="popup">
+                                    <tr>
+                                        <td>
+                                            Click Close OR escape button to close it
+                                            
+                                        </td>
+                                    </tr>
+                                </table>-->
+                            </div>
+                        </div>
+                    {% endfor %}
+                </div>
             </div>
 
             <div id="mapContainer">
                 <div id="map"></div>
-
                 <!-- Script to implement googe maps block -->
                 <script>    
                     var map = new google.maps.Map(document.getElementById('map'), {
-                            zoom: 10,
+                            zoom: 14,
                             center: new google.maps.LatLng({{center_lon}},{{center_lat}}),
                             mapTypeId: google.maps.MapTypeId.ROADMAP
                     });
@@ -316,51 +373,12 @@
                     }
                 </script>
             </div>
-          
-            <form method="post"  onsubmit="" action='../reserve/' enctype="multipart/form-data" >
-            {% csrf_token %}
-            <div id="parkingSpotsContainer">
-                <div id="parkingContainer">
-                    {% for x in parkingspots %}
-                        <div class="parkingSpots">
-                            <p class="parkingImageContainer">
-                                <img class="parkingImage" src="{% static "media/default.png" %}" alt="Parking Image">
-                            </p>
-                            <a class="popUpLink" href="#" onClick="pop('popDiv')">
-                                <p class="streetAddress">{{ x.street_address }}, {{ x.city }}, {{ x.state }}</p>
-                            </a>
-                            <p class="reviewRating"><b>Review:&nbsp</b></p>
-                            <p class="descriptionContainer">{{ x.description }}</p>
-                            <div class="buttonContainer">
-                                <button name="reserve" type="submit" id="reserve" value="{{x.id}}" class="btn btn-primary btn-large">Reserve</button>
-                            </div>
-                            <div id="popDiv" class="ontop">
-                                <div class="popup">
-                                    <h4> {{x.street_address}}</h4>
-                                    <p><b>Cost:</b></p>
-                                    <p>{{x.cost}}</p>
-                                    <p><b>Description:</b></p>
-                                    <p>{{x.description}}</p>
-                                    <a href="#" onClick="hide('popDiv')">Close</a>
-                                </div>
-                                <!--<table border="1" id="popup">
-                                    <tr>
-                                        <td>
-                                            Click Close OR escape button to close it
-                                            
-                                        </td>
-                                    </tr>
-                                </table>-->
-                            </div>
-                        </div>
-                    {% endfor %}
-                </div>
-            </div>
-            </form>
         </div>
 
-        <!-- Prints footer -->
-        {% include "footer.html" %}
+        <!-- Prints footer 
+        <div class="footer">
+            <p>&copy; GameDayParking | Privacy | Terms</p>
+        </div>
 
         <!-- SCRIPTS BEGIN-->
 
