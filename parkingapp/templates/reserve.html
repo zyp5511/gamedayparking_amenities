@@ -104,10 +104,10 @@
                 border-bottom-width:1px;
             }
 
-            .streetAddress {
+            .spotInfo {
             	margin-top: 10cm;
                 float:left;
-                padding-left:10px;
+                padding-left:20px;
             }
 
             .reviewRating {
@@ -151,7 +151,16 @@
 	 			 <p class="reservationParkingImageContainer">
                   	<img class="reservationParkingImage" src="{% static "media/default.png" %}" alt="Parking Image">
                  </p>
-                 <p class="streetAddress">Address: {{parkingspot.street_address}}</p>
+                 <p class="spotInfo">Address: {{parkingspot.street_address}}</p></br>
+                 <p class="spotInfo">City: {{parkingspot.city}}</p></br>
+                 <p class="spotInfo">State: {{parkingspot.state}}</p></br>
+                 <p class="spotInfo">Zipcode: {{parkingspot.zipcode}}</p></br>
+                 <p class="spotInfo">parkingspot Owner: {{parkingspot.owner}}</p></br>
+                 <p class="spotInfo">Description: {{parkingspot.description}}</p></br>
+                 <p class="spotInfo">Amenities: {{parkingspot.amenities}} </p></br>
+                 <p class="spotInfo">Cost: {{parkingspot.cost}}</p></br>
+                 <p class="spotInfo">Number of Spots: {{parkingspot.default_num_spots}}</p>
+
 	 	</div>
 	 	{% include "footer.html" %}
 	</body>
