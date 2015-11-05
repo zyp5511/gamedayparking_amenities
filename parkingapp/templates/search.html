@@ -195,7 +195,7 @@
 
             .popup {
                 width:500px;
-                height:400px;
+                height:450px;
                 position:absolute;
                 color:#000000;
                 background-color:white;
@@ -315,8 +315,16 @@
                         <div id="popDiv" class="ontop">
                             <div class="popup">
                                 <h4> {{x.street_address}}</h4>
+                                <img class="parkingImage" src='"/static'+'{{x.photos}}"'+ alt="Parking Image">
                                 <p><b>Cost:</b></p>
                                 <p>{{x.cost}}</p>
+                                <p><b>Amenities:</b></p><p>
+                                    {% for key, value in x.amenities.items %}
+                                        {% if value %}
+                                        {{key}}
+                                        {% endif %}
+                                    {% endfor %}
+                                </p>
                                 <p><b>Description:</b></p>
                                 <p>{{x.description}}</p>
                                 <a href="#" onClick="hide('popDiv')">Close</a>
