@@ -1,3 +1,5 @@
+import json
+
 from django.db import models
 from django.contrib.postgres.fields import ArrayField
 from django.contrib.gis.db import models
@@ -79,13 +81,6 @@ class ParkingSpot(models.Model):
         except KeyError:
             return -1
 
-    def get_avg_rating(self):
-        ratings = [x.rating for x in self.review_set.all()]
-        if ratings:
-            return sum(ratings)/float(len(ratings))
-        else:
-            return None
-
     def get_all_spots_available(self):
         spots_avail = []
         for date in self.parking_spot_avail["dates"]:
@@ -94,34 +89,29 @@ class ParkingSpot(models.Model):
                 spots_avail.append((date, tmp))
         return spots_avail
 
+
+    def get_avg_rating(self):
+        """Returns average rating from all the reviews for the parkingspot"""
+        ratings = [x.rating for x in self.review_set.all()]
+        if ratings:
+            return sum(ratings)/float(len(ratings))
+        else:
+            return None
+
+
     # override save method to interpret location field base on address
     def save(self, *args, **kwargs):
         g = GoogleV3()
         p = g.geocode("{}, {}, {} {}".format(self.street_address, self.city, self.state, self.zipcode))
         self.location = Point(p.longitude, p.latitude)
+        # hopefully solves the issue of django default string
+        
+        if isinstance(self.amenities, str):
+            self.amenities = json.loads(self.amenities)
+        if isinstance(self.parking_spot_avail, str):
+            self.parking_spot_avail = json.loads(self.parking_spot_avail)
         super(ParkingSpot, self).save(*args, **kwargs)
 
 
     def __str__(self):
         return self.street_address
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
