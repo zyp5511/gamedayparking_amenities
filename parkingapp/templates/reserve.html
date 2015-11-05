@@ -104,10 +104,10 @@
                 border-bottom-width:1px;
             }
 
-            .spotInfo {
-            	margin-top: 10cm;
+            .infoContainer {
+            	margin-top: 5scm;
                 float:left;
-                padding-left:20px;
+                padding-left:120px;
             }
 
             .reviewRating {
@@ -151,17 +151,24 @@
 	 			 <p class="reservationParkingImageContainer">
                   	<img class="reservationParkingImage" src="{% static "media/default.png" %}" alt="Parking Image">
                  </p>
-                 <p class="spotInfo">Address: {{parkingspot.street_address}}</p></br>
-                 <p class="spotInfo">City: {{parkingspot.city}}</p></br>
-                 <p class="spotInfo">State: {{parkingspot.state}}</p></br>
-                 <p class="spotInfo">Zipcode: {{parkingspot.zipcode}}</p></br>
-                 <p class="spotInfo">parkingspot Owner: {{parkingspot.owner}}</p></br>
-                 <p class="spotInfo">Description: {{parkingspot.description}}</p></br>
-                 <p class="spotInfo">Amenities: {{parkingspot.amenities}} </p></br>
-                 <p class="spotInfo">Cost: {{parkingspot.cost}}</p></br>
-                 <p class="spotInfo">Number of Spots: {{parkingspot.default_num_spots}}</p>
+                 <div class="infoContainer">
+                    <p>Address: {{parkingspot.street_address}}</p></br>
+                    <p>City: {{parkingspot.city}}</p></br>
+                    <p>State: {{parkingspot.state}}</p></br>
+                    <p>Zipcode: {{parkingspot.zipcode}}</p></br>
+                    <p>parkingspot Owner: {{parkingspot.owner}}</p></br>
+                    <p>Description: {{parkingspot.description}}</p></br>
+                    <p>Amenities:
+                    {% for key, value in parkingspot.amenities.items %}
+                        {% if value %}
+                            <p>{{key}}</p>
+                        {% endif %}
+                    {% endfor %}
+                    <p>Cost: {{parkingspot.cost}}</p></br>
+                    <p>Number of Spots: {{parkingspot.default_num_spots}}</p>
+                </div>
 
 	 	</div>
-	 	{% include "footer.html" %}
 	</body>
 </html>
+{% include "footer.html" %}
