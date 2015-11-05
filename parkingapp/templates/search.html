@@ -22,16 +22,11 @@
                 padding:0;
             }
 
-            #bodyContainer {
-                width:100%;
-                height:100%;
-                margin-top:-20px;
-            }
-
             #filterContainer {
                 background-color:#EAEAEA;
                 width:100%;
                 height:70px;
+                margin-top:-20px;
                 border-style:inset;
                 border-width:1px;
                 border-right-width:0px;
@@ -85,7 +80,6 @@
             } 
 
             #checkboxForm {
-                display:inline-block;
                 float:right;
                 width:400px;
                 height:100%;
@@ -95,26 +89,15 @@
             .filterCheckBoxLabel {
                 position:relative;
                 vertical-align:center;
-                bottom:1px;
+                bottom:1;
                 margin-right:10px;
             }
 
-            #mapContainer {
-                display:inline-block;
-                width:47%; 
-                height:100%; 
-                margin-top:0px; 
-                float:right;
-            }
-
-            #map {
-                height:100%; 
-                width:100%;
-            }
-
             #parkingSpotsContainer {
-                width:53%; 
-                height:100%; 
+                position:absolute;
+                top:122px;
+                bottom:0px;
+                width:53%;  
                 float:left; 
                 overflow-y:scroll;
             }
@@ -182,6 +165,22 @@
                 padding-bottom:5px;
             }
 
+            #mapContainer {
+                display:inline-block;
+                position:absolute;
+                top:122px;
+                bottom:0px;
+                right:0px;
+                width:47%; 
+                margin-top:0px; 
+                float:right;
+            }
+
+            #map {
+                height:100%; 
+                width:100%;
+            }
+
             .ontop {
                 z-index:999;
                 width:100%;
@@ -192,8 +191,6 @@
                 position:fixed;
                 background-color:rgba(40,40,40,0.9);
                 color:#000000;
-                /*filter:alpha(opacity = 50);
-                opacity: .9;*/
             }
 
             .popup {
@@ -233,166 +230,151 @@
     
     <body>
         {% block nav_bar %}{% endblock %}
-        <div id="bodyContainer">
-            <div id="filterContainer">
-                <form id="searchBarForm" action="../search/" method="get" name="search_bar">
-                    <input id="searchBar" type="text" name="location" placeholder="E.g. Madison, WI">
-                    {% csrf_token %}
-                </form>
+        <div id="filterContainer">
+            <form id="searchBarForm" action="../search/" method="get" name="search_bar">
+                <input id="searchBar" type="text" name="location" placeholder="E.g. Madison, WI">
+                {% csrf_token %}
+            </form>
 
-                <div class="filterCouple">
-                    <button id="cost_low" onclick="sort_cost_low()">Cost Low to High</button>
-                    <button id="cost_high" onclick="sort_cost_high()">Cost High To Low</button>
-                </div>
-                <div class="filterCouple">
-                    <button id="dist_low" onclick="sort_dist_low()">Distance Low to High</button>
-                    <button id="dist_high" onclick="sort_dist_high()">Distance High to Low</button>
-                </div>
-                <div class="filterCouple">
-                    <button id="rat_low" onclick="sort_rating_low()">Rating Low to High</button>
-                    <button id="rat_high" onclick="sort_rating_high()">Rating High to Low</button>
-                </div>
-
-                <form id="checkboxForm" NAME="amenities">
-                    <input  class="filterCheckBox" 
-                            TYPE="checkbox" 
-                            id="filter_grill" 
-                            name="grill" 
-                            onClick="filter_grill_func()" /> 
-                    <label  class="filterCheckBoxLabel" 
-                            for="grill">Grill</label>
-
-                    <input  class="filterCheckBox" 
-                            TYPE="checkbox" 
-                            id="filter_bathroom" 
-                            name="bathroom" 
-                            onClick="filter_bathroom_func()" />
-                    <label  class="filterCheckBoxLabel" 
-                            for="bathroom">Bathroom</label>
-
-                    <input  class="filterCheckBox" 
-                            TYPE="checkbox" 
-                            id="filter_yard" 
-                            name="yard" 
-                            onClick="filter_yard_func()" />
-                    <label  class="filterCheckBoxLabel" 
-                            for="yard">Yard</label>
-
-                    <input  class="filterCheckBox" 
-                            TYPE="checkbox" 
-                            id="filter_table" 
-                            name="table" 
-                            onClick="filter_table_func()" />
-                    <label  class="filterCheckBoxLabel" 
-                            for="table">Table</label>
-
-                    <input  class="filterCheckBox" 
-                            TYPE="checkbox" 
-                            id="filter_electricity" 
-                            name="electricity" 
-                            onClick="filter_electricity_func()" /> 
-                    <label  class="filterCheckBoxLabel" 
-                            for="electricity">Electricity</label>
-                    {% csrf_token %}
-                </form>
+            <div class="filterCouple">
+                <button id="cost_low" onclick="sort_cost_low()">Cost Low to High</button>
+                <button id="cost_high" onclick="sort_cost_high()">Cost High To Low</button>
+            </div>
+            <div class="filterCouple">
+                <button id="dist_low" onclick="sort_dist_low()">Distance Low to High</button>
+                <button id="dist_high" onclick="sort_dist_high()">Distance High to Low</button>
+            </div>
+            <div class="filterCouple">
+                <button id="rat_low" onclick="sort_rating_low()">Rating Low to High</button>
+                <button id="rat_high" onclick="sort_rating_high()">Rating High to Low</button>
             </div>
 
-            <div id="parkingSpotsContainer">
-                <div id="parkingContainer">
-                    {% for x in parkingspots %}
-                        <div class="parkingSpots">
-                            <p class="parkingImageContainer">
-                                <img class="parkingImage" src="{% static "media/default.png" %}" alt="Parking Image">
-                            </p>
-                            <a class="popUpLink" href="#" onClick="pop('popDiv')">
-                                <p class="streetAddress">{{ x.street_address }}, {{ x.city }}, {{ x.state }}</p>
-                            </a>
-                            <p class="reviewRating"><b>Review:&nbsp</b></p>
-                                <span class="stars">4.3</span>
-                            <p class="descriptionContainer">{{ x.description }}</p>
-                            <form method="post"  onsubmit="" action='../reserve/' enctype="multipart/form-data" >
-                                <div class="reserveButtonContainer">
-                                    <button name="reserve" type="submit" id="reserve" value="{{ x.id }}" class="btn btn-primary btn-large">Reserve</button>
-                                </div>
-                                {% csrf_token %}
-                            </form>
-                            <div id="popDiv" class="ontop">
-                                <div class="popup">
-                                    <h4> {{x.street_address}}</h4>
-                                    <p><b>Cost:</b></p>
-                                    <p>{{x.cost}}</p>
-                                    <p><b>Description:</b></p>
-                                    <p>{{x.description}}</p>
-                                    <a href="#" onClick="hide('popDiv')">Close</a>
-                                </div>
-                                <!--<table border="1" id="popup">
-                                    <tr>
-                                        <td>
-                                            Click Close OR escape button to close it
-                                            
-                                        </td>
-                                    </tr>
-                                </table>-->
+            <form id="checkboxForm" NAME="amenities">
+                <input  class="filterCheckBox" 
+                        TYPE="checkbox" 
+                        id="filter_grill" 
+                        name="grill" 
+                        onClick="filter_grill_func()" /> 
+                <label  class="filterCheckBoxLabel" 
+                        for="grill">Grill</label>
+
+                <input  class="filterCheckBox" 
+                        TYPE="checkbox" 
+                        id="filter_bathroom" 
+                        name="bathroom" 
+                        onClick="filter_bathroom_func()" />
+                <label  class="filterCheckBoxLabel" 
+                        for="bathroom">Bathroom</label>
+
+                <input  class="filterCheckBox" 
+                        TYPE="checkbox" 
+                        id="filter_yard" 
+                        name="yard" 
+                        onClick="filter_yard_func()" />
+                <label  class="filterCheckBoxLabel" 
+                        for="yard">Yard</label>
+
+                <input  class="filterCheckBox" 
+                        TYPE="checkbox" 
+                        id="filter_table" 
+                        name="table" 
+                        onClick="filter_table_func()" />
+                <label  class="filterCheckBoxLabel" 
+                        for="table">Table</label>
+
+                <input  class="filterCheckBox" 
+                        TYPE="checkbox" 
+                        id="filter_electricity" 
+                        name="electricity" 
+                        onClick="filter_electricity_func()" /> 
+                <label  class="filterCheckBoxLabel" 
+                        for="electricity">Electricity</label>
+                {% csrf_token %}
+            </form>
+        </div>
+
+        <div id="parkingSpotsContainer">
+            <div id="parkingContainer">
+                {% for x in parkingspots %}
+                    <div class="parkingSpots">
+                        <p class="parkingImageContainer">
+                            <img class="parkingImage" src="{% static "media/default.png" %}" alt="Parking Image">
+                        </p>
+                        <a class="popUpLink" href="#" onClick="pop('popDiv')">
+                            <p class="streetAddress">{{ x.street_address }}, {{ x.city }}, {{ x.state }}</p>
+                        </a>
+                        <p class="reviewRating"><b>Review:&nbsp</b></p>
+                            <span class="stars">4.3</span>
+                        <p class="descriptionContainer">{{ x.description }}</p>
+                        <form method="post"  onsubmit="" action='../reserve/' enctype="multipart/form-data" >
+                            <div class="reserveButtonContainer">
+                                <button name="reserve" type="submit" id="reserve" value="{{ x.id }}" class="btn btn-primary btn-large">Reserve</button>
+                            </div>
+                            {% csrf_token %}
+                        </form>
+                        <div id="popDiv" class="ontop">
+                            <div class="popup">
+                                <h4> {{x.street_address}}</h4>
+                                <p><b>Cost:</b></p>
+                                <p>{{x.cost}}</p>
+                                <p><b>Description:</b></p>
+                                <p>{{x.description}}</p>
+                                <a href="#" onClick="hide('popDiv')">Close</a>
                             </div>
                         </div>
-                    {% endfor %}
-                </div>
+                    </div>
+                {% endfor %}
             </div>
+        </div>
 
-            <div id="mapContainer">
-                <div id="map"></div>
-                <!-- Script to implement googe maps block -->
-                <script>    
-                    var map = new google.maps.Map(document.getElementById('map'), {
-                            zoom: 14,
-                            center: new google.maps.LatLng({{center_lon}},{{center_lat}}),
-                            mapTypeId: google.maps.MapTypeId.ROADMAP
+        <div id="mapContainer">
+            <div id="map"></div>
+            <!-- Script to implement googe maps block -->
+            <script>    
+                var map = new google.maps.Map(document.getElementById('map'), {
+                        zoom: 14,
+                        center: new google.maps.LatLng({{center_lon}},{{center_lat}}),
+                        mapTypeId: google.maps.MapTypeId.ROADMAP
+                });
+                
+                var infowindow = new google.maps.InfoWindow();
+                var parkingspots = {{ json_parkingspots|safe }};
+                var i, marker;
+               
+                for (i = 0; i < parkingspots.length; i++) {
+                       marker = new google.maps.Marker({
+                       position: new google.maps.LatLng(parkingspots[i].location.longitude, parkingspots[i].location.latitude),
+                       map: map
                     });
-                    
-                    var infowindow = new google.maps.InfoWindow();
-                    var parkingspots = {{ json_parkingspots|safe }};
-                    var i, marker;
-                   
-                    for (i = 0; i < parkingspots.length; i++) {
-                           marker = new google.maps.Marker({
-                           position: new google.maps.LatLng(parkingspots[i].location.longitude, parkingspots[i].location.latitude),
-                           map: map
-                        });
-                    var listAmenities =parkingspots[i].amenities;
-                    var amenitiesPopUp=''
-                    for(var k in listAmenities)
+                var listAmenities =parkingspots[i].amenities;
+                var amenitiesPopUp=''
+                for(var k in listAmenities)
+                {
+                    if(listAmenities[k]==true)
                     {
-                        if(listAmenities[k]==true)
-                        {
-                            amenitiesPopUp+=k+' ';
+                        amenitiesPopUp+=k+' ';
+                    }
+                }
+                    google.maps.event.addListener(marker, 'click', (function(marker, i) {
+                        return function() {
+                          infowindow.setContent(
+
+                                                //not responsive
+                                               '<div id="popContainer" style="width:400px; min-height:300px;">'+
+                                              '<img src="/static'+parkingspots[i].photos +'" height="50%" width="50%">'+
+                                               '<h4>' + parkingspots[i].street_address+'</h4>'+
+                                               '<p><b>Cost:</b></p>'+
+                                                '<p>$' + parkingspots[i].cost+'</p>'+
+                                                '<p><b>Amenities:</b></p>'+
+                                                '<p>' + amenitiesPopUp+'</p>'+
+                                               '<p><b>Description:</b></p>'+
+                                                '<p>' + parkingspots[i].description+'</p>'
+                                              );
+                        infowindow.open(map, marker);
                         }
-                    }
-                        google.maps.event.addListener(marker, 'click', (function(marker, i) {
-                            return function() {
-                              infowindow.setContent(
-
-                                                    //not responsive
-                                                   '<div id="popContainer" style="width:400px; min-height:300px;">'+
-                                                  '<img src="/static'+parkingspots[i].photos +'" height="50%" width="50%">'+
-                                                   '<h4>' + parkingspots[i].street_address+'</h4>'+
-                                                   '<p><b>Cost:</b></p>'+
-                                                    '<p>$' + parkingspots[i].cost+'</p>'+
-                                                    '<p><b>Amenities:</b></p>'+
-                                                    '<p>' + amenitiesPopUp+'</p>'+
-                                                   '<p><b>Description:</b></p>'+
-                                                    '<p>' + parkingspots[i].description+'</p>'
-                                                    
-                                                  );
-                            infowindow.open(map, marker);
-                            }
-                        })(marker, i));
-                    }
-                </script>
-            </div>
-
-        <!-- Prints footer 
-        <div class="footer">
-            <p>&copy; GameDayParking | Privacy | Terms</p>
+                    })(marker, i));
+                }
+            </script>
         </div>
 
         <!-- SCRIPTS BEGIN-->
