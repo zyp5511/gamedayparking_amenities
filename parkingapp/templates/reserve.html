@@ -1,7 +1,158 @@
-<p>Blank page.  Fix me!  I should be a page for reserving the spot the user clicked on.</p>
-<p>{{parkingspot.street_address}}</p>
-<p>{{parkingspot.city}}</p>
-<p>{{parkingspot.zipcode}}</p>
-{% for dates in date_list%}
-<p>On {{dates.0}} I have {{dates.1}} spots available.</p>
-{% endfor %}
+
+<!DOCTYPE html>
+{% load staticfiles %}
+
+ <style>
+            body {
+                width:100%;
+                min-height:100%;
+            }
+
+            #bodyContainer {
+                width:100%;
+                height:800px;
+                margin-top:-20px;
+            }
+
+            input:focus {outline: none;}
+
+            .filterCouple {
+                display:inline-block;
+                text-align:center;
+                width:155px;
+                height:100%;
+                padding-top:5px;
+                padding-bottom:5px;
+                margin-left:20px;
+                margin-right:20px;
+            }
+
+            #cost_low, 
+            #dist_low,
+            #rat_low {
+                width:150px;
+            }
+
+            #cost_high,
+            #dist_high,
+            #rat_high {
+                width:150px;
+                margin-top:5px;
+            } 
+
+            #checkboxForm {
+                display:inline-block;
+                float:right;
+                width:500px;
+                height:100%;
+                padding-top:25px;
+            }
+
+            .filterCheckBoxLabel {
+                position:relative;
+                vertical-align:center;
+                bottom:1px;
+                margin-right:10px;
+            }
+
+            #mapContainer {
+                width:47%; 
+                height:100%; 
+                margin-top:1px; 
+                float:right;
+            }
+
+            #map {
+                height:100%; 
+                width:100%;
+            }
+
+            #parkingSpotsContainer {
+                width:53%; 
+                height:100%; 
+                float:left; 
+            }
+
+            #parkingContainer {
+                text-align:center;
+                margin-top:30px;
+                width:100%;
+            }
+
+            .parkingSpots {
+                display:inline-block;
+                width:325px; 
+                margin-bottom:30px;
+                margin-right:15px;
+                margin-left:15px;
+                border-style:solid;
+                border-color:grey;
+                border-width:1px;
+                -webkit-box-shadow: 0 8px 6px -7px grey;
+                -moz-box-shadow: 0 8px 6px -7px grey;
+                box-shadow: 0 8px 6px -7px grey;
+            }
+
+            .reservationParkingImageContainer, .reservationParkingImage {
+                display:inline-block; 
+                width:60%; 
+                height:300px; 
+                margin-left: 10%;
+                border-style:solid;
+                border-color:lightgrey;
+                border-width:0px;
+                border-bottom-width:1px;
+            }
+
+            .streetAddress {
+            	margin-top: 10cm;
+                float:left;
+                padding-left:10px;
+            }
+
+            .reviewRating {
+                float:left;
+                clear:left;
+                padding-left:10px;
+            }
+
+            .descriptionContainer {
+                float:left;
+                clear:left;
+                padding-left:10px;
+                font-style:italic;
+            }
+            .buttonContainer {
+                float:left;
+                clear:left;
+                padding-left:10px;
+                font-style:italic;
+                padding-bottom:5px;
+            }
+
+            .address {
+              	float:left;
+                clear:left;
+                padding-left:10px;
+                font-style:italic;
+            }
+        </style>
+<html lang="en">
+	<head> 
+		{% include "header.html" %}
+  		<link rel="stylesheet" href="{% static "bower_components/bootstrap/dist/css/bootstrap.min.css" %}">
+	</head>
+	<body>
+	 	{% block nav_bar %}{% endblock %}
+
+	 	<div class="parkingspot">
+	 		<h2>Reserve Parking Spot</h2>
+	 		<div id="bodyContainer">
+	 			 <p class="reservationParkingImageContainer">
+                  	<img class="reservationParkingImage" src="{% static "media/default.png" %}" alt="Parking Image">
+                 </p>
+                 <p class="streetAddress">Address: {{parkingspot.street_address}}</p>
+	 	</div>
+	 	{% include "footer.html" %}
+	</body>
+</html>
