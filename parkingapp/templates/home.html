@@ -6,6 +6,10 @@
         <link   rel="stylesheet" 
                 href="{% static "bower_components/bootstrap/dist/css/bootstrap.min.css" %}">
 
+         <link rel="stylesheet" href="//code.jquery.com/ui/1.11.4/themes/smoothness/jquery-ui.css">
+                
+        <link rel="stylesheet" href="/resources/demos/style.css">
+
         <style>
             #homeTitle {
                 margin-top:150px; 
@@ -37,9 +41,23 @@
         <form align="center" action="../search/" method="get" name="search_bar">
             <input id="location" type="text" name="location" placeholder="E.g. {{ location }}">
         </form>
+        <h3 align="center">
+        <p>Date: <input type="text" id="datepicker"></p>
+        </h3>
 
         <script src="{% static "bower_components/jquery/dist/jquery.min.js" %}"></script>
         <script src="{% static "bower_components/bootstrap/dist/js/bootstrap.min.js" %}"></script>
+        <script src="//code.jquery.com/jquery-1.10.2.js"></script>
+        <script src="//code.jquery.com/ui/1.11.4/jquery-ui.js"></script>
+        <script>
+             $(function() {
+             $( "#datepicker" ).datepicker();
+            });
+        </script>
+        <script>
+               var currentDate = $( ".selector" ).datepicker( "getDate" );
+        </script>
         {% include "footer.html" %}
     </body>
+
 </html>
