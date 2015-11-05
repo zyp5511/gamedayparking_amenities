@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+    <!DOCTYPE html>
 {% load staticfiles %}
 <html lang="en">
     <head>
@@ -9,6 +9,8 @@
          <link rel="stylesheet" href="//code.jquery.com/ui/1.11.4/themes/smoothness/jquery-ui.css">
                 
         <link rel="stylesheet" href="/resources/demos/style.css">
+
+        <link rel="stylesheet" href="http://code.jquery.com/mobile/1.4.5/jquery.mobile-1.4.5.min.css">
 
         <style>
             #homeTitle {
@@ -27,6 +29,10 @@
                 height:40px;
                 width:400px;
             }
+            #inputForm {
+                display:inline-block;
+                width:400px;
+            }
             input:focus {outline: none;}
         </style>
     </head>
@@ -38,26 +44,26 @@
                 Gameday Amenities Finder
             </p>
         </h1>
-        <form align="center" action="../search/" method="get" name="search_bar">
-            <input id="location" type="text" name="location" placeholder="E.g. {{ location }}">
+<div style="text-align:center;">
+        <form id="inputForm"  action="../search/" method="get" name="search_bar">
+            <label for="location">Location:</label>
+            <input id = "location"  type="text" name="location" >
+            <label for="parkingdate">Date you want to Park:</label>
+            <input type="date" name="parkingdate" id="parkingday">
+            <input type="submit" data-inline="true" value="Submit">
         </form>
-        <h3 align="center">
-        <p>Date: <input type="text" id="datepicker"></p>
-        </h3>
+    </div>
+       
 
         <script src="{% static "bower_components/jquery/dist/jquery.min.js" %}"></script>
         <script src="{% static "bower_components/bootstrap/dist/js/bootstrap.min.js" %}"></script>
         <script src="//code.jquery.com/jquery-1.10.2.js"></script>
         <script src="//code.jquery.com/ui/1.11.4/jquery-ui.js"></script>
-        <script>
-             $(function() {
-             $( "#datepicker" ).datepicker();
-            });
-        </script>
-        <script>
-                // the variable that can be used as date the currentDate will be stored as Date 
-               var currentDate = $( ".selector" ).datepicker( "getDate" );
-        </script>
+
+        <script src="http://code.jquery.com/jquery-1.11.3.min.js"></script>
+        <script src="http://code.jquery.com/mobile/1.4.5/jquery.mobile-1.4.5.min.js"></script>
+
+
         {% include "footer.html" %}
     </body>
 
