@@ -5,6 +5,7 @@ from django.shortcuts import render_to_response
 from django.contrib.gis.measure import D
 from django.contrib.gis.geos import Point
 from django.contrib.gis.geoip import GeoIP
+from django.forms.models import model_to_dict
 from geopy.geocoders import GoogleV3
 from parkingspot.models import ParkingSpot
 from message.models import Message, ResMessage
@@ -51,6 +52,13 @@ def search(request, message=None):
         location = request.GET['location']
     except:
         location = "Madison, WI" #DEV
+    try:
+        search_date = request.GET['parkingdate']
+        search_date = search_date.replace("-", "/")
+    except:
+        today = datetime.datetime.now()
+        search_date =   "{}/{}/{}".format(today.month, today.day, today.year)
+
     g = GoogleV3()
     p = g.geocode(location)
     point = Point(p.longitude, p.latitude)
@@ -67,21 +75,25 @@ def search(request, message=None):
             point = Point(-89.411784,43.069817)
         point = Point(-89.411784,43.069817)
 
-    # query database for parkign spots within 50 miles of user
+    # query database for parkign spots within 25 miles of search location
     parkingspots = ParkingSpot.objects.filter(location__distance_lte=(point, D(mi=25)))
-    parkingspot_vals = ParkingSpot.objects.values().filter(location__distance_lte=(point, D(mi=50)))
-    print(type(parkingspots))
-    for index, values in enumerate(parkingspot_vals):
-        distance = values['location'].distance(point)
-        values.update({'distance': distance})
-        rating = parkingspots[index].get_avg_rating()
-        values.update({'rating':rating})
-        location = {'latitude': values['location'].coords[0], 'longitude':values['location'].coords[1]}
-        values.update({'location': location})
-        amenities = json.loads(values['amenities'])
-        values.update({'amenities': amenities})
+    # filter by date availability
+    parkingspots = [x for x in parkingspots if x.get_num_spots(search_date) >= 0]
+    ret_list = []
+    for index, x in enumerate(parkingspots):
+        # some fields with object points need manual translation for json
+        # also some additional fields are necessary.
+        # moved to a method of the model?
+        temp_dict = model_to_dict(x)
+        temp_dict['distance'] = x.location.distance(point)
+        temp_dict['rating'] = x.get_avg_rating()
+        temp_dict['location'] = {'latitude':x.location.coords[0], 'longitude':x.location.coords[1]}
+        temp_dict['amenities'] = parkingspots[index].amenities
+        temp_dict['parking_spot_avail'] = parkingspots[index].parking_spot_avail
+        temp_dict['photos'] = parkingspots[index].photos.url
+        ret_list.append(temp_dict)
 
-    json_parkingspots = json.dumps(list(parkingspot_vals))
+    json_parkingspots = json.dumps(ret_list)
     context = {
         'parkingspots' : parkingspots,
         'json_parkingspots' : json_parkingspots,
@@ -89,7 +101,6 @@ def search(request, message=None):
         'center_lon' : point.coords[1]
     }
     return render(request, 'search.html', context)
-
 
 
 def reserve_request(request):
