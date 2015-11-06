@@ -1,16 +1,16 @@
-    <!DOCTYPE html>
+<!DOCTYPE html>
 {% load staticfiles %}
 <html lang="en">
     <head>
         {% include "header.html" %}
         <link   rel="stylesheet" 
                 href="{% static "bower_components/bootstrap/dist/css/bootstrap.min.css" %}">
-
-         <link rel="stylesheet" href="//code.jquery.com/ui/1.11.4/themes/smoothness/jquery-ui.css">
-                
-        <link rel="stylesheet" href="/resources/demos/style.css">
-
-        <link rel="stylesheet" href="http://code.jquery.com/mobile/1.4.5/jquery.mobile-1.4.5.min.css">
+        <link   rel="stylesheet" 
+                href="//code.jquery.com/ui/1.11.4/themes/smoothness/jquery-ui.css">    
+        <link   rel="stylesheet" 
+                href="/resources/demos/style.css">
+        <link   rel="stylesheet" 
+                href="http://code.jquery.com/mobile/1.4.5/jquery.mobile-1.4.5.min.css">
 
         <style>
             #homeTitle {
@@ -22,6 +22,7 @@
                 font-size:45px; 
                 line-height:1;
             }
+
             #location {
                 background-color:rgba(0,0,0,.15);
                 border-radius:5px;
@@ -29,10 +30,12 @@
                 height:40px;
                 width:400px;
             }
+
             #inputForm {
                 display:inline-block;
                 width:400px;
             }
+
             input:focus {outline: none;}
         </style>
     </head>
@@ -44,15 +47,17 @@
                 Gameday Amenities Finder
             </p>
         </h1>
-<div style="text-align:center;">
-        <form id="inputForm"  action="../search/" method="get" name="search_bar">
-            <label for="location">Location:</label>
-            <input id = "location"  type="text" name="location" >
-            <label for="parkingdate">Date you want to Park:</label>
-            <input type="date" name="parkingdate" id="parkingday">
-            <input type="submit" data-inline="true" value="Submit">
-        </form>
-    </div>
+        <div style="text-align:center;">
+            <form id="inputForm"  action="../search/" method="get" name="search_bar">
+                <label for="location">Location:</label>
+                <input id = "location"  type="text" name="location" >
+
+                <label for="parkingday">Pick Your Date:</label>
+                <input id="parkingday" type="date" name="parkingdate">
+
+                <input type="submit" data-inline="true" value="Submit">
+            </form>
+        </div>
        
 
         <script src="{% static "bower_components/jquery/dist/jquery.min.js" %}"></script>

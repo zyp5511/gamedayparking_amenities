@@ -1,7 +1,9 @@
 
 <!DOCTYPE html>
 {% load staticfiles %}
-
+         <link rel="stylesheet" href="//code.jquery.com/ui/1.11.4/themes/smoothness/jquery-ui.css">
+                
+        <link rel="stylesheet" href="/resources/demos/style.css">
  <style>
             body {
                 width:100%;
@@ -105,7 +107,7 @@
             }
 
             .infoContainer {
-            	margin-top: 5scm;
+            	margin-top: 10cm;
                 float:left;
                 padding-left:120px;
             }
@@ -166,9 +168,19 @@
                     {% endfor %}
                     <p>Cost: {{parkingspot.cost}}</p></br>
                     <p>Number of Spots: {{parkingspot.default_num_spots}}</p>
+                    <p>Date: <input type="text" id="datepicker"></p>
                 </div>
-
 	 	</div>
 	</body>
+    {% include "footer.html" %}
 </html>
-{% include "footer.html" %}
+<script src="{% static "bower_components/jquery/dist/jquery.min.js" %}"></script>
+<script src="{% static "bower_components/bootstrap/dist/js/bootstrap.min.js" %}"></script>
+<script src="//code.jquery.com/jquery-1.10.2.js"></script>
+<script src="//code.jquery.com/ui/1.11.4/jquery-ui.js"></script>
+<script>
+$(function() 
+{
+            $( "#datepicker" ).datepicker();
+            });
+</script>
