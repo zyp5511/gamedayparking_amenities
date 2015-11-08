@@ -1,242 +1,233 @@
-  <!DOCTYPE html>
-  {% load staticfiles %}
+<!DOCTYPE html>
+{% load staticfiles %}
 
-  <html lang="en" ng-app="TestApp">
+<html lang="en" ng-app="TestApp">
     <head>
-      <title>Search Results</title>
+        <title>Search Results</title>
 
-      {% include "header.html" %}
+        {% include "header.html" %}
 
+        <link   rel="stylesheet" 
+                href="{% static "bower_components/bootstrap/dist/css/bootstrap.min.css" %}">
+        <link   rel="stylesheet" 
+                href="https://ajax.googleapis.com/ajax/libs/angular_material/1.0.0-rc1/angular-material.min.css">
 
-        <link   rel="stylesheet" href="{% static "bower_components/bootstrap/dist/css/bootstrap.min.css" %}">
+         <style type="text/css">
+            .listdemoBasicUsage md-divider {
+                  margin-top: 10px;
+                  margin-bottom: 10px; 
+            }
 
-        <link rel="stylesheet" href="https://ajax.googleapis.com/ajax/libs/angular_material/1.0.0-rc1/angular-material.min.css">
+            .listdemoBasicUsage md-list-item {
+                padding: 20px;
+                border-bottom: 1px solid #ddd; 
+            }
+        </style>
 
-  
-       <style type="text/css">
-        .listdemoBasicUsage md-divider {
-              margin-top: 10px;
-              margin-bottom: 10px; }
-        .listdemoBasicUsage md-list-item {
-            padding: 20px;
-            border-bottom: 1px solid #ddd;
-          
-        }
-      </style>
-
-      <style type="text/css">
+        <style type="text/css">
 
         /***
-  User Profile Sidebar by @keenthemes
-  A component of Metronic Theme - #1 Selling Bootstrap 3 Admin Theme in Themeforest: http://j.mp/metronictheme
-  Licensed under MIT
-  ***/
+        User Profile Sidebar by @keenthemes
+        A component of Metronic Theme - #1 Selling Bootstrap 3 Admin Theme in Themeforest: http://j.mp/metronictheme
+        Licensed under MIT
+        ***/
 
-  body {
-    background: #F1F3FA;
-  }
+            body {
+              background: #F1F3FA;
+            }
 
-  .left {
-    float: left;
-  }
-  .right {
-    float: right;
-  }
+            .left {
+              float: left;
+            }
+            .right {
+              float: right;
+            }
 
-  .clearfix {
-    zoom: 1;
-  }
-  .clearfix:before,
-  .clearfix:after {
-    content: "";
-    display: table;
-  }
-  .clearfix:after {
-    clear: both;
-  }
-  .sender-name {
-    line-height: 30px;
-    vertical-align: middle;
-  }
-  /* Profile container */
-  .profile {
-    margin: 20px 0;
-  }
+            .clearfix {
+              zoom: 1;
+            }
+            .clearfix:before,
+            .clearfix:after {
+              content: "";
+              display: table;
+            }
+            .clearfix:after {
+              clear: both;
+            }
+            .sender-name {
+              line-height: 30px;
+              vertical-align: middle;
+            }
+            /* Profile container */
+            .profile {
+              margin: 20px 0;
+            }
 
-  /* Profile sidebar */
-  .profile-sidebar {
-    padding: 20px 0 10px 0;
-    background: #fff;
-  }
+            /* Profile sidebar */
+            .profile-sidebar {
+              padding: 20px 0 10px 0;
+              background: #fff;
+            }
 
-  .profile-userpic img {
-    float: none;
-    margin: 0 auto;
-    width: 50%;
-    height: 50%;
-    -webkit-border-radius: 50% !important;
-    -moz-border-radius: 50% !important;
-    border-radius: 50% !important;
-  }
+            .profile-userpic img {
+              float: none;
+              margin: 0 auto;
+              width: 50%;
+              height: 50%;
+              -webkit-border-radius: 50% !important;
+              -moz-border-radius: 50% !important;
+              border-radius: 50% !important;
+            }
 
-  .profile-usertitle {
-    text-align: center;
-    margin-top: 20px;
-  }
+            .profile-usertitle {
+              text-align: center;
+              margin-top: 20px;
+            }
 
-  .profile-usertitle-name {
-    color: #5a7391;
-    font-size: 16px;
-    font-weight: 600;
-    margin-bottom: 7px;
-  }
+            .profile-usertitle-name {
+              color: #5a7391;
+              font-size: 16px;
+              font-weight: 600;
+              margin-bottom: 7px;
+            }
 
-  .profile-usertitle-job {
-    text-transform: uppercase;
-    color: #5b9bd1;
-    font-size: 12px;
-    font-weight: 600;
-    margin-bottom: 15px;
-  }
+            .profile-usertitle-job {
+              text-transform: uppercase;
+              color: #5b9bd1;
+              font-size: 12px;
+              font-weight: 600;
+              margin-bottom: 15px;
+            }
 
-      
-  .profile-usermenu {
-    margin-top: 30px;
-  }
+                
+            .profile-usermenu {
+              margin-top: 30px;
+            }
 
-  .profile-usermenu ul li {
-    border-bottom: 1px solid #f0f4f7;
-  }
+            .profile-usermenu ul li {
+              border-bottom: 1px solid #f0f4f7;
+            }
 
-  .profile-usermenu ul li:last-child {
-    border-bottom: none;
-  }
+            .profile-usermenu ul li:last-child {
+              border-bottom: none;
+            }
 
-  .profile-usermenu ul li a {
-    color: #93a3b5;
-    font-size: 14px;
-    font-weight: 400;
-  }
+            .profile-usermenu ul li a {
+              color: #93a3b5;
+              font-size: 14px;
+              font-weight: 400;
+            }
 
-  .profile-usermenu ul li a i {
-    margin-right: 8px;
-    font-size: 14px;
-  }
+            .profile-usermenu ul li a i {
+              margin-right: 8px;
+              font-size: 14px;
+            }
 
-  .profile-usermenu ul li a:hover {
-    background-color: #fafcfd;
-    color: #5b9bd1;
-  }
+            .profile-usermenu ul li a:hover {
+              background-color: #fafcfd;
+              color: #5b9bd1;
+            }
 
-  .profile-usermenu ul li.active {
-    border-bottom: none;
-  }
+            .profile-usermenu ul li.active {
+              border-bottom: none;
+            }
 
-  .profile-usermenu ul li.active a {
-    color: #5b9bd1;
-    background-color: #f6f9fb;
-    border-left: 2px solid #5b9bd1;
-    margin-left: -2px;
-  }
+            .profile-usermenu ul li.active a {
+              color: #5b9bd1;
+              background-color: #f6f9fb;
+              border-left: 2px solid #5b9bd1;
+              margin-left: -2px;
+            }
 
-  /* Profile Content */
-  .profile-content {
-    padding: 20px;
-    background: #fff;
-    min-height: 460px;
-  }
-      </style>
+            /* Profile Content */
+            .profile-content {
+              padding: 20px;
+              background: #fff;
+              min-height: 460px;
+            }
+        </style>
     </head>
-  <body>
+<body>
 
+    <div class="container">
+        <div class="row profile">
+            <div class="col-md-3">
+                <div class="profile-sidebar">
+                    <!-- SIDEBAR USERPIC -->
+                    <div class="profile-userpic">
+                      <img src="http://keenthemes.com/preview/metronic/theme/assets/admin/pages/media/profile/profile_user.jpg" class="img-responsive" alt="">
+                    </div>
+                    <!-- END SIDEBAR USERPIC -->
 
-
-  <div class="container">
-      <div class="row profile">
-      <div class="col-md-3">
-        <div class="profile-sidebar">
-          <!-- SIDEBAR USERPIC -->
-          <div class="profile-userpic">
-            <img src="http://keenthemes.com/preview/metronic/theme/assets/admin/pages/media/profile/profile_user.jpg" class="img-responsive" alt="">
-          </div>
-          <!-- END SIDEBAR USERPIC -->
-          <!-- SIDEBAR USER TITLE -->
-          <div class="profile-usertitle">
-            <div class="profile-usertitle-name">
-                  USERName
+                    <!-- SIDEBAR USER TITLE -->
+                    <div class="profile-usertitle">
+                        <div class="profile-usertitle-name">
+                            USERName
+                        </div>
+                    <div class="profile-usertitle-job">
+                        <!-- normal users or admin-->
+                        title /admin or user
+                    </div>
+                    <!-- END SIDEBAR USER TITLE -->
+                </div>
+        
+                <!-- SIDEBAR MENU -->
+                <div class="profile-usermenu">
+                    <ul class="nav">
+                        <li class="active">
+                            <a href="#"><i class="glyphicon glyphicon-home"></i>Overview</a>
+                        </li>
+                        <li>
+                            <a href="#"><i class="glyphicon glyphicon-user"></i>Account Settings </a>
+                        </li>
+                        <li>
+                            <a href="#" target="_blank"><i class="glyphicon glyphicon-ok"></i>My trip </a>
+                        </li>
+                        <li>
+                            <a href="#"><i class="glyphicon glyphicon-flag"></i>Help </a>
+                        </li>
+                    </ul>
+                </div>
+                <!-- END SIDEBAR MENU -->
             </div>
-            <div class="profile-usertitle-job">
-                  <!-- normal users or admin-->
-                  title /admin or user
-            </div>
-          </div>
-          <!-- END SIDEBAR USER TITLE -->
-          <!-- SIDEBAR MENU -->
-          <div class="profile-usermenu">
-            <ul class="nav">
-              <li class="active">
-                <a href="#">
-                <i class="glyphicon glyphicon-home"></i>
-                Overview </a>
-              </li>
-              <li>
-                <a href="#">
-                <i class="glyphicon glyphicon-user"></i>
-                Account Settings </a>
-              </li>
-              <li>
-                <a href="#" target="_blank">
-                <i class="glyphicon glyphicon-ok"></i>
-                My trip </a>
-              </li>
-              <li>
-                <a href="#">
-                <i class="glyphicon glyphicon-flag"></i>
-                Help </a>
-              </li>
-            </ul>
-          </div>
-          <!-- END MENU -->
         </div>
-      </div>
-      <div class="col-md-9">
-              <div class="Message">   
-              <div ng-controller="AppCtrl as vm" ng-cloak class="listdemoBasicUsage">
-              <md-content>
-              <md-list>
-          <md-subheader class="md-no-sticky">Message Inbox</md-subheader>
-          <md-list-item class="md-3-line" ng-repeat="Message in todos">
-          <img ng-src="[[item.face]]?[[$index]]" class="md-avatar" alt="[[Message.who]]">
-          <div class="md-list-item-text" layout="column" align="left">
-            <h3 class="clearfix">
-              <div class="sender-name left">[[Message.who]]</div>  
-              <div class="right reserve-confirmbuttons" align="right">
-                <button type="button" class="btn btn-danger btn-sm">Approve</button>
-                <button type="button" class="btn btn-danger btn-sm">Decline</button>
-                <button type="button" class="btn btn-danger btn-sm">Message</button>
-              </div>
-            </h3>
-            <h4>[[Message.what]]</h4>
-            <p>[[Message.notes]]</p>
-            
-          </div>
+        <div class="col-md-9">
+            <div class="Message">   
+                <div ng-controller="AppCtrl as vm" ng-cloak class="listdemoBasicUsage">
+                    <md-content>
+                    <md-list>
+                    <md-subheader class="md-no-sticky">Message Inbox</md-subheader>
+                    <md-list-item class="md-3-line" ng-repeat="Message in todos">
+                        <img  ng-src="[[item.face]]?[[$index]]" 
+                              class="md-avatar" 
+                              alt="[[Message.who]]">
+                        <div class="md-list-item-text" layout="column" align="left">
+                            <h3 class="clearfix">
+                                <div class="sender-name left">[[Message.who]]</div>  
+                                <div class="right reserve-confirmbuttons" align="right">
+                                    <button type="button" class="btn btn-danger btn-sm">Approve</button>
+                                    <button type="button" class="btn btn-danger btn-sm">Decline</button>
+                                    <button type="button" class="btn btn-danger btn-sm">Message</button>
+                                </div>
+                            </h3>
 
-        </md-list-item>
-        <md-divider></md-divider>
-         </div>
-      </div>
+                            <h4>[[Message.what]]</h4>
+                            <p>[[Message.notes]]</p>
+                        </div>
+                    </md-list-item>
+                    <md-divider></md-divider>
+                </div>
+            </div>
+        </div>
     </div>
-   </div>
-  <div>
+    <div>
 
-        <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.4.7/angular.min.js"></script>
-        <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.4.7/angular-animate.min.js"></script>
-        <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.4.7/angular-aria.min.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.4.7/angular.min.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.4.7/angular-animate.min.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.4.7/angular-aria.min.js"></script>
 
-       <script src="https://ajax.googleapis.com/ajax/libs/angular_material/1.0.0-rc1/angular-material.min.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/angular_material/1.0.0-rc1/angular-material.min.js"></script>
 
-
-        <script src="{% static "js/app.js" %}"></script>
-
-  </body>
-  </html>
+    <script src="{% static "js/app.js" %}"></script>
+</body>
+</html>
