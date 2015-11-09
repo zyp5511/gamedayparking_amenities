@@ -335,7 +335,7 @@
                             <span class="stars">4.3</span></b>
                         </p>
                         <p class="descriptionContainer">{{ x.description }}</p>
-                        <form method="post"  onsubmit="" action='../reserve/' enctype="multipart/form-data" >
+                        <form method="get"  onsubmit="" action='../reserve/' enctype="multipart/form-data" >
                             <div class="reserveButtonContainer">
                                 <button name="reserve" type="submit" id="reserve" value="{{ x.id }}" class="btn btn-primary btn-large">Reserve</button>
                             </div>
@@ -426,7 +426,7 @@
             function filter_and_sort_list() {
                 curr_list = global_list.slice(); //used to copy global_list
                 // get checkbox values
-                yard_checked = document.getElementById("filter_yard").checked
+                yard_checked = documegetnt.getElementById("filter_yard").checked
                 bathroom_checked = document.getElementById("filter_bathroom").checked
                 table_checked = document.getElementById("filter_table").checked
                 electricity_checked = document.getElementById("filter_electricity").checked
@@ -559,7 +559,7 @@
                     content += "<p class='reviewRating'><b>Rating:&nbsp</b>";
                     content += "<span class='stars'>4.3</span></p>";
                     content += "<p class='descriptionContainer'>" + curr_list[i].description + "</p>";
-                    content += "<form method='post'  onsubmit='' action=\'../reserve/\' enctype='multipart/form-data'>";
+                    content += "<form method='get'  onsubmit='' action=\'../reserve/\' enctype='multipart/form-data'>";
                     content += "<div class='reserveButtonContainer'>";
                     content += "<button name='reserve' type='submit' id='reserve' value=\'" + curr_list[i].id + "\' class='btn btn-primary btn-large'>Reserve</button>";
                     content += "</div>{% csrf_token %}</form>";

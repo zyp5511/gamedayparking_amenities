@@ -108,7 +108,7 @@ def reserve_request(request):
         redirect('/accounts/login')
     current_user = request.user
     try:
-        parkingspot = ParkingSpot.objects.get(id=request.POST['reserve'])
+        parkingspot = ParkingSpot.objects.get(id=request.GET['reserve'])
     except:
         return redirect('/search')
     parkingspot.open_date('12/01/2015') #DEV
