@@ -107,7 +107,6 @@
             }
 
             .infoContainer {
-            	margin-top: 10cm;
                 float:left;
                 padding-left:120px;
             }
@@ -154,25 +153,35 @@
                   	<img class="reservationParkingImage" src="{% static "media/default.png" %}" alt="Parking Image">
                  </p>
                  <div class="infoContainer">
+                     <div class='row' align='center'>
+                     {% for key, value in parkingspot.amenities.items %}
+                     <section class='col-sm-2 col-md-2 col-lg-3'>
+                        {% if value %}
+                            {% with 'media/icons/on/'|add:key|add:'.png' as image%}
+                            <h3>{{key}}</h3>
+                            <img class='icon' src="{% static image %}" alt='Icon'/>
+                            {% endwith %}
+                        {% else %}
+                            {% with 'media/icons/off/'|add:key|add:'.png' as image%}
+                            <h3>{{key}}</h3>
+                            <img class='icon' src="{% static image %}" alt='Icon'/>
+                            {% endwith %}
+                        {% endif %}
+                    </section>
+                    {% endfor %}
+                </div> 
                     <p>Address: {{parkingspot.street_address}}</p></br>
                     <p>City: {{parkingspot.city}}</p></br>
                     <p>State: {{parkingspot.state}}</p></br>
                     <p>Zipcode: {{parkingspot.zipcode}}</p></br>
                     <p>parkingspot Owner: {{parkingspot.owner}}</p></br>
                     <p>Description: {{parkingspot.description}}</p></br>
-                    <p>Amenities:
-                    {% for key, value in parkingspot.amenities.items %}
-                        {% if value %}
-                            <p>{{key}}</p>
-                        {% endif %}
-                    {% endfor %}
                     <p>Cost: {{parkingspot.cost}}</p></br>
                     <p>Number of Spots: {{parkingspot.default_num_spots}}</p>
                     <p>Date: <input type="text" id="datepicker"></p>
                 </div>
 	 	</div>
 	</body>
-    {% include "footer.html" %}
 </html>
 <script src="{% static "bower_components/jquery/dist/jquery.min.js" %}"></script>
 <script src="{% static "bower_components/bootstrap/dist/js/bootstrap.min.js" %}"></script>
