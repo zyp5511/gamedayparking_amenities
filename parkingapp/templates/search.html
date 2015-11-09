@@ -326,7 +326,7 @@
                 {% for x in parkingspots %}
                     <div class="parkingSpots">
                         <p class="parkingImageContainer">
-                            <img class="parkingImage" src="{% static "media/default.png" %}" alt="Parking Image">
+                        <img class="parkingImage" src="{{x.photos.url}}" alt="Parking Image">
                         </p>
                         <a class="popUpLink" href="#" onClick="pop('popDiv')">
                             <p class="streetAddress">{{ x.street_address }}, {{ x.city }}, {{ x.state }}</p>
@@ -344,7 +344,7 @@
                         <div id="popDiv" class="ontop">
                             <div class="popup">
                                 <h4> {{x.street_address}}</h4>
-                                <img class="parkingImage" src="{% static "media/default.png"%}" alt="Parking Image">
+                                <img class="parkingImage" src="{{x.photos.url}}" alt="Parking Image">
                                 <p><b>Cost:</b></p>
                                 <p>{{x.cost}}</p>
                                 <p><b>Amenities:</b></p><p>
@@ -398,7 +398,7 @@
 
                                                 //not responsive
                                                '<div id="popContainer" style="width:400px; min-height:300px;">'+
-                                              '<img src="/static'+parkingspots[i].photos +'" height="50%" width="50%">'+
+                                              '<img src="'+parkingspots[i].photos +'" height="50%" width="50%">'+
                                                '<h4>' + parkingspots[i].street_address+'</h4>'+
                                                '<p><b>Cost:</b></p>'+
                                                 '<p>$' + parkingspots[i].cost+'</p>'+
@@ -553,7 +553,7 @@
                 for (i = 0; i < curr_list.length; i++) {
                     content += "<div class='parkingSpots'>";
                     content += "<p class='parkingImageContainer'>";
-                    content += "<img class='parkingImage' src=\"/static" + parkingspots[i].photos + '\" alt="Parking Image"></p>';
+                    content += "<img class='parkingImage' src=\"" + parkingspots[i].photos + '\" alt="Parking Image"></p>';
                     content += "<a href='#' onClick=\"pop('popDiv')\">";
                     content += "<p class='streetAddress' style='color:black;'>" + curr_list[i].street_address + ",&nbsp" + curr_list[i].city + ",&nbsp" + curr_list[i].state + "</p></a>";
                     content += "<p class='reviewRating'><b>Rating:&nbsp</b>";
@@ -566,7 +566,7 @@
                     content += "<div id='popDiv' class='ontop' align='center'>";
                     content += "<div id='popup' style='width:500px; height:450px; position:absolute; color:#000000; background-color:white; top:50%; left:50%; margin-top:-200px; margin-left:-250px;'>";
                     content += "<h4>" + curr_list[i].street_address + "</h4>";
-                    content += "<img class='parkingImage' src='/static" + curr_list[i].photos + "' alt='Parking Image'>";
+                    content += "<img class='parkingImage' src='" + curr_list[i].photos + "' alt='Parking Image'>";
                     content += "<p><b>Cost:</b></p>";
                     content += "<p>" + curr_list[i].cost + "</p>";
                     content += "<p><b>Description:</b></p>";

@@ -22,7 +22,7 @@ class ParkingSpot(models.Model):
     description = models.CharField(max_length=256)
     amenities = JSONField(default='{"bathroom":false,"yard":false,"grill":false,"table":false,"electricity":false}')
     cost = models.IntegerField(blank=True, null=True, default=5)
-    photos = models.ImageField(default='%s/default.png' % settings.MEDIA_URL)
+    photos = models.ImageField(default='%s/default.png' % settings.MEDIA_URL, upload_to='parkingspots/')
     default_num_spots = models.IntegerField(default=0)
     parking_spot_avail = JSONField(default='{"dates":{}}')
     objects = models.GeoManager()
