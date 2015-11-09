@@ -53,8 +53,8 @@ def search(request, message=None):
     except:
         location = "Madison, WI" #DEV
     try:
-        search_date = request.GET['parkingdate']
-        search_date = search_date.replace("-", "/")
+        search_date = request.GET['parkingdate'].split("-")
+        search_date =   "{}/{}/{}".format(search_date[1], search_date[2], search_date[0])
     except:
         today = datetime.datetime.now()
         search_date =   "{}/{}/{}".format(today.month, today.day, today.year)
@@ -117,7 +117,7 @@ def reserve_request(request):
     parkingspot.open_date('1/03/2090') #DEV
     date_list = parkingspot.get_all_spots_available()
     date_list.sort(key=lambda x: datetime.datetime.strptime(x[0], '%m/%d/%Y'))
-    context = {"parkingspot": parkingspot, 
+    context = {"parkingspot": parkingspot,
                 "date_list": date_list}
     return render(request, 'reserve.html', context)
 
