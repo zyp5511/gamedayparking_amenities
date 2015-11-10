@@ -56,8 +56,10 @@ def search(request, message=None):
     except:
         location = "Madison, WI" #DEV
     try:
-        search_date = request.GET['parkingdate'].split("-")
-        search_date =   "{}/{}/{}".format(search_date[1], search_date[2], search_date[0])
+        search_date = request.GET['parkingdate']
+        if '-' in search_date:
+            search_date = search_date.split('-')
+            search_date =   "{}/{}/{}".format(search_date[1], search_date[2], search_date[0])
     except:
         today = datetime.datetime.now()
         search_date =   "{}/{}/{}".format(today.month, today.day, today.year)
