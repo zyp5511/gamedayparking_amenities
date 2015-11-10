@@ -80,6 +80,7 @@
 
             .iconLabel {
                 display:inline-block;
+                padding-bottom:5px;
                 width:100%;
             }
 
@@ -155,10 +156,8 @@
                         {% endfor %}
                     </div> 
 
-                    <span>Address: {{parkingspot.street_address}}</span></br>
-                    <span>City: {{parkingspot.city}}</span></br>
-                    <span>State: {{parkingspot.state}}</span></br>
-                    <span>Zipcode: {{parkingspot.zipcode}}</span></br>
+                    <h3>{{parkingspot.street_address}}, {{parkingspot.city}}, {{parkingspot.state}}, {{parkingspot.zipcode}}</h3>
+                    
                     <span>Owner: {{parkingspot.owner}}</span></br>
                     <span>Description: {{parkingspot.description}}</span></br>
                     <span>Cost: {{parkingspot.cost}}</span></br>
