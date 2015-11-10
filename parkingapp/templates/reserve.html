@@ -41,6 +41,19 @@
                 border-color:lightgrey;
             }
 
+            .stars, .stars>* {
+                display: inline-block;
+                background: url({% static "media/stars.png" %}) 0 -16px repeat-x;
+                width: 80px;
+                height: 16px;
+                margin-left:20px;
+            }
+
+            .stars>*{
+                max-width:80px;
+                background-position: 0 0;
+            }
+
             #reservationParkingImage {
                 display:inline-block; 
                 width:70%; 
@@ -68,7 +81,6 @@
                 display:inline-block;
                 float:left;
                 text-align:center;
-                padding-bottom:15px;
                 width:100%;
             }
 
@@ -96,6 +108,21 @@
                 width:100%;
             }
 
+            #descriptionContainer {
+                display:inline-block;
+                width:100%;
+                height:15%;
+                border-style:solid;
+                border-width:1px;
+                border-color:lightgrey;
+                overflow-y:scroll;
+                margin-top:5px;
+            }
+
+            #addressHeader {
+                font-size:18px;
+            }
+
             #bookingDetails {
                 position:absolute;
                 display:inline-block;
@@ -113,6 +140,30 @@
             .dateLabel {
                 display:inline-block;
                 width:100%;
+                margin-top:5px;
+                margin-bottom:5px;
+            }
+
+            .dateInputs {
+                display:inline-block;
+                width:100%;
+            }
+
+            #requestForm {
+                display:inline-block;
+                width:100%;
+                height:25%;
+            }
+
+            #requestSpotButton {
+                width:100%;
+                height:45%;
+                margin-bottom:5%;
+            }
+
+            #cancelButton {
+                width:100%;
+                height:45%;
             }
 
             input:focus {outline: none;}
@@ -135,39 +186,69 @@
                              <div class="iconSet" style="text-align:center;">
                                 {% if value %}
                                     {% with 'media/icons/on/'|add:key|add:'.png' as image %}
-                                    <span class="iconLabel">{{ key }}</span>
-                                    <div class="iconContainer">
-                                        <img    class='icon' 
-                                                src="{% static image %}" 
-                                                alt='Icon'/>
-                                    </div>
+                                        <span class="iconLabel">{{ key }}</span>
+                                        <div class="iconContainer">
+                                            <img    class='icon' 
+                                                    src="{% static image %}" 
+                                                    alt='Icon'/>
+                                        </div>
                                     {% endwith %}
                                 {% else %}
                                     {% with 'media/icons/off/'|add:key|add:'.png' as image %}
-                                    <span class="iconLabel">{{ key }}</span>
-                                    <div class="iconContainer">
-                                        <img    class='icon' 
-                                                src="{% static image %}" 
-                                                alt='Icon'/>
-                                    </div>
+                                        <span class="iconLabel">{{ key }}</span>
+                                        <div class="iconContainer">
+                                            <img    class='icon' 
+                                                    src="{% static image %}" 
+                                                    alt='Icon'/>
+                                        </div>
                                     {% endwith %}
                                 {% endif %}
                             </div>
                         {% endfor %}
+
+                        <!-- Horizontal Separator -->
+                        <hr>
                     </div> 
 
-                    <h3>{{parkingspot.street_address}}, {{parkingspot.city}}, {{parkingspot.state}}, {{parkingspot.zipcode}}</h3>
-                    
-                    <span>Owner: {{parkingspot.owner}}</span></br>
-                    <span>Description: {{parkingspot.description}}</span></br>
-                    <span>Cost: {{parkingspot.cost}}</span></br>
-                    <span>Number of Spots: {{parkingspot.default_num_spots}}</span></br>
-                    <span>Date: <input type="text" id="datepicker"></span>
+                    <span id="addressHeader"><b>{{parkingspot.street_address}}, {{parkingspot.city}}, {{parkingspot.state}}, {{parkingspot.zipcode}}</b></span>
+                    <span class="stars">4.3</span></br>
+                    <span>Owner: <b>{{parkingspot.owner}}</b></span></br>
+                    <span>Number of Spots: <b>{{parkingspot.default_num_spots}}</b></span></br>
+                    <span>Cost Per Spot: $<b>{{parkingspot.cost}}</b></span></br>
+                    <span>Description: </span></br>
+
+                    <div id="descriptionContainer">
+                        {{parkingspot.description}}
+                    </div></br>
                 </div>
 
                 <div id="bookingDetails">
-                    <span class="dateLabel">From</span>
-                    <span>To</span>
+                    <span class="dateLabel">From:</span>
+                    <div class="dateInputs">
+                        <input  type="text" 
+                                class="datepicker" 
+                                style="width:100%;">
+                    </div>
+
+                    <span class="dateLabel">To:</span>
+                    <div class="dateInputs">
+                        <input  type="text" 
+                                class="datepicker" 
+                                style="width:100%;">
+                    </div>
+
+                    <!-- horizontal Separator -->
+                    <hr>
+
+                    <form id="requestForm">
+                        <input  id="requestSpotButton" 
+                                type="submit" 
+                                value="Request Spot">
+                        <button id="cancelButton" 
+                                type="button" 
+                                onClick="history.go(-1);">Cancel</button>
+                        {% csrf_token %}
+                    </form>
                 </div>
             </div>
         </div>
@@ -181,6 +262,5 @@
         <script src="{% static "bower_components/bootstrap/dist/js/bootstrap.min.js" %}"></script>
         <script src="//code.jquery.com/jquery-1.10.2.js"></script>
         <script src="//code.jquery.com/ui/1.11.4/jquery-ui.js"></script>
-
 	</body>
 </html>
