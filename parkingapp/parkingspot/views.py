@@ -12,6 +12,9 @@ from message.models import Message, ResMessage
 from userprof.models import ExtendedUser, AdminUser
 from django.contrib.auth.models import User
 
+from django.contrib.auth.decorators import login_required
+from django.utils.six.moves.urllib.parse import urlparse
+
 # Create your views here.
 def home(request):
 
@@ -103,14 +106,13 @@ def search(request, message=None):
     return render(request, 'search.html', context)
 
 
+@login_required
 def reserve_request(request):
-    if not request.user.is_authenticated():
-        redirect('/accounts/login')
     current_user = request.user
     try:
         parkingspot = ParkingSpot.objects.get(id=request.GET['reserve'])
     except:
-        return redirect('/search')
+        return redirect(request.META.get('HTTP_REFERER', '/'))
     parkingspot.open_date('12/01/2015') #DEV
     parkingspot.open_date('12/02/2015') #DEV
     parkingspot.open_date('12/03/2015') #DEV
