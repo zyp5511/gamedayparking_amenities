@@ -78,8 +78,29 @@ class SeleniumTests(StaticLiveServerTestCase):
         )
         self.test_spot4.save()
 
+        self.test_spot5 = ParkingSpot.objects.create(
+            street_address = "124 Langdon Street",
+            city = "Madison",
+            state = "WI",
+            zipcode = 53703,
+            cost = 0,
+            owner = admin_user,
+            description = "has yard, lowest cost, not open on 12/03",
+            amenities = {"bathroom":False,"yard":True,"grill":True,"table":False,"electricity":False}
+        )
+        self.test_spot5.save()
+
+
+        self.all_spots = [self.test_spot1, self.test_spot2, self.test_spot3, self.test_spot4, self.test_spot5]
         self.madison_spots = [self.test_spot2, self.test_spot3, self.test_spot4]
 
+        # open spots on 12/03/2015 for all but test_spot5
+        for x in self.all_spots:
+            x.default_num_spots = 5
+            x.open_date("12/03/2015")
+            x.save()
+        self.test_spot5.parking_spot_avail = '{"dates":{}}'
+        self.test_spot5.save()
 
     @classmethod
     def tearDownClass(cls):
@@ -114,32 +135,35 @@ class SeleniumTests(StaticLiveServerTestCase):
         self.selenium.get("{}{}".format(self.live_server_url, '/home/'))
         search_input =  self.selenium.find_element_by_name("location")
         search_input.clear()
-        search_input.send_keys("Camp Randall")
+        search_input.send_keys("Madison, WI")
+        date_input = self.selenium.find_element_by_id("parkingday")
+        date_input.send_keys("12/03/2015")
         search_input.submit()
         # verify three madison parkingspots appear
         spots = [x.text for x in self.selenium.find_elements_by_class_name("streetAddress")]
         test_spots = [display_address(x) for x in self.madison_spots]
+        self.assertEqual( len(test_spots), len(self.madison_spots))
         self.assertTrue(all(x in spots for x in test_spots))
 
 
     def test_search_nav_bar(self):
         # test brand link
-        self.selenium.get("{}{}".format(self.live_server_url, '/search/?location=Madison%2C+WI'))
+        self.selenium.get("{}{}".format(self.live_server_url, '/search/?location=Madison&parkingdate=12%2F03%2F2015'))
         self.selenium.find_element_by_link_text("Game Day Parking").click()
         title = self.selenium.find_element_by_tag_name("h1")
         self.assertEqual(title.text, u'Gameday Amenities Finder')
         # test home link
-        self.selenium.get("{}{}".format(self.live_server_url, '/search/?location=Madison%2C+WI'))
+        self.selenium.get("{}{}".format(self.live_server_url, '/search/?location=Madison&parkingdate=12%2F03%2F2015'))
         self.selenium.find_element_by_link_text("Home").click()
         title = self.selenium.find_element_by_tag_name("h1")
         self.assertEqual(title.text, u'Gameday Amenities Finder')
         # test test about us link
-        self.selenium.get("{}{}".format(self.live_server_url, '/search/?location=Madison%2C+WI'))
+        self.selenium.get("{}{}".format(self.live_server_url, '/search/?location=Madison&parkingdate=12%2F03%2F2015'))
         self.selenium.find_element_by_link_text("About Us").click()
         title = self.selenium.find_element_by_tag_name("h2")
         self.assertEqual(title.text, u'What does Gameday Parking do?')
         # test contact us link
-        self.selenium.get("{}{}".format(self.live_server_url, '/home/'))
+        self.selenium.get("{}{}".format(self.live_server_url, '/search/?location=Madison&parkingdate=12%2F03%2F2015'))
         self.selenium.find_element_by_link_text("Contact Us").click()
         title = self.selenium.find_element_by_tag_name("h2")
         self.assertEqual(title.text, u'Computer Science 506 Game Day Parking and Amenities Finder Team')
@@ -149,7 +173,7 @@ class SeleniumTests(StaticLiveServerTestCase):
     # is escaping quotes? Can see problem by viewing source of page during test
     def test_search_filter(self):
         # test filtering by bathroom
-        self.selenium.get("{}{}".format(self.live_server_url, '/search/?location=Madison%2C+WI'))
+        self.selenium.get("{}{}".format(self.live_server_url, '/search/?location=Madison&parkingdate=12%2F03%2F2015'))
 
         madison_display = [display_address(x) for x in self.madison_spots]
         bathroom_filtered = [display_address(x) for x in self.madison_spots if x.amenities['bathroom']]
@@ -161,11 +185,15 @@ class SeleniumTests(StaticLiveServerTestCase):
         # check yard filter
         self.selenium.find_element_by_id("filter_yard").click()
         displayed = [x.text for x in self.selenium.find_elements_by_class_name("streetAddress")]
+        for x in yard_filtered:
+            self.assertTrue(x in displayed)
+
         self.assertTrue(all(x in displayed for x in yard_filtered))
         # check defilter
         self.selenium.find_element_by_id("filter_yard").click()
         displayed = [x.text for x in self.selenium.find_elements_by_class_name("streetAddress")]
-        self.assertTrue(all(x in displayed for x in madison_display))
+        for x in madison_display:
+            self.assertTrue(x in displayed)
 
         # check grill filter
         self.selenium.find_element_by_id("filter_grill").click()
@@ -185,7 +213,7 @@ class SeleniumTests(StaticLiveServerTestCase):
 
     def test_search_sort(self):
         # test sorting cost low to high
-        self.selenium.get("{}{}".format(self.live_server_url, '/search/?location=Camp+Randall'))
+        self.selenium.get("{}{}".format(self.live_server_url, '/search/?location=Camp+randall%2C+madison&parkingdate=12%2F03%2F2015'))
 
         # test sorting cost low to high
         self.selenium.find_element_by_id("cost_low").click()
@@ -202,9 +230,10 @@ class SeleniumTests(StaticLiveServerTestCase):
             self.assertEqual(spots[i], display_address(sorted_high_to_low[i]))
 
         # view calculates distance, do same calcultion for test spots
-        point = Point(-89.412613, 43.069722) #Camp Randall
+        point = Point(-89.414861, 43.06986)
         for x in self.madison_spots:
             x.distance =  x.location.distance(point)
+
         # test sorting distance low to high
         self.selenium.find_element_by_id("dist_low").click()
         sorted_low_to_high = sorted(self.madison_spots, key=lambda x: x.distance)
@@ -220,7 +249,7 @@ class SeleniumTests(StaticLiveServerTestCase):
             self.assertEqual(spots[i], display_address(sorted_high_to_low[i]))
 
     def test_search_filter_and_sort(self):
-        self.selenium.get("{}{}".format(self.live_server_url, '/search/?location=Camp+Randall'))
+        self.selenium.get("{}{}".format(self.live_server_url, '/search/?location=Madison&parkingdate=12%2F03%2F2015'))
 
         # sort by cost low to high for predictable outpu
         self.selenium.find_element_by_id("cost_low").click()
