@@ -7,8 +7,7 @@
   		<link   rel="stylesheet" 
                 href="{% static "bower_components/bootstrap/dist/css/bootstrap.min.css" %}">
         <link   rel="stylesheet" 
-                href="//code.jquery.com/ui/1.11.4/themes/smoothness/jquery-ui.css">    
-
+                href="{% static "bower_components/datepicker/css/datepicker.css" %}"></link>
         <style>
             html, body {
                 background-color:lightgrey;
@@ -226,13 +225,15 @@
                     <span class="dateLabel">From:</span>
                     <div class="dateInputs">
                         <input  type="text" 
+                                id="dp1"
                                 class="datepicker" 
                                 style="width:100%;">
                     </div>
 
                     <span class="dateLabel">To:</span>
                     <div class="dateInputs">
-                        <input  type="text" 
+                        <input  type="text"
+                                id="dp2"
                                 class="datepicker" 
                                 style="width:100%;">
                     </div>
@@ -252,15 +253,17 @@
                 </div>
             </div>
         </div>
-        <script>
-            $(function() {
-                $( "#datepicker" ).datepicker();
-            });
-        </script>
-
         <script src="{% static "bower_components/jquery/dist/jquery.min.js" %}"></script>
         <script src="{% static "bower_components/bootstrap/dist/js/bootstrap.min.js" %}"></script>
-        <script src="//code.jquery.com/jquery-1.10.2.js"></script>
-        <script src="//code.jquery.com/ui/1.11.4/jquery-ui.js"></script>
+        <script src="{% static "bower_components/datepicker/js/bootstrap-datepicker.js" %}"></script>
+        <script>
+            $('#dp1').datepicker({
+                    format: 'mm/dd/yyyy'
+                    })
+            $('#dp2').datepicker({
+                    format: 'mm/dd/yyyy'
+                    })
+
+        </script>
 	</body>
 </html>
