@@ -4,14 +4,9 @@
     <head>
         {% include "header.html" %}
         <link   rel="stylesheet" 
-                href="{% static "bower_components/bootstrap/dist/css/bootstrap.min.css" %}">
+                href="{% static "bower_components/bootstrap/dist/css/bootstrap.min.css" %}"></link>
         <link   rel="stylesheet" 
-                href="//code.jquery.com/ui/1.11.4/themes/smoothness/jquery-ui.css">    
-        <link   rel="stylesheet" 
-                href="/resources/demos/style.css">
-        <link   rel="stylesheet" 
-                href="http://code.jquery.com/mobile/1.4.5/jquery.mobile-1.4.5.min.css">
-
+                href="{% static "bower_components/datepicker/css/datepicker.css" %}"></link>
         <style>
             #homeTitle {
                 margin-top:150px; 
@@ -41,7 +36,6 @@
     </head>
 
     <body>
-        {% block nav_bar %}{% endblock %}
         <h1 align="center">
             <p id="homeTitle">
                 Gameday Amenities Finder
@@ -50,12 +44,12 @@
         <div style="text-align:center;">
             <form id="inputForm"  action="../search/" method="get" name="search_bar">
                 <label for="location">Location:</label>
-                <input id = "location"  type="text" name="location" >
+                <input id = "location"  type="text" name="location"/>
 
                 <label for="parkingday">Pick Your Date:</label>
-                <input id="parkingday" type="date" name="parkingdate">
+                <input id="parkingday" type="text" name="parkingdate"/>
 
-                <input type="submit" data-inline="true" value="Submit">
+                <input type="submit" data-inline="true" value="Submit"/>
                 {% csrf_token %}
             </form>
         </div>
@@ -63,13 +57,12 @@
 
         <script src="{% static "bower_components/jquery/dist/jquery.min.js" %}"></script>
         <script src="{% static "bower_components/bootstrap/dist/js/bootstrap.min.js" %}"></script>
-        <script src="//code.jquery.com/jquery-1.10.2.js"></script>
-        <script src="//code.jquery.com/ui/1.11.4/jquery-ui.js"></script>
-
-        <!---<script src="http://code.jquery.com/jquery-1.11.3.min.js"></script>
-        <script src="http://code.jquery.com/mobile/1.4.5/jquery.mobile-1.4.5.min.js"></script>
-        -->
-
+        <script src="{% static "bower_components/datepicker/js/bootstrap-datepicker.js" %}"></script>
+        <script>
+            $('#parkingday').datepicker({
+                    format: 'mm/dd/yyyy'
+                    })
+        </script>
         {% include "footer.html" %}
     </body>
 
