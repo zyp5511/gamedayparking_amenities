@@ -356,7 +356,15 @@
                                 </p>
                                 <p><b>Description:</b></p>
                                 <p>{{x.description}}</p>
-                                <a href="#" onClick="hide('popDiv')">Close</a>
+                                <p>
+                                <form method="get"  onsubmit="" action='../reserve/' enctype="multipart/form-data" >
+                                    <div class="reserveButtonContainer">
+                                    <button name="reserve" type="submit" id="reserve" value="{{ x.id }}" class="btn btn-primary btn-large">Reserve</button>
+                                    </div>
+                                    {% csrf_token %}
+                                </form>
+                                </p>
+                                <p><a href="#" onClick="hide('popDiv')">Close</a></p>
                             </div>
                         </div>
                     </div>
@@ -414,7 +422,11 @@
                                 '<p><b>Amenities:</b></p>'+
                                 '<p>' + amenitiesPopUp+'</p>'+
                                 '<p><b>Description:</b></p>'+
-                                '<p>' + parkingspot.description+'</p>'
+                                '<p>' + parkingspot.description+'</p>'+
+                                "<form method='get'  onsubmit='' action=\'../reserve/\' enctype='multipart/form-data'>"+
+                                "<div class='reserveButtonContainer'>"+
+                                "<button name='reserve' type='submit' id='reserve' value=\'" + parkingspot.id + "\' class='btn btn-primary btn-large'>Reserve</button>"+
+                                "</div>{% csrf_token %}</form>"
                               );
                             infowindow.open(map, marker);
                     }
