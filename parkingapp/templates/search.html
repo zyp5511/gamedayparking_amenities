@@ -368,22 +368,31 @@
             <div id="map"></div>
             <!-- Script to implement googe maps block -->
             <script>    
-                var map = new google.maps.Map(document.getElementById('map'), {
-                        zoom: 14,
-                        center: new google.maps.LatLng({{center_lon}},{{center_lat}}),
-                        mapTypeId: google.maps.MapTypeId.ROADMAP
+                var map;
+                var markers = [];
+                function init_map() {
+                    map = new google.maps.Map(document.getElementById('map'), {
+                            zoom: 14,
+                            center: new google.maps.LatLng({{center_lon}},{{center_lat}}),
+                            mapTypeId: google.maps.MapTypeId.ROADMAP
+                    });
+                    var infowindow = new google.maps.InfoWindow();
+                    var parkingspots = {{ json_parkingspots|safe }};
+                    var i, marker;
+                    var markers = []
+                    for (i = 0; i < parkingspots.length; i++) {
+                        createMarker(parkingspots[i])
+                        markers.push(marker)
+                    }
+            }
+            function createMarker(parkingspot) {
+                var infowindow = new google.maps.InfoWindow();
+                var marker = new google.maps.Marker({
+                    position: new google.maps.LatLng(parkingspot.location.longitude, parkingspot.location.latitude),
+                    map: map
                 });
                 
-                var infowindow = new google.maps.InfoWindow();
-                var parkingspots = {{ json_parkingspots|safe }};
-                var i, marker;
-               
-                for (i = 0; i < parkingspots.length; i++) {
-                       marker = new google.maps.Marker({
-                       position: new google.maps.LatLng(parkingspots[i].location.longitude, parkingspots[i].location.latitude),
-                       map: map
-                    });
-                var listAmenities =parkingspots[i].amenities;
+                var listAmenities =parkingspot.amenities;
                 var amenitiesPopUp=''
                 for(var k in listAmenities)
                 {
@@ -392,25 +401,46 @@
                         amenitiesPopUp+=k+' ';
                     }
                 }
-                    google.maps.event.addListener(marker, 'click', (function(marker, i) {
+                google.maps.event.addListener(marker, 'click', 
+                    (function(marker) {
                         return function() {
-                          infowindow.setContent(
-
-                                                //not responsive
-                                               '<div id="popContainer" style="width:400px; min-height:300px;">'+
-                                              '<img src="'+parkingspots[i].photos +'" height="50%" width="50%">'+
-                                               '<h4>' + parkingspots[i].street_address+'</h4>'+
-                                               '<p><b>Cost:</b></p>'+
-                                                '<p>$' + parkingspots[i].cost+'</p>'+
-                                                '<p><b>Amenities:</b></p>'+
-                                                '<p>' + amenitiesPopUp+'</p>'+
-                                               '<p><b>Description:</b></p>'+
-                                                '<p>' + parkingspots[i].description+'</p>'
-                                              );
-                        infowindow.open(map, marker);
-                        }
-                    })(marker, i));
-                }
+                            infowindow.setContent(
+                                //not responsive
+                                '<div id="popContainer" style="width:400px; min-height:300px;">'+
+                                '<img src="'+parkingspot.photos +'" height="50%" width="50%">'+
+                                '<h4>' + parkingspot.street_address+'</h4>'+
+                                '<p><b>Cost:</b></p>'+
+                                '<p>$' + parkingspot.cost+'</p>'+
+                                '<p><b>Amenities:</b></p>'+
+                                '<p>' + amenitiesPopUp+'</p>'+
+                                '<p><b>Description:</b></p>'+
+                                '<p>' + parkingspot.description+'</p>'
+                              );
+                            infowindow.open(map, marker);
+                    }
+                })(marker));
+                markers.push(marker);
+            }
+            // Sets the map on all markers in the array.
+            function setMapOnAll(map) {
+              for (var i = 0; i < markers.length; i++) {
+                markers[i].setMap(map);
+              }
+            }
+            // Removes the markers from the map, but keeps them in the array.
+            function clearMarkers() {
+              setMapOnAll(null);
+            }
+            // Shows any markers currently in the array.
+            function showMarkers() {
+              setMapOnAll(map);
+            }
+            // Deletes all markers in the array by removing references to them.
+            function deleteMarkers() {
+              clearMarkers();
+              markers = [];
+            }
+            init_map()
             </script>
         </div>
 
@@ -466,6 +496,7 @@
                     document.write("No last sort");
                 }
                 updateParkingList(curr_list);
+                updateMap(curr_list);
             }
             
             function filter_yard_func () {
@@ -473,6 +504,7 @@
                 if (filter_yard_check) {
                     curr_list = curr_list.filter(filter_by_yard);
                     updateParkingList(curr_list);
+                    updateMap(curr_list);
                 }
                 else {
                     filter_and_sort_list();
@@ -483,6 +515,7 @@
                 if (filter_bathroom_check) {
                     curr_list = curr_list.filter(filter_by_bathroom);
                     updateParkingList(curr_list);
+                    updateMap(curr_list);
                 }
                 else {
                     filter_and_sort_list();
@@ -493,6 +526,7 @@
                 if (filter_grill_check) {
                     curr_list = curr_list.filter(filter_by_grill);
                     updateParkingList(curr_list);
+                    updateMap(curr_list);
                 }
                 else {
                     filter_and_sort_list();
@@ -503,6 +537,7 @@
                 if (filter_electricity_check) {
                     curr_list = curr_list.filter(filter_by_electricity);
                     updateParkingList(curr_list);
+                    updateMap(curr_list);
                 }
                 else {
                     filter_and_sort_list();
@@ -513,6 +548,7 @@
                 if (filter_table_check) {
                     curr_list = curr_list.filter(filter_by_table);
                     updateParkingList(curr_list);
+                    updateMap(curr_list);
                 }
                 else {
                     filter_and_sort_list();
@@ -575,6 +611,13 @@
                     content += "</div></div></div>";
                 }
                 document.getElementById("parkingContainer").innerHTML = content;
+            }
+            function updateMap(curr_list) {
+                clearMarkers();
+                markers = []
+                for(i = 0; i < curr_list.length; i++) {
+                    createMarker(curr_list[i]);
+                }
             }
         </script>
 
