@@ -13,8 +13,8 @@
                 href="{% static "bower_components/datepicker/css/datepicker.css" %}"></link>
         <script src="http://maps.google.com/maps/api/js?sensor=false" 
                 type="text/javascript"></script>
-        <script src="http://ajax.googleapis.com/ajax/libs/jquery/2.0.2/jquery.min.js"></script>
-        
+        <script src="{% static "bower_components/jquery/dist/jquery.min.js" %}"></script>
+        <script src="http://ajax.googleapis.com/ajax/libs/jquery/3.0.2/jquery.min.js"></script>
         <meta charset=utf-8 />
         <style>
             html, body {
@@ -230,14 +230,15 @@
                 background-color:#f5f5f5;  
             }
         
-            span.stars, span.stars>* {
+            span.stars, span.stars span {
                 display: inline-block;
                 background: url({% static "media/stars.png" %}) 0 -16px repeat-x;
                 width: 80px;
                 height: 16px;
+                text-align:left;
             }
 
-            span.stars>*{
+            span.stars span {
                 max-width:80px;
                 background-position: 0 0;
             }
@@ -336,7 +337,7 @@
                             <p class="streetAddress">{{ x.street_address }}, {{ x.city }}, {{ x.state }}</p>
                         </a>
                         <p class="reviewRating"><b>Rating:&nbsp
-                            <span class="stars">4.3</span></b>
+                            <span class="stars">{{x.get_avg_rating}}</span></b>
                         </p>
                         <p class="descriptionContainer">{{ x.description }}</p>
                         <form method="get"  onsubmit="" action='../reserve/' enctype="multipart/form-data" >
@@ -609,7 +610,7 @@
                     content += "<a href='#' onClick=\"pop('popDiv')\">";
                     content += "<p class='streetAddress' style='color:black;'>" + curr_list[i].street_address + ",&nbsp" + curr_list[i].city + ",&nbsp" + curr_list[i].state + "</p></a>";
                     content += "<p class='reviewRating'><b>Rating:&nbsp</b>";
-                    content += "<span class='stars'>4.3</span></p>";
+                    content += "<span class='stars'>" + curr_list[i].rating + "</span></p>";
                     content += "<p class='descriptionContainer'>" + curr_list[i].description + "</p>";
                     content += "<form method='get'  onsubmit='' action=\'../reserve/\' enctype='multipart/form-data'>";
                     content += "<div class='reserveButtonContainer'>";
@@ -627,6 +628,9 @@
                     content += "</div></div></div>";
                 }
                 document.getElementById("parkingContainer").innerHTML = content;
+                $('.stars').each(function() {
+                        $(this).html($('<span/>').width(Math.max(0, (Math.min(5, parseFloat($(this).html())))) * 16));
+                });
             }
             function updateMap(curr_list) {
                 clearMarkers();
@@ -652,20 +656,17 @@
                 }
             };
         </script>
-        <script>
-            $.fn.stars = function() {
-                return this.each(function(i,e){$(e).html($('<span/>').width($(e).text()*16));});
-            };
-            $('.stars').stars();
-        </script>
-
-        <script src="{% static "bower_components/jquery/dist/jquery.min.js" %}"></script>
         <script src="{% static "bower_components/bootstrap/dist/js/bootstrap.min.js" %}"></script>
         <script src="{% static "bower_components/datepicker/js/bootstrap-datepicker.js" %}"></script>
         <script>
             $('#parkingday').datepicker({
                     format: 'mm/dd/yyyy'
             })
+        </script>
+        <script>
+            $('.stars').each(function() {
+                    $(this).html($('<span/>').width(Math.max(0, (Math.min(5, parseFloat($(this).html())))) * 16));
+            });
         </script>
         <script src="{% static "js/parking_sort.js" %}"></script>
 
