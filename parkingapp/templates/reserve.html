@@ -6,8 +6,11 @@
 
   		<link   rel="stylesheet" 
                 href="{% static "bower_components/bootstrap/dist/css/bootstrap.min.css" %}">
-        <link   rel="stylesheet" 
-                href="{% static "bower_components/datepicker/css/datepicker.css" %}"></link>
+
+        <script src="{% static "bower_components/jquery/dist/jquery.min.js" %}"></script>
+        <script src="{% static "bower_components/bootstrap/dist/js/bootstrap.min.js" %}"></script>
+        <script src="{% static "bower_components/bootstrap-datepicker-1.5.0-dist/js/bootstrap-datepicker.js" %}"></script>
+
         <style>
             html, body {
                 background-color:lightgrey;
@@ -38,20 +41,6 @@
                 border-width:0px;
                 border-bottom-width:1px;
                 border-color:lightgrey;
-            }
-
-            .stars, .stars>* {
-                display:inline-block;
-                background:url({% static "media/stars.png" %}) 0 -16px repeat-x;
-                width:80px;
-                height:16px;
-                text-align:left;
-                margin-left:20px;
-            }
-
-            .stars>*{
-                max-width:80px;
-                background-position:0 0;
             }
 
             #reservationParkingImage {
@@ -121,6 +110,20 @@
 
             #addressHeader {
                 font-size:18px;
+                margin-right:15px;
+            }
+
+            span.stars, span.stars span {
+                display: inline-block;
+                background: url({% static "media/stars.png" %}) 0 -16px repeat-x;
+                width: 80px;
+                height: 16px;
+                text-align:left;
+            }
+
+            span.stars span {
+                max-width:80px;
+                background-position: 0 0;
             }
 
             #bookingDetails {
@@ -165,6 +168,152 @@
                 width:100%;
                 height:45%;
             }
+
+            /* Popup Begins Here */
+
+            .ontop {
+                z-index:999;
+                width:100%;
+                height:100%;
+                top:0;
+                left:0;
+                display:none;
+                position:fixed;
+                background-color:rgba(40,40,40,0.9);
+                color:#000000;
+            }
+
+            .popup {
+                width:450px;
+                height:500px;
+                position:absolute;
+                color:#000000;
+                background-color:lightgrey;
+                /* To align popup window at the center of screen*/
+                top:40%;
+                left:50%;
+                margin-top:-200px;
+                margin-left:-250px;
+                border-radius:10px;
+            }
+
+            #popUpHeader {
+                text-align:center;
+            }
+
+            #popUpHeader span {
+                display:inline-block;
+                height:26px;
+                width:100%;
+                font-size:24px;
+                font-weight:bold;
+                margin-top:15px;
+            }
+
+            #popUpMainContainer {
+                position:absolute;
+                top:60px;
+                bottom:0;
+                left:1px;
+                right:1px;
+                background-color:white;
+                border-bottom-left-radius:10px;
+                border-bottom-right-radius:10px;
+            }
+
+            #confirmForm {
+                position:absolute;
+                display:inline-block;
+                text-align:center;
+                top:0;
+                left:0;
+                right:0;
+                bottom:0;
+            }
+
+            .popup p{
+                text-align:center;
+                margin-top:25px;
+                margin-bottom:25px;
+                color:grey;
+            }
+
+            #name {
+                display:block;
+                width:300px;
+                height:35px;
+                margin-left:auto;
+                margin-right:auto;
+                padding-left:5px;
+                margin-bottom:25px;
+                border-style:solid;
+                border-width:1px;
+                border-color:grey;
+                border-radius:3px;
+            }
+
+            #email {
+                display:block;
+                width:300px;
+                height:35px;
+                margin-left:auto;
+                margin-right:auto;
+                padding-left:5px;
+                margin-bottom:25px;
+                border-style:solid;
+                border-width:1px;
+                border-color:grey;
+                border-radius:3px;
+            }
+
+            #phone {
+                display:block;
+                width:300px;
+                height:35px;
+                margin-left:auto;
+                margin-right:auto;
+                padding-left:5px;
+                margin-bottom:25px;
+                border-style:solid;
+                border-width:1px;
+                border-color:grey;
+                border-radius:3px;
+            }
+
+            #message {
+                display:block;
+                width:300px;
+                height:120px;
+                margin-left:auto;
+                margin-right:auto;
+                padding-left:5px;
+                margin-bottom:20px;
+                border-style:solid;
+                border-width:1px;
+                border-color:grey;
+            }
+
+            #confirmButton {
+                width:120px;
+                height:30px;
+                margin-right:8px;
+                border-style:solid;
+                border-width:1px;
+                border-color:lightgrey;
+                border-radius:5px;
+            }
+
+            #popUpCancel {
+                width:120px;
+                height:30px;
+                margin-left:8px;
+                border-style:solid;
+                border-width:1px;
+                border-color:lightgrey;
+                border-radius:5px;
+            }
+
+            /* Popup Ends Here */
 
             input:focus {outline: none;}
         </style>
@@ -244,34 +393,100 @@
 
                     <form id="requestForm">
                         <input  id="requestSpotButton" 
-                                type="submit" 
-                                value="Request Spot">
+                                type="button"
+                                value="Request Spot"
+                                onClick="pop('popDiv')">
                         <button id="cancelButton" 
                                 type="button" 
                                 onClick="history.go(-1);">Cancel</button>
                         {% csrf_token %}
                     </form>
+
+                    <!-- Popup Div Starts Here -->
+                    <div id="popDiv" class="ontop">
+                        <div class="popup">
+                            <div id="popUpHeader">
+                                <span>Confirm Request</span>
+                            </div>
+
+                            <div id="popUpMainContainer">
+                                <form id="confirmForm">
+                                    <p>(Please Provide owner with Information below)</p>
+
+                                    <input  id="name"
+                                            type="text"
+                                            name="name"
+                                            placeholder="Full Name">
+
+                                    <input  id="email"
+                                            type="text"
+                                            name="email"
+                                            placeholder="example@domain.com">
+ 
+                                    <input  id="phone"
+                                            type="text"
+                                            name="phone"
+                                            placeholder="(xxx) xxx-xxxx">
+
+                                    <textarea   id="message"
+                                                name="message"
+                                                maxlength="200"
+                                                placeholder="Write a message to owner..."></textarea>
+
+                                    <input  id="confirmButton" 
+                                            type="button"
+                                            value="Send Request"
+                                            onClick="">
+
+                                    <button id="popUpCancel" 
+                                            type="button" 
+                                            onClick="hide('popDiv')">Cancel</button>
+                                    {% csrf_token %}
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- Popup Div Ends Here -->
                 </div>
             </div>
         </div>
+
+        <script>
+            //Function To Display Popup
+            function pop(div) {
+                document.getElementById(div).style.display = 'block';
+            }
+
+            function hide(div) {
+                document.getElementById(div).style.display = 'none';
+            }
+
+            //To detect escape button
+            document.onkeydown = function(evt) {
+                evt = evt || window.event;
+                if (evt.keyCode == 27) {
+                    hide('popDiv');
+                }
+            };
+        </script>
+
         <script>
             $('.stars').each(function() {
                     $(this).html($('<span/>').width(Math.max(0, (Math.min(5, parseFloat($(this).html())))) * 16));
             });
         </script>
-    
+
         <script>
-            $('#dp1').datepicker({
+            $('#dp1').datepicker( {
                     format: 'mm/dd/yyyy'
-                    })
-            $('#dp2').datepicker({
-                    format: 'mm/dd/yyyy'
-                    })
-
+                    });
+            $('#dp1').datepicker('update', new Date());
         </script>
-
-        <script src="{% static "bower_components/jquery/dist/jquery.min.js" %}"></script>
-        <script src="{% static "bower_components/bootstrap/dist/js/bootstrap.min.js" %}"></script>
-        <script src="{% static "bower_components/datepicker/js/bootstrap-datepicker.js" %}"></script>
+        <script>
+            $('#dp2').datepicker( {
+                    format: 'mm/dd/yyyy'
+                    });
+            $('#dp2').datepicker('update', new Date());
+        </script>
 	</body>
 </html>

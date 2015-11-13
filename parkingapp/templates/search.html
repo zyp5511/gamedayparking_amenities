@@ -14,6 +14,8 @@
                 type="text/javascript"></script>
         <script src="{% static "bower_components/jquery/dist/jquery.min.js" %}"></script>
         <script src="http://ajax.googleapis.com/ajax/libs/jquery/3.0.2/jquery.min.js"></script>
+        <script src="{% static "bower_components/bootstrap-datepicker-1.5.0-dist/js/bootstrap-datepicker.js" %}"></script>
+        <script src="{% static "js/parking_sort.js" %}"></script>
 
         <meta charset=utf-8 />
         <style>
@@ -692,10 +694,6 @@
             });
         </script>
 
-        <script src="{% static "bower_components/bootstrap/dist/js/bootstrap.min.js" %}"></script>
-        <script src="{% static "bower_components/bootstrap-datepicker-1.5.0-dist/js/bootstrap-datepicker.js" %}"></script>
-        <script src="{% static "js/parking_sort.js" %}"></script>
-
         <script>
             $('#parkingday').datepicker({
                     format: 'mm/dd/yyyy'
@@ -703,6 +701,7 @@
             $('#parkingday').datepicker('update', new Date());
         </script>
 
+        <script src="{% static "bower_components/bootstrap/dist/js/bootstrap.min.js" %}"></script>
         <!-- SCRIPTS END -->
     </body>
     

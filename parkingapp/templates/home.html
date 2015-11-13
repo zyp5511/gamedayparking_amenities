@@ -6,6 +6,10 @@
         <link   rel="stylesheet" 
                 href="{% static "bower_components/bootstrap/dist/css/bootstrap.min.css" %}" />
 
+        <script src="{% static "bower_components/jquery/dist/jquery.min.js" %}"></script>
+        <script src="{% static "bower_components/bootstrap/dist/js/bootstrap.min.js" %}"></script>
+        <script src="{% static "bower_components/bootstrap-datepicker-1.5.0-dist/js/bootstrap-datepicker.js" %}"></script>
+
         <style>
             #homeTitle {
                 margin-top:150px; 
@@ -66,10 +70,6 @@
             </form>
         </div>
        
-
-        <script src="{% static "bower_components/jquery/dist/jquery.min.js" %}"></script>
-        <script src="{% static "bower_components/bootstrap/dist/js/bootstrap.min.js" %}"></script>
-        <script src="{% static "bower_components/bootstrap-datepicker-1.5.0-dist/js/bootstrap-datepicker.js" %}"></script>
         <script>
             $('#parkingday').datepicker({
                     format: 'mm/dd/yyyy'
