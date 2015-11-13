@@ -41,16 +41,17 @@
             }
 
             .stars, .stars>* {
-                display: inline-block;
-                background: url({% static "media/stars.png" %}) 0 -16px repeat-x;
-                width: 80px;
-                height: 16px;
+                display:inline-block;
+                background:url({% static "media/stars.png" %}) 0 -16px repeat-x;
+                width:80px;
+                height:16px;
+                text-align:left;
                 margin-left:20px;
             }
 
             .stars>*{
                 max-width:80px;
-                background-position: 0 0;
+                background-position:0 0;
             }
 
             #reservationParkingImage {
@@ -210,7 +211,7 @@
                     </div> 
 
                     <span id="addressHeader"><b>{{parkingspot.street_address}}, {{parkingspot.city}}, {{parkingspot.state}}, {{parkingspot.zipcode}}</b></span>
-                    <span class="stars">4.3</span></br>
+                    <span class="stars">{{parkingspot.get_avg_rating}}</span></br>
                     <span>Owner: <b>{{parkingspot.owner}}</b></span></br>
                     <span>Number of Spots: <b>{{parkingspot.default_num_spots}}</b></span></br>
                     <span>Cost Per Spot: $<b>{{parkingspot.cost}}</b></span></br>
@@ -253,9 +254,12 @@
                 </div>
             </div>
         </div>
-        <script src="{% static "bower_components/jquery/dist/jquery.min.js" %}"></script>
-        <script src="{% static "bower_components/bootstrap/dist/js/bootstrap.min.js" %}"></script>
-        <script src="{% static "bower_components/datepicker/js/bootstrap-datepicker.js" %}"></script>
+        <script>
+            $('.stars').each(function() {
+                    $(this).html($('<span/>').width(Math.max(0, (Math.min(5, parseFloat($(this).html())))) * 16));
+            });
+        </script>
+    
         <script>
             $('#dp1').datepicker({
                     format: 'mm/dd/yyyy'
@@ -265,5 +269,9 @@
                     })
 
         </script>
+
+        <script src="{% static "bower_components/jquery/dist/jquery.min.js" %}"></script>
+        <script src="{% static "bower_components/bootstrap/dist/js/bootstrap.min.js" %}"></script>
+        <script src="{% static "bower_components/datepicker/js/bootstrap-datepicker.js" %}"></script>
 	</body>
 </html>
