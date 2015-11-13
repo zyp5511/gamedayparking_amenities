@@ -9,6 +9,8 @@
 
         <link   rel="stylesheet" 
                 href="{% static "bower_components/bootstrap/dist/css/bootstrap.min.css" %}" />
+        <link   rel="stylesheet" 
+                href="{% static "bower_components/bootstrap-datepicker-1.5.0-dist/css/bootstrap-datepicker.min.css" %}"/>
 
         <script src="http://maps.google.com/maps/api/js?sensor=false" 
                 type="text/javascript"></script>
@@ -271,7 +273,7 @@
         {% block nav_bar %}{% endblock %}
         <div id="filterContainer">
             <form id="searchBarForm" action="../search/" method="get" name="search_bar">
-                <input id="searchBar" type="text" name="location" placeholder="E.g. Madison, WI">
+                <input id="searchBar" type="text" name="location" value={{prev_search}}>
                 <input id="parkingday" type="text" name="parkingdate"/>
                 <input id="searchButton" type="submit" data-inline="true" value="Submit"/>
                 {% csrf_token %}
@@ -695,10 +697,11 @@
         </script>
 
         <script>
+            var d = {{date|safe}};
             $('#parkingday').datepicker({
                     format: 'mm/dd/yyyy'
                     });
-            $('#parkingday').datepicker('update', new Date());
+            $('#parkingday').datepicker('update', new Date(d[2], d[0]-1, d[1]));
         </script>
 
         <script src="{% static "bower_components/bootstrap/dist/js/bootstrap.min.js" %}"></script>

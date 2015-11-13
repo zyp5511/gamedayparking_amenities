@@ -100,8 +100,10 @@ def search(request, message=None):
 
     json_parkingspots = json.dumps(ret_list)
     context = {
+        'prev_search' : request.GET['location'],
         'parkingspots' : parkingspots,
         'json_parkingspots' : json_parkingspots,
+        'date'      :  json.dumps(search_date.split("/")),
         'center_lat' : point.coords[0],
         'center_lon' : point.coords[1]
     }
