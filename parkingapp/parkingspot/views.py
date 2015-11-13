@@ -124,7 +124,9 @@ def reserve_request(request):
     date_list = parkingspot.get_all_spots_available()
     date_list.sort(key=lambda x: datetime.datetime.strptime(x[0], '%m/%d/%Y'))
     context = {"parkingspot": parkingspot,
-                "date_list": date_list}
+                "date_list": date_list,
+                "date": request.GET['date'].split("/")
+              }
     return render(request, 'reserve.html', context)
 
 

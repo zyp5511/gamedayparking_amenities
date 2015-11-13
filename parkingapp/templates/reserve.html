@@ -480,13 +480,14 @@
             $('#dp1').datepicker( {
                     format: 'mm/dd/yyyy'
                     });
-            $('#dp1').datepicker('update', new Date());
+            $('#dp1').datepicker('update', new Date({{date.2}}, {{date.0}}-1, {{date.1}}));
         </script>
         <script>
             $('#dp2').datepicker( {
                     format: 'mm/dd/yyyy'
                     });
             $('#dp2').datepicker('update', new Date());
+            $('#dp2').datepicker('update', new Date({{date.2}}, {{date.0}}-1, {{date.1}}));
         </script>
 	</body>
 </html>
