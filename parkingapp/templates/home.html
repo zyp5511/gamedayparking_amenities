@@ -6,7 +6,7 @@
         <link   rel="stylesheet" 
                 href="{% static "bower_components/bootstrap/dist/css/bootstrap.min.css" %}"></link>
         <link   rel="stylesheet" 
-                href="{% static "bower_components/datepicker/css/datepicker.css" %}"></link>
+                href="{% static "bower_components/bootstrap-datepicker-1.5.0-dist/css/bootstrap-datepicker3.min.css" %}"></link>
         <style>
             #homeTitle {
                 margin-top:150px; 
@@ -57,11 +57,12 @@
 
         <script src="{% static "bower_components/jquery/dist/jquery.min.js" %}"></script>
         <script src="{% static "bower_components/bootstrap/dist/js/bootstrap.min.js" %}"></script>
-        <script src="{% static "bower_components/datepicker/js/bootstrap-datepicker.js" %}"></script>
+        <script src="{% static "bower_components/bootstrap-datepicker-1.5.0-dist/js/bootstrap-datepicker.js" %}"></script>
         <script>
             $('#parkingday').datepicker({
                     format: 'mm/dd/yyyy'
-                    })
+                    });
+            $('#parkingday').datepicker('update', new Date());
         </script>
         {% include "footer.html" %}
     </body>
