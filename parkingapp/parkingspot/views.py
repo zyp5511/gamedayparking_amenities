@@ -103,7 +103,7 @@ def search(request, message=None):
         'prev_search' : request.GET['location'],
         'parkingspots' : parkingspots,
         'json_parkingspots' : json_parkingspots,
-        'date'      :  json.dumps(search_date.split("/")),
+        'date'      :  search_date.split("/"),
         'center_lat' : point.coords[0],
         'center_lon' : point.coords[1]
     }
