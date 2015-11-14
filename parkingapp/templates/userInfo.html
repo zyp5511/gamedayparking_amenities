@@ -220,6 +220,14 @@
   <div class="container">
       <div class="row profile">
       <div class="col-md-3">
+      {% if message %}
+      {%if message_type%}
+      <div id="success1" style="display:flex"  class="alert alert-success" role="alert">{{message}}</div>
+      {%else %}
+      <div id="error1" style="display:flex" class="alert alert-danger" role="alert">{{message}}</div>
+      {%endif%}
+      {%endif%}
+
         <div class="profile-sidebar">
           <!-- SIDEBAR USERPIC -->
           <div class="profile-userpic">

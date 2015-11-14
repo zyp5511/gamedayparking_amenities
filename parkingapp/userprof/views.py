@@ -22,12 +22,24 @@ def admin_page(request, message=None, success=None):
 
 
 def profile(request):
+  message = None
+  message_type = None
+  try:
+    message = request.session.pop('message')
+  except:
+    pass
+  try:
+    message_type = request.session.pop('message_type')
+  except:
+    pass
+  print message
   if not request.user.is_authenticated():
     return redirect('/home')
   current_user = request.user
   messages = Message.objects.filter(receiver=current_user, is_reservation=False).order_by('date')
-  incoming_requests = ResMessage.objects.filter(receiver=current_user)
-  outgoing_requests = ResMessage.objects.filter(sender=current_user)
+  incoming_requests = ResMessage.objects.filter(message__receiver=current_user).order_by('date')
+  outgoing_requests = ResMessage.objects.filter(message__sender=current_user).order_by('date')
+  return render(request, "userInfo.html", {"message": message, "message_type":message_type, "incoming_requests": incoming_requests, "outgoing_requests": outgoing_requests, "messages": messages})
 
 def approve_request(request):
   if request.method == 'POST':
