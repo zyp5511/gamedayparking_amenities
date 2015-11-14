@@ -170,7 +170,6 @@ def newspot(request):
 def reserve_request(request):
     if not request.user.is_authenticated():
         return redirect('/accounts/login')
->>>>>>> Stashed changes
     current_user = request.user
     try:
         parkingspot = ParkingSpot.objects.get(id=request.GET['reserve'])
