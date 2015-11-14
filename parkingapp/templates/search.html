@@ -389,17 +389,6 @@
                                 </p>
                                 <p><b>Description:</b></p>
                                 <p>{{x.description}}</p>
-                                <p>
-                                <form method="get"  onsubmit="" action='../reserve/' enctype="multipart/form-data" >
-                                    <div class="reserveButtonContainer">
-                                    <button name="reserve" type="submit" id="reserve" value="{{ x.id }}" class="btn btn-primary btn-large">Reserve</button>
-                                    {% with ""|add:date.0|add:"/"|add:date.1|add:"/"|add:date.2 as searched_date %}
-                                    <input type="hidden" name="date" value={{searched_date}}>
-                                    {% endwith %}
-                                    </div>
-                                    {% csrf_token %}
-                                </form>
-                                </p>
                                 <p><a href="#" onClick="hide('popDiv')">Close</a></p>
                             </div>
                         </div>
@@ -459,7 +448,7 @@
                                     '<p><b>Cost:</b></p>'+
                                     '<p>$' + parkingspot.cost+'</p>'+
                                     '<p><b>Amenities:</b></p>'+
-                                    '<p>' + amenitiesPopUp+'</p>'+
+                                    '<p>' + amenitiesPopUp +'</p>'+
                                     '<p><b>Description:</b></p>'+
                                     '<p>' + parkingspot.description+'</p>'+
                                     "<form method='get'  onsubmit='' action=\'../reserve/\' enctype='multipart/form-data'>"+
