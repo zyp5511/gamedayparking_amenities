@@ -54,6 +54,8 @@ def home(request):
 def search(request, message=None):
     try:
         location = request.GET['location']
+        if reques.GET['location'] == null:
+            location = "Madison, WI"
     except:
         location = "Madison, WI" #DEV
     try:
