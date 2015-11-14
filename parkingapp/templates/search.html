@@ -8,13 +8,17 @@
         {% include "header.html" %}
 
         <link   rel="stylesheet" 
-                href="{% static "bower_components/bootstrap/dist/css/bootstrap.min.css" %}">
+                href="{% static "bower_components/bootstrap/dist/css/bootstrap.min.css" %}" />
         <link   rel="stylesheet" 
-                href="{% static "bower_components/datepicker/css/datepicker.css" %}"></link>
+                href="{% static "bower_components/bootstrap-datepicker-1.5.0-dist/css/bootstrap-datepicker.min.css" %}"/>
+
         <script src="http://maps.google.com/maps/api/js?sensor=false" 
                 type="text/javascript"></script>
         <script src="{% static "bower_components/jquery/dist/jquery.min.js" %}"></script>
         <script src="http://ajax.googleapis.com/ajax/libs/jquery/3.0.2/jquery.min.js"></script>
+        <script src="{% static "bower_components/bootstrap-datepicker-1.5.0-dist/js/bootstrap-datepicker.js" %}"></script>
+        <script src="{% static "js/parking_sort.js" %}"></script>
+
         <meta charset=utf-8 />
         <style>
             html, body {
@@ -27,7 +31,7 @@
             #filterContainer {
                 background-color:#EAEAEA;
                 width:100%;
-                height:70px;
+                height:90px;
                 margin-top:-20px;
                 border-style:inset;
                 border-width:1px;
@@ -39,18 +43,38 @@
             #searchBarForm {
                 display:inline-block;
                 float:left;
-                margin-top:15px;
                 margin-left:20px;
                 margin-right:25px;
                 width:250px;
-                height:40px;
+                height:100%;
             }
 
             #searchBar {
                 float:left;
                 width:100%;
-                height:100%;
+                height:35px;
+                margin-top:7px;
                 padding-left:10px;
+                border-style:solid;
+                border-width:1px;
+                border-color:lightgrey;
+                border-radius:5px;
+            }
+
+            #parkingday {
+                width:60%;
+                height:35px;
+                margin-top:5px;
+                padding-left:10px;
+                border-style:solid;
+                border-width:1px;
+                border-color:lightgrey;
+                border-radius:5px;
+            }
+
+            #searchButton {
+                width:38%;
+                height:35px;
                 border-style:solid;
                 border-width:1px;
                 border-color:lightgrey;
@@ -65,8 +89,7 @@
                 text-align:center;
                 width:155px;
                 height:100%;
-                padding-top:5px;
-                padding-bottom:5px;
+                padding-top:13px;
                 margin-right:20px;
             }
 
@@ -74,20 +97,20 @@
             #dist_low,
             #rat_low {
                 width:170px;
+                margin-bottom:10px;
             }
 
             #cost_high,
             #dist_high,
             #rat_high {
                 width:170px;
-                margin-top:5px;
             } 
 
             #checkboxForm {
                 float:left;
                 height:100%;
                 width:250px;
-                padding-top:10px;
+                padding-top:21px;
             }
 
             .checkboxGrid {
@@ -110,7 +133,7 @@
 
             #parkingSpotsContainer {
                 position:absolute;
-                top:122px;
+                top:142px;
                 bottom:0px;
                 width:53%;  
                 float:left; 
@@ -184,7 +207,7 @@
             #mapContainer {
                 display:inline-block;
                 position:absolute;
-                top:122px;
+                top:142px;
                 bottom:0px;
                 right:0px;
                 width:47%; 
@@ -250,9 +273,9 @@
         {% block nav_bar %}{% endblock %}
         <div id="filterContainer">
             <form id="searchBarForm" action="../search/" method="get" name="search_bar">
-                <input id="searchBar" type="text" name="location" placeholder="E.g. Madison, WI">
+                <input id="searchBar" type="text" name="location" value={{prev_search}}>
                 <input id="parkingday" type="text" name="parkingdate"/>
-                <input type="submit" data-inline="true" value="Submit"/>
+                <input id="searchButton" type="submit" data-inline="true" value="Submit"/>
                 {% csrf_token %}
             </form>
 
@@ -331,7 +354,7 @@
                 {% for x in parkingspots %}
                     <div class="parkingSpots">
                         <p class="parkingImageContainer">
-                        <img class="parkingImage" src="{{x.photos.url}}" alt="Parking Image">
+                            <img class="parkingImage" src="{{x.photos.url}}" alt="Parking Image">
                         </p>
                         <a class="popUpLink" href="#" onClick="pop('popDiv')">
                             <p class="streetAddress">{{ x.street_address }}, {{ x.city }}, {{ x.state }}</p>
@@ -340,12 +363,17 @@
                             <span class="stars">{{x.get_avg_rating}}</span></b>
                         </p>
                         <p class="descriptionContainer">{{ x.description }}</p>
+
                         <form method="get"  onsubmit="" action='../reserve/' enctype="multipart/form-data" >
                             <div class="reserveButtonContainer">
                                 <button name="reserve" type="submit" id="reserve" value="{{ x.id }}" class="btn btn-primary btn-large">Reserve</button>
+                                {% with ""|add:date.0|add:"/"|add:date.1|add:"/"|add:date.2 as searched_date %}
+                                <input type="hidden" name="date" value={{searched_date}}>
+                                {% endwith %}
                             </div>
                             {% csrf_token %}
                         </form>
+
                         <div id="popDiv" class="ontop">
                             <div class="popup">
                                 <h4> {{x.street_address}}</h4>
@@ -361,14 +389,6 @@
                                 </p>
                                 <p><b>Description:</b></p>
                                 <p>{{x.description}}</p>
-                                <p>
-                                <form method="get"  onsubmit="" action='../reserve/' enctype="multipart/form-data" >
-                                    <div class="reserveButtonContainer">
-                                    <button name="reserve" type="submit" id="reserve" value="{{ x.id }}" class="btn btn-primary btn-large">Reserve</button>
-                                    </div>
-                                    {% csrf_token %}
-                                </form>
-                                </p>
                                 <p><a href="#" onClick="hide('popDiv')">Close</a></p>
                             </div>
                         </div>
@@ -383,6 +403,7 @@
             <script>    
                 var map;
                 var markers = [];
+
                 function init_map() {
                     map = new google.maps.Map(document.getElementById('map'), {
                             zoom: 14,
@@ -397,67 +418,73 @@
                         createMarker(parkingspots[i])
                         markers.push(marker)
                     }
-            }
-            function createMarker(parkingspot) {
-                var infowindow = new google.maps.InfoWindow();
-                var marker = new google.maps.Marker({
-                    position: new google.maps.LatLng(parkingspot.location.longitude, parkingspot.location.latitude),
-                    map: map
-                });
-                
-                var listAmenities =parkingspot.amenities;
-                var amenitiesPopUp=''
-                for(var k in listAmenities)
-                {
-                    if(listAmenities[k]==true)
-                    {
-                        amenitiesPopUp+=k+' ';
-                    }
                 }
-                google.maps.event.addListener(marker, 'click', 
-                    (function(marker) {
-                        return function() {
-                            infowindow.setContent(
-                                //not responsive
-                                '<div id="popContainer" style="width:400px; min-height:300px;">'+
-                                '<img src="'+parkingspot.photos +'" height="50%" width="50%">'+
-                                '<h4>' + parkingspot.street_address+'</h4>'+
-                                '<p><b>Cost:</b></p>'+
-                                '<p>$' + parkingspot.cost+'</p>'+
-                                '<p><b>Amenities:</b></p>'+
-                                '<p>' + amenitiesPopUp+'</p>'+
-                                '<p><b>Description:</b></p>'+
-                                '<p>' + parkingspot.description+'</p>'+
-                                "<form method='get'  onsubmit='' action=\'../reserve/\' enctype='multipart/form-data'>"+
-                                "<div class='reserveButtonContainer'>"+
-                                "<button name='reserve' type='submit' id='reserve' value=\'" + parkingspot.id + "\' class='btn btn-primary btn-large'>Reserve</button>"+
-                                "</div>{% csrf_token %}</form>"
-                              );
-                            infowindow.open(map, marker);
+
+                function createMarker(parkingspot) {
+                    var infowindow = new google.maps.InfoWindow();
+                    var marker = new google.maps.Marker({
+                        position: new google.maps.LatLng(parkingspot.location.longitude, parkingspot.location.latitude),
+                        map: map
+                    });
+                    
+                    var listAmenities =parkingspot.amenities;
+                    var amenitiesPopUp=''
+                    for(var k in listAmenities)
+                    {
+                        if(listAmenities[k]==true)
+                        {
+                            amenitiesPopUp+=k+' ';
+                        }
                     }
-                })(marker));
-                markers.push(marker);
-            }
-            // Sets the map on all markers in the array.
-            function setMapOnAll(map) {
-              for (var i = 0; i < markers.length; i++) {
-                markers[i].setMap(map);
-              }
-            }
-            // Removes the markers from the map, but keeps them in the array.
-            function clearMarkers() {
-              setMapOnAll(null);
-            }
-            // Shows any markers currently in the array.
-            function showMarkers() {
-              setMapOnAll(map);
-            }
-            // Deletes all markers in the array by removing references to them.
-            function deleteMarkers() {
-              clearMarkers();
-              markers = [];
-            }
-            init_map()
+                    {% with ""|add:date.0|add:"/"|add:date.1|add:"/"|add:date.2 as searched_date %}
+                    google.maps.event.addListener(marker, 'click', 
+                        (function(marker) {
+                            return function() {
+                                infowindow.setContent(
+                                    //not responsive
+                                    '<div id="popContainer" style="width:400px; min-height:300px;">'+
+                                    '<img src="'+parkingspot.photos +'" height="50%" width="50%">'+
+                                    '<h4>' + parkingspot.street_address+'</h4>'+
+                                    '<p><b>Cost:</b></p>'+
+                                    '<p>$' + parkingspot.cost+'</p>'+
+                                    '<p><b>Amenities:</b></p>'+
+                                    '<p>' + amenitiesPopUp +'</p>'+
+                                    '<p><b>Description:</b></p>'+
+                                    '<p>' + parkingspot.description+'</p>'+
+                                    "<form method='get'  onsubmit='' action=\'../reserve/\' enctype='multipart/form-data'>"+
+                                    "<div class='reserveButtonContainer'>"+
+                                    "<button name='reserve' type='submit' id='reserve' value=\'" + parkingspot.id + "\' class='btn btn-primary btn-large'>Reserve</button>"+
+                                    "<input type='hidden' name='date' value={{searched_date}}>"+
+                                    "</div>{% csrf_token %}</form>"
+                                );
+                                infowindow.open(map, marker);
+                            }
+                        })(marker));
+                    markers.push(marker);
+                    {% endwith %}
+                }
+
+                // Sets the map on all markers in the array.
+                function setMapOnAll(map) {
+                  for (var i = 0; i < markers.length; i++) {
+                    markers[i].setMap(map);
+                  }
+                }
+                // Removes the markers from the map, but keeps them in the array.
+                function clearMarkers() {
+                  setMapOnAll(null);
+                }
+                // Shows any markers currently in the array.
+                function showMarkers() {
+                  setMapOnAll(map);
+                }
+                // Deletes all markers in the array by removing references to them.
+                function deleteMarkers() {
+                  clearMarkers();
+                  markers = [];
+                }
+
+                init_map()
             </script>
         </div>
 
@@ -601,8 +628,10 @@
                 curr_list.sort(sort_by_high_rating)
                 updateParkingList(curr_list);
             }
+
             function updateParkingList(curr_list) {
                 var content = "";
+                {% with ""|add:date.0|add:"/"|add:date.1|add:"/"|add:date.2 as searched_date %}
                 for (i = 0; i < curr_list.length; i++) {
                     content += "<div class='parkingSpots'>";
                     content += "<p class='parkingImageContainer'>";
@@ -615,6 +644,7 @@
                     content += "<form method='get'  onsubmit='' action=\'../reserve/\' enctype='multipart/form-data'>";
                     content += "<div class='reserveButtonContainer'>";
                     content += "<button name='reserve' type='submit' id='reserve' value=\'" + curr_list[i].id + "\' class='btn btn-primary btn-large'>Reserve</button>";
+                    content += "<input type='hidden' name='date' value={{searched_date}}>";
                     content += "</div>{% csrf_token %}</form>";
                     content += "<div id='popDiv' class='ontop' align='center'>";
                     content += "<div id='popup' style='width:500px; height:450px; position:absolute; color:#000000; background-color:white; top:50%; left:50%; margin-top:-200px; margin-left:-250px;'>";
@@ -627,11 +657,13 @@
                     content += "<a href='#' onClick=\"hide('popDiv')\">Close</a>";
                     content += "</div></div></div>";
                 }
+                {% endwith %}
                 document.getElementById("parkingContainer").innerHTML = content;
                 $('.stars').each(function() {
                         $(this).html($('<span/>').width(Math.max(0, (Math.min(5, parseFloat($(this).html())))) * 16));
                 });
             }
+
             function updateMap(curr_list) {
                 clearMarkers();
                 markers = []
@@ -645,9 +677,11 @@
             function pop(div) {
                 document.getElementById(div).style.display = 'block';
             }
+
             function hide(div) {
                 document.getElementById(div).style.display = 'none';
             }
+
             //To detect escape button
             document.onkeydown = function(evt) {
                 evt = evt || window.event;
@@ -656,20 +690,21 @@
                 }
             };
         </script>
-        <script src="{% static "bower_components/bootstrap/dist/js/bootstrap.min.js" %}"></script>
-        <script src="{% static "bower_components/datepicker/js/bootstrap-datepicker.js" %}"></script>
-        <script>
-            $('#parkingday').datepicker({
-                    format: 'mm/dd/yyyy'
-            })
-        </script>
+
         <script>
             $('.stars').each(function() {
                     $(this).html($('<span/>').width(Math.max(0, (Math.min(5, parseFloat($(this).html())))) * 16));
             });
         </script>
-        <script src="{% static "js/parking_sort.js" %}"></script>
 
+        <script>
+            $('#parkingday').datepicker({
+                    format: 'mm/dd/yyyy'
+                    });
+            $('#parkingday').datepicker('update', new Date({{date.2}}, {{date.0}}-1, {{date.1}}));
+        </script>
+
+        <script src="{% static "bower_components/bootstrap/dist/js/bootstrap.min.js" %}"></script>
         <!-- SCRIPTS END -->
     </body>
     

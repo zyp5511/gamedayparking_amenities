@@ -1,7 +1,7 @@
 import json
 import datetime
 from django.shortcuts import render, redirect
-from django.shortcuts import render_to_response
+from django.shortcuts import render_to_response, get_object_or_404
 from django.contrib.gis.measure import D
 from django.contrib.gis.geos import Point
 from django.contrib.gis.geoip import GeoIP
@@ -11,6 +11,7 @@ from parkingspot.models import ParkingSpot
 from message.models import Message, ResMessage
 from userprof.models import ExtendedUser, AdminUser
 from django.contrib.auth.models import User
+from parkingspot.forms import ParkingSpotEdit
 
 from django.contrib.auth.decorators import login_required
 from django.utils.six.moves.urllib.parse import urlparse
@@ -100,16 +101,75 @@ def search(request, message=None):
 
     json_parkingspots = json.dumps(ret_list)
     context = {
+        'prev_search' : request.GET['location'],
         'parkingspots' : parkingspots,
         'json_parkingspots' : json_parkingspots,
+        'date'      :  search_date.split("/"),
         'center_lat' : point.coords[0],
         'center_lon' : point.coords[1]
     }
     return render(request, 'search.html', context)
 
 
-@login_required
+
+def spotmodify(request):
+    if not request.user.is_authenticated():
+        return redirect('/accounts/login')
+    current_user = request.user
+    e_user = ExtendedUser.objects.get(main_user=current_user)
+    try:
+        a_user = get_object_or_404(AdminUser, extended_user=e_user)
+    except:
+        return redirect('/home')
+    if a_user.registered is not True:
+        return redirect('/home')
+    if request.method == 'POST':
+        button = request.POST['submit']
+        print button
+        try:
+            instance = get_object_or_404(ParkingSpot,id=button)
+        except:
+            instance = ParkingSpot(owner=a_user)
+        form = ParkingSpotEdit(request.POST, request.FILES, instance=instance)
+        print form
+        if form.is_valid():
+            form.save()
+            return render(request, "editspot.html", {'form': form})
+    elif request.method == 'GET':
+        form = ParkingSpotEdit()
+    return render(request, "editspot.html", {'form': form})
+
+
+def newspot(request):
+    if not request.user.is_authenticated():
+        return redirect('/accounts/login')
+    current_user = request.user
+    e_user = ExtendedUser.objects.get(main_user=current_user)
+    try:
+        a_user = get_object_or_404(AdminUser, extended_user=e_user)
+    except:
+        return redirect('/home')
+    if a_user.registered is not True:
+        return redirect('/home')
+    if request.method == 'POST':
+        button = request.POST['submit']
+        print button
+        try:
+            instance = get_object_or_404(ParkingSpot,id=button)
+        except:
+            instance = ParkingSpot(owner=a_user)
+        form = ParkingSpotEdit(request.POST, request.FILES, instance=instance)
+        print form
+        if form.is_valid():
+            form.save()
+            return render(request, "editspot.html", {'form': form})
+    elif request.method == 'GET':
+        form = ParkingSpotEdit()
+    return render(request, "editspot.html", {'form': form})
+
 def reserve_request(request):
+    if not request.user.is_authenticated():
+        return redirect('/accounts/login')
     current_user = request.user
     try:
         parkingspot = ParkingSpot.objects.get(id=request.GET['reserve'])
@@ -122,7 +182,9 @@ def reserve_request(request):
     date_list = parkingspot.get_all_spots_available()
     date_list.sort(key=lambda x: datetime.datetime.strptime(x[0], '%m/%d/%Y'))
     context = {"parkingspot": parkingspot,
-                "date_list": date_list}
+                "date_list": date_list,
+                "date": request.GET['date'].split("/")
+              }
     return render(request, 'reserve.html', context)
 
 

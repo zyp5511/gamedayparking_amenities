@@ -4,9 +4,14 @@
     <head>
         {% include "header.html" %}
         <link   rel="stylesheet" 
-                href="{% static "bower_components/bootstrap/dist/css/bootstrap.min.css" %}"></link>
+                href="{% static "bower_components/bootstrap/dist/css/bootstrap.min.css" %}" />
         <link   rel="stylesheet" 
-                href="{% static "bower_components/bootstrap-datepicker-1.5.0-dist/css/bootstrap-datepicker3.min.css" %}"></link>
+                href="{% static "bower_components/bootstrap-datepicker-1.5.0-dist/css/bootstrap-datepicker.min.css" %}"/>
+
+        <script src="{% static "bower_components/jquery/dist/jquery.min.js" %}"></script>
+        <script src="{% static "bower_components/bootstrap/dist/js/bootstrap.min.js" %}"></script>
+        <script src="{% static "bower_components/bootstrap-datepicker-1.5.0-dist/js/bootstrap-datepicker.js" %}"></script>
+
         <style>
             #homeTitle {
                 margin-top:150px; 
@@ -18,17 +23,34 @@
                 line-height:1;
             }
 
+            #inputForm {
+                display:inline-block;
+                width:70%;
+            }
+
             #location {
                 background-color:rgba(0,0,0,.15);
                 border-radius:5px;
                 padding-left:10px;
+                margin-bottom:10px;
                 height:40px;
-                width:400px;
+                width:30%;
             }
 
-            #inputForm {
-                display:inline-block;
-                width:400px;
+            #parkingday {
+                background-color:rgba(0,0,0,.15);
+                border-radius:5px;
+                padding-left:10px;
+                margin-left:10px;
+                margin-right:10px;
+                margin-bottom:;
+                height:40px;
+                width:20%;
+            }
+
+            #searchButton {
+                width:100px;
+                height:40px;
             }
 
             input:focus {outline: none;}
@@ -43,21 +65,13 @@
         </h1>
         <div style="text-align:center;">
             <form id="inputForm"  action="../search/" method="get" name="search_bar">
-                <label for="location">Location:</label>
-                <input id = "location"  type="text" name="location"/>
-
-                <label for="parkingday">Pick Your Date:</label>
+                <input id="location" type="text" name="location" placeholder="E.g. Madison, WI"/>
                 <input id="parkingday" type="text" name="parkingdate"/>
-
-                <input type="submit" data-inline="true" value="Submit"/>
+                <input id="searchButton" type="submit" data-inline="true" value="Submit"/>
                 {% csrf_token %}
             </form>
         </div>
        
-
-        <script src="{% static "bower_components/jquery/dist/jquery.min.js" %}"></script>
-        <script src="{% static "bower_components/bootstrap/dist/js/bootstrap.min.js" %}"></script>
-        <script src="{% static "bower_components/bootstrap-datepicker-1.5.0-dist/js/bootstrap-datepicker.js" %}"></script>
         <script>
             $('#parkingday').datepicker({
                     format: 'mm/dd/yyyy'
