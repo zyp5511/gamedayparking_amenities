@@ -210,12 +210,12 @@ def finalize_reserve(request):
 
 def AddReview(request):
     #DEV    test sample user, parkingspot info
-    cur_user = request.user
-    cur_parkingspot = parkingspot[0]
-    context = {
-        "user" = cur_user
-        "parkingspot" = cur_parkingspot
-    }
+    #cur_user = request.user
+    #cur_parkingspot = parkingspot[0]
+    #context = {
+    #    "user" = cur_user
+    #    "parkingspot" = cur_parkingspot
+    #}
     return render(request, 'add_review.html', context)
 
 def about(request):
