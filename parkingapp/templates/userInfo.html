@@ -1,12 +1,11 @@
-  <!DOCTYPE html>
+<!DOCTYPE html>
   {% load staticfiles %}
 
   <html lang="en" ng-app="TestApp">
-    <head>
-      <title>Search Results</title>
+    <head>  
+  <title>Search Results</title>
 
       {% include "header.html" %}
-
 
         <link   rel="stylesheet" href="{% static "bower_components/bootstrap/dist/css/bootstrap.min.css" %}">
 
@@ -14,117 +13,43 @@
 
   
        <style type="text/css">
-        .listdemoBasicUsage md-divider {
-              margin-top: 10px;
-              margin-bottom: 10px; }
-        .listdemoBasicUsage md-list-item {
-            padding: 20px;
-            border-bottom: 1px solid #ddd;
-          
-        }
+        .subheaderdemoBasicUsage .face {
+          border-radius: 30px;
+          border: 1px solid #ddd;
+          width: 48px;
+          margin: 16px; }
       </style>
 
       <style type="text/css">
 
-        /***
-  User Profile Sidebar by @keenthemes
-  A component of Metronic Theme - #1 Selling Bootstrap 3 Admin Theme in Themeforest: http://j.mp/metronictheme
-  Licensed under MIT
-  ***/
+
 
   body {
     background: #F1F3FA;
   }
 
-  #parkingSpotsContainer {
-                position:absolute;
-                top:122px;
-                bottom:0px;
-                width:53%;  
-                float:left; 
-                overflow-y:scroll;
-            }
+  .left {
+    float: left;
+  }
+  .right {
+    float: right;
+  }
 
- .parkingImageContainer, .parkingImage {
-                display:inline-block; 
-                width:100%; 
-                height:200px; 
-                float:left;
-                border-style:solid;
-                border-color:lightgrey;
-                border-width:0px;
-                border-bottom-width:1px;
-            }
-
- .streetAddress {
-                float:left;
-                clear:right;
-                padding-left:10px;
-                text-decoration:underline;
-            }
-
- .reviewRating {
-                float:left;
-                clear:left;
-                padding-left:10px;
-            }
-
-            .descriptionContainer {
-                float:left;
-                clear:left;
-                padding-left:10px;
-                font-style:italic;
-            }
-
-            .reserveButtonContainer {
-                float:left;
-                clear:left;
-                padding-left:10px;
-                font-style:italic;
-                padding-bottom:5px;
-            }
-
-
-            span.stars, span.stars span {
-                display: inline-block;
-                background: url({% static "media/stars.png" %}) 0 -16px repeat-x;
-                width: 80px;
-                height: 16px;
-                text-align:left;
-            }
-
-            span.stars span {
-                max-width:80px;
-                background-position: 0 0;
-            }
-
-             .ontop {
-                z-index:999;
-                width:100%;
-                height:100%;
-                top:0;
-                left:0;
-                display:none;
-                position:fixed;
-                background-color:rgba(40,40,40,0.9);
-                color:#000000;
-            }
-
-            .popup {
-                width:500px;
-                height:450px;
-                position:absolute;
-                color:#000000;
-                background-color:white;
-                /* To align popup window at the center of screen*/
-                top:50%;
-                left:50%;
-                margin-top:-200px;
-                margin-left:-250px;
-            }
-
-
-
+  .clearfix {
+    zoom: 1;
+  }
+  .clearfix:before,
+  .clearfix:after {
+    content: "";
+    display: table;
+  }
+  .clearfix:after {
+    clear: both;
+  }
+  .sender-name {
+    line-height: 30px;
+    vertical-align: middle;
+  }
   /* Profile container */
   .profile {
     margin: 20px 0;
@@ -135,6 +60,7 @@
     padding: 20px 0 10px 0;
     background: #fff;
   }
+
   .profile-userpic img {
     float: none;
     margin: 0 auto;
@@ -211,23 +137,40 @@
     background: #fff;
     min-height: 460px;
   }
+.ontop {
+                z-index:999;
+                width:100%;
+                height:100%;
+                top:0;
+                left:0;
+                display:none;
+                position:fixed;
+                background-color:rgba(40,40,40,0.9);
+                color:#000000;
+            }
+
+.popup {
+                width:500px;
+                height:450px;
+                position:absolute;
+                color:#000000;
+                background-color:white;
+                /* To align popup window at the center of screen*/
+                top:50%;
+                left:50%;
+                margin-top:-200px;
+                margin-left:-250px;
+            }
+
       </style>
     </head>
-  <body>
+     <body>
 
 
 
   <div class="container">
       <div class="row profile">
       <div class="col-md-3">
-      {% if message %}
-      {%if message_type%}
-      <div id="success1" style="display:flex"  class="alert alert-success" role="alert">{{message}}</div>
-      {%else %}
-      <div id="error1" style="display:flex" class="alert alert-danger" role="alert">{{message}}</div>
-      {%endif%}
-      {%endif%}
-
         <div class="profile-sidebar">
           <!-- SIDEBAR USERPIC -->
           <div class="profile-userpic">
@@ -237,11 +180,14 @@
           <!-- SIDEBAR USER TITLE -->
           <div class="profile-usertitle">
             <div class="profile-usertitle-name">
-                  USERName
+                 user.username
             </div>
             <div class="profile-usertitle-job">
                   <!-- normal users or admin-->
-                  title /admin or user
+                  {% if user.extendeduser.adminuser.registered%}
+                          ADMIN
+                  {% else% }
+                          COMMOM USER
             </div>
           </div>
           <!-- END SIDEBAR USER TITLE -->
@@ -274,70 +220,148 @@
         </div>
       </div>
       <div class="col-md-9">
-             <div id="parkingSpotsContainer">
-            <div id="parkingContainer">
-                {% for x in parkingspots %}
-                    <div class="parkingSpots">
-                        <p class="parkingImageContainer">
-                        <img class="parkingImage" src="{{x.photos.url}}" alt="Parking Image">
-                        </p>
-                        <a class="popUpLink" href="#" onClick="pop('popDiv')">
-                            <p class="streetAddress">{{ x.street_address }}, {{ x.city }}, {{ x.state }}</p>
-                        </a>
-                        <p class="reviewRating"><b>Rating:&nbsp
-                            <span class="stars">{{x.get_avg_rating}}</span></b>
-                        </p>
-                        <p class="descriptionContainer">{{ x.description }}</p>
-                        <form method="get"  onsubmit="" action='../reserve/' enctype="multipart/form-data" >
-                            <div class="reserveButtonContainer">
-                                <button name="reserve" type="submit" id="reserve" value="{{ x.id }}" class="btn btn-primary btn-large">Reserve</button>
-                            </div>
-                            {% csrf_token %}
-                        </form>
-                        <div id="popDiv" class="ontop">
-                            <div class="popup">
-                                <h4> {{x.street_address}}</h4>
-                                <img class="parkingImage" src="{{x.photos.url}}" alt="Parking Image">
-                                <p><b>Cost:</b></p>
-                                <p>{{x.cost}}</p>
-                                <p><b>Amenities:</b></p><p>
-                                    {% for key, value in x.amenities.items %}
-                                        {% if value %}
-                                        {{key}}
-                                        {% endif %}
-                                    {% endfor %}
-                                </p>
-                                <p><b>Description:</b></p>
-                                <p>{{x.description}}</p>
-                                <p>
-                                <form method="get"  onsubmit="" action='../reserve/' enctype="multipart/form-data" >
-                                    <div class="reserveButtonContainer">
-                                    <button name="reserve" type="submit" id="reserve" value="{{ x.id }}" class="btn btn-primary btn-large">Reserve</button>
-                                    </div>
-                                    {% csrf_token %}
-                                </form>
-                                </p>
+       
+
+
+  <div ng-controller="SubheaderAppCtrl" layout="column" flex="" layout-fill="" ng-cloak="" class="subheaderdemoBasicUsage" ng-app="TestApp">
+
+  <md-toolbar md-scroll-shrink="">
+    <div class="md-toolbar-tools">Messages Inbox</div>
+  </md-toolbar>
+
+  <md-content style="height: 600px;" md-theme="altTheme">
+
+    <section>
+      <md-subheader class="md-primary">Messages</md-subheader>
+      <md-list layout-padding="">
+        <md-list-item class="md-3-line" ng-repeat="Message in messages">
+            <img ng-src="[[message.face]]" class="md-avatar" alt="[[message.sender]]">
+            <div class="md-list-item-text">
+              <div class="md-list-item-text">
+            <h3>[[RMessage.date]]</h3>
+              <h4>[[Message.sender]]</h4>
+              <p>
+               <h5> [[Message.subject]]</h5>
+                <a class="popUpLink" href="#" onClick="pop('popDiv')">
+                 <p class="message">{[[Message.message]]</p>
+                 </a>
+              </p>
+
+          <div id="popDiv" class="ontop">
+               <div class="popup">
+                  <h3>[[Message.subject]]</h3>
+                  <h4>[[Message.sender]]</h4>
+                  <h5>[[Message.sender]] </h5>
+                      [[Message.message]]   
+                  <p><a href="#" onClick="hide('popDiv')">Close</a></p>
+                    </div>
+                        </div>
+          </div>
+            </div>
+        </md-list-item>
+      </md-list>
+    </section>
+
+    <section>
+      <md-subheader class="md-warn">Messages</md-subheader>
+      <md-list layout="column" layout-padding="">
+        <md-list-item class="md-3-line" ng-repeat="ResMessage in outgoing_requests">
+          <img ng-src="[[message.face]]" class="md-avatar" alt="[[ResMessage.Message.sender]]">
+          <div class="md-list-item-text">
+             <div class="md-list-item-text">
+            <h3>[[ResMessage.Message.date]]</h3>
+              <h4>[[ResMessage.Message.sender]]</h4>
+              <p>
+               <h5> [[ResMessage.Message.subject]]</h5>
+                <a class="popUpLink" href="#" onClick="pop('popDiv')">
+                 <p class="message">{[[ResMessage.Message.message]]</p>
+                 </a>
+              </p>
+
+          <div id="popDiv" class="ontop">
+               <div class="popup">
+                  <h3>[[ResMessage.Message.subject]]</h3>
+                  <h4>[[ResMessage.Message.sender]]</h4>
+                  <h5>[ResMessage.Message.sender]] </h5>
+                      [[ResMessage.Message.message]]   
                                 <p><a href="#" onClick="hide('popDiv')">Close</a></p>
                             </div>
                         </div>
-                    </div>
-                {% endfor %}
-            </div>
-        </div>
+          </div>
+          </div>
+        </md-list-item>
+      </md-list>
+    </section>
+
+    <section>
+      <md-subheader></md-subheader>
+      <md-list layout="column" layout-padding="">
+        <md-list-item class="md-3-line" ng-repeat="ResMessage in incoming_requests">
+          <img ng-src="[[ResMessage.face]]" class="md-avatar" alt="[[ResMessage.Message.sender]]">
+          <div class="md-list-item-text">
+            <h3>[[ResMessage.Message.date]]</h3>
+              <h4>[[ResMessage.Message.sender]]</h4>
+              <p>
+               <h5> [[ResMessage.Message.subject]]</h5>
+                <a class="popUpLink" href="#" onClick="pop('popDiv')">
+                 <p class="message">{[[ResMessage.Message.message]]</p>
+                 </a>
+              </p>
+
+          <div id="popDiv" class="ontop">
+               <div class="popup">
+                  <h3>[[ResMessage.Message.subject]]</h3>
+                  <h4>[[ResMessage.Message.sender]]</h4>
+                  <h5>[ResMessage.Message.sender]] </h5>
+                      [[ResMessage.Message.message]]   
+                                <p><a href="#" onClick="hide('popDiv')">Close</a></p>
+                            </div>
+                        </div>
+          </div>
+        </md-list-item>
+      </md-list>
+    </section>
+
+<!--<section>
+      <md-subheader class="md-accent">Archived messages</md-subheader>
+      <md-list layout="column" layout-padding="">
+        <md-list-item class="md-3-line" ng-repeat="message in messages">
+          <img ng-src="[[message.face]]" class="md-avatar" alt="[[message.who]]">
+          <div class="md-list-item-text">
+            <h3>[[message.what]]</h3>
+            <h4>[[message.who]]</h4>
+            <p>
+              [[message.notes]]
+            </p>
+          </div>
+        </md-list-item>
+      </md-list>
+    </section>
+-->
+  </md-content>
+</div>
 
 
-    </div>
-   </div>
-  <div>
+       </div>
+      </div>     
+  </div>
 
+<script type="text/javascript">
+    (function($) {  
+  var TestApp = angular.module('TestApp', ['ngMaterial'], function($interpolateProvider) {
+    $interpolateProvider.startSymbol('[[');
+    $interpolateProvider.endSymbol(']]');
+  });
+})
+</script>
+        
         <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.4.7/angular.min.js"></script>
         <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.4.7/angular-animate.min.js"></script>
         <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.4.7/angular-aria.min.js"></script>
 
-        <script src="https://ajax.googleapis.com/ajax/libs/angular_material/1.0.0-rc1/angular-material.min.js"></script>
+       <script src="https://ajax.googleapis.com/ajax/libs/angular_material/1.0.0-rc1/angular-material.min.js"></script>
 
 
-        <script src="{% static "js/app.js" %}"></script>
+        </body>
+  </html> 
 
-  </body>
-  </html>
