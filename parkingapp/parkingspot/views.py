@@ -204,7 +204,8 @@ def finalize_reserve(request):
     msg = "Parking Request Sent"
     return redirect('parkingspot.views.search', message=msg)
 
-
+def AddReview(request):
+    return render(request, 'add_review.html')
 
 def about(request):
     return render(request, 'about_us.html')
