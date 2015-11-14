@@ -208,7 +208,14 @@ def finalize_reserve(request):
     return redirect('parkingspot.views.search', message=msg)
 
 def AddReview(request):
-    return render(request, 'add_review.html')
+    #DEV    test sample user, parkingspot info
+    #cur_user = request.user
+    #cur_parkingspot = parkingspot[0]
+    #context = {
+    #    "user" = cur_user
+    #    "parkingspot" = cur_parkingspot
+    #}
+    return render(request, 'add_review.html', context)
 
 def about(request):
     return render(request, 'about_us.html')
