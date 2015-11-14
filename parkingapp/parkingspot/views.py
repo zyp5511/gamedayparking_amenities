@@ -54,9 +54,10 @@ def home(request):
 
 
 def search(request, message=None):
+    
     try:
         location = request.GET['location']
-        if reques.GET['location'] == null:
+        if not location:
             location = "Madison, WI"
     except:
         location = "Madison, WI" #DEV
@@ -208,12 +209,11 @@ def finalize_reserve(request):
     return redirect('parkingspot.views.search', message=msg)
 
 def AddReview(request):
-    #DEV    test sample user, parkingspot info
-    #cur_user = request.user
-    #cur_parkingspot = parkingspot[0]
+    #DEV   test sample user, parkingspot info
+    
     #context = {
-    #    "user" = cur_user
-    #    "parkingspot" = cur_parkingspot
+    #"user" : request.user
+    #"parkingspot" : parkingspot[0]
     #}
     return render(request, 'add_review.html', context)
 
