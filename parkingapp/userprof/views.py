@@ -36,9 +36,17 @@ def profile(request):
   if not request.user.is_authenticated():
     return redirect('/home')
   current_user = request.user
+  m_user = get_object_or_404(ExtendedUser, main_user=current_user)
+  try:
+    a_user = get_object_or_404(AdminUser, extended_user=m_user)
+    parking_spots = ParkingSpot.objects.filter(owner=a_user)
+    incoming_requests = ResMessage.objects.filter(message__receiver=current_user).order_by('date')
+  except:
+    parking_spots=None
+    incoming_requests=None
   messages = Message.objects.filter(receiver=current_user, is_reservation=False).order_by('date')
-  incoming_requests = ResMessage.objects.filter(message__receiver=current_user).order_by('date')
   outgoing_requests = ResMessage.objects.filter(message__sender=current_user).order_by('date')
+  
   return render(request, "userInfo.html", {"message": message, "message_type":message_type, "incoming_requests": incoming_requests, "outgoing_requests": outgoing_requests, "messages": messages})
 
 def approve_request(request):
