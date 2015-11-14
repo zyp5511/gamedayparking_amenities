@@ -53,11 +53,12 @@ def approve_request(request):
   if request.method == 'POST':
     value = request.POST['confirm']
     res_msg = ResMessage.objects.get(id=value)
-    res_msg.is_approved = True
-    res_msg.has_responded = True
+
     date = res_msg.res_date
     pspot = res_msg.parkingspot
     if pspot.get_num_spots(date) > 0:
+      res_msg.is_approved = True
+      res_msg.has_responded = True
       pspot.reserve_spot(res_msg.message.sender,date)
       subject = "Congratulations!  Your parking spot request has been approved."
       message = "You've successfully booked a parking spot at %s %s, %s for the date: %s." % (pspot.street_address, pspot.city, pspot.state, date)
@@ -69,7 +70,7 @@ def approve_request(request):
     else:
       msg = "You've overbooked for that date, or you haven't opened that date for booking.  You can increase your number of spots available."
       success = False
-    redirect('userprof.views.admin_page', message=msg, success=success)
+    return redirect('userprof.views.admin_page', message=msg, success=success)
 
 def deny_request(request):
   if request.method == "POST":
@@ -84,4 +85,4 @@ def deny_request(request):
     res_msg.save()
     msg = "Parking request denied."
     success = True
-    redirect('userprof.views.admin_page', message=msg, success=success)
+    return redirect('userprof.views.admin_page', message=msg, success=success)
