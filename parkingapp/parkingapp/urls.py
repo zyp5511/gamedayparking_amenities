@@ -28,7 +28,8 @@ urlpatterns = [
     url(r'^detail/', 'parkingspot.views.detail'),
     url(r'^about/', 'parkingspot.views.about'),
     url(r'^contact/', 'parkingspot.views.contact'),
-    url(r'^reserve/', 'parkingspot.views.reserve_request')
+    url(r'^reserve/', 'parkingspot.views.reserve_request'),
+    url(r'^add_spot/', 'parkingspot.views.spotmodify')
 
 ]
 
