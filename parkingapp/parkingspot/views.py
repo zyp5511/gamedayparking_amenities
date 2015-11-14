@@ -221,13 +221,18 @@ def finalize_reserve(request):
         return redirect(reserve_request)
 
 def AddReview(request):
-    #DEV   test sample user, parkingspot info
-    
-    #context = {
-    #"user" : request.user
-    #"parkingspot" : parkingspot[0]
-    #}
-    return render(request, 'add_review.html', context)
+    if not request.user.is_authenticated():
+        return redirect('/accounts/login')
+    current_user = request.user
+    user_id = request.POST['sampleID']
+    today = datetime.datetime.now()
+    booking_history = ResMessage.objects.filter(sender=current_user, is_approved=True, res_date__lte=today).order_by('res_date')
+    booking_history.reverse()
+    context = {
+        'booking_history' : booking_history
+    }
+
+    return render(request, 'add_review.html',context)
 
 def about(request):
     return render(request, 'about_us.html')

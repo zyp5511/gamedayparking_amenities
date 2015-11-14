@@ -33,6 +33,7 @@ urlpatterns = [
     url(r'^edit_spot/', 'parkingspot.views.spotmodify'),
     url(r'^profile/', 'userprof.views.profile'),
     url(r'^finalize_reservation/', 'parkingspot.views.finalize_reserve'),
+    url(r'^add_review/', 'userprof.views.AddReview')
 ]
 
 if settings.DEBUG:
