@@ -128,7 +128,7 @@ def spotmodify(request):
     if a_user.registered is not True:
         return redirect('/home')
     if request.method == 'POST':
-        instance = get_object_or_404(ParkingSpot,id=10)
+        instance = get_object_or_404(ParkingSpot,id=1) #TODO, switch to ID
         print "GOT HERE"
         form = ParkingSpotEdit(request.POST, request.FILES, instance=instance)
         form.owner = a_user
@@ -138,7 +138,7 @@ def spotmodify(request):
             form.save()
             return render(request, "editspot.html", {'form': form})
     elif request.method == 'GET':
-        instance = get_object_or_404(ParkingSpot, id=10)
+        instance = get_object_or_404(ParkingSpot, id=1) #TODO, switch to ID
         print instance.id
         form = ParkingSpotEdit(instance=instance)
         print form
