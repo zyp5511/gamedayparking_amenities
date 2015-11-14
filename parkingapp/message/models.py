@@ -15,7 +15,7 @@ class Message(models.Model):
   is_reservation = models.BooleanField(default=False)
 
   def __str__(self):
-    return "%s -> %s" % (sender.main_user.username, receiver.main_user.username)
+    return "%s -> %s" % (self.sender, self.receiver)
 
 
 class ResMessage(models.Model):
@@ -24,3 +24,6 @@ class ResMessage(models.Model):
   res_date = models.DateTimeField(blank=True, null=True)
   is_approved = models.BooleanField(default=False)
   has_responded = models.BooleanField(default=False)
+
+  def __str__(self):
+    return "%s -> %s, %s" % (self.message.sender, self.message.receiver, self.parkingspot)

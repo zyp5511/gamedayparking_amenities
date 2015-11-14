@@ -280,6 +280,19 @@
                 border-radius:3px;
             }
 
+            #dp1 {
+                display:block;
+                width:300px;
+                height:35px;
+                margin-left:auto;
+                margin-right:auto;
+                padding-left:5px;
+                margin-bottom:25px;
+                border-style:solid;
+                border-width:1px;
+                border-color:grey;
+                border-radius:3px;
+            }
             #message {
                 display:block;
                 width:300px;
@@ -330,6 +343,13 @@
 
             <div id="infoContainer">
                 <div id="parkingDetailsContainer">
+                  {% if message %}
+                  {%if message_type%}
+                  <div id="success1" style="display:flex"  class="alert alert-success" role="alert">{{message}}</div>
+                  {%else %}
+                  <div id="error1" style="display:flex" class="alert alert-danger" role="alert">{{message}}</div>
+                  {%endif%}
+                  {%endif%}
                     <div id='iconRow'>
                          {% for key, value in parkingspot.amenities.items %}
                              <div class="iconSet" style="text-align:center;">
@@ -372,25 +392,6 @@
                 </div>
 
                 <div id="bookingDetails">
-                    <span class="dateLabel">From:</span>
-                    <div class="dateInputs">
-                        <input  type="text" 
-                                id="dp1"
-                                class="datepicker" 
-                                style="width:100%;">
-                    </div>
-
-                    <span class="dateLabel">To:</span>
-                    <div class="dateInputs">
-                        <input  type="text"
-                                id="dp2"
-                                class="datepicker" 
-                                style="width:100%;">
-                    </div>
-
-                    <!-- horizontal Separator -->
-                    <hr>
-
                     <form id="requestForm">
                         <input  id="requestSpotButton" 
                                 type="button"
@@ -410,23 +411,16 @@
                             </div>
 
                             <div id="popUpMainContainer">
-                                <form id="confirmForm">
+                                <form id="confirmForm" action="../finalize_reservation/" method="post">
                                     <p>(Please Provide owner with Information below)</p>
 
-                                    <input  id="name"
-                                            type="text"
-                                            name="name"
-                                            placeholder="Full Name">
+                                    <input type="hidden" name="pid" value={{parkingspot.id}}> 
 
-                                    <input  id="email"
-                                            type="text"
-                                            name="email"
-                                            placeholder="example@domain.com">
- 
-                                    <input  id="phone"
-                                            type="text"
-                                            name="phone"
-                                            placeholder="(xxx) xxx-xxxx">
+                                    <input  type="text" 
+                                            name="dp1"
+                                            id="dp1"
+                                            class="datepicker"
+                                            value="00/00/00">
 
                                     <textarea   id="message"
                                                 name="message"
@@ -434,14 +428,13 @@
                                                 placeholder="Write a message to owner..."></textarea>
 
                                     <input  id="confirmButton" 
-                                            type="button"
-                                            value="Send Request"
-                                            onClick="">
+                                            type="submit"
+                                            value="Send Request">
 
                                     <button id="popUpCancel" 
-                                            type="button" 
+                                            type="button"
                                             onClick="hide('popDiv')">Cancel</button>
-                                    {% csrf_token %}
+                                    {% csrf_token%}
                                 </form>
                             </div>
                         </div>

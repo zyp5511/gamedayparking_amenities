@@ -20,7 +20,8 @@ from django.utils.six.moves.urllib.parse import urlparse
 
 # Create your views here.
 def home(request):
-
+    mess = Message.objects.all()
+    print mess
     # get Point from request IP address
     g = GeoIP()
     ip = request.META.get('REMOTE_ADDR', None)
@@ -53,8 +54,7 @@ def home(request):
     return render(request, 'home.html', context)
 
 
-def search(request, message=None):
-    
+def search(request):
     try:
         location = request.GET['location']
         if not location:
@@ -173,6 +173,7 @@ def newspot(request):
         form = ParkingSpotAdd()
     return render(request, "editspot.html", {'form': form})
 
+@login_required
 def reserve_request(request):
     if not request.user.is_authenticated():
         return redirect('/accounts/login')
@@ -181,32 +182,43 @@ def reserve_request(request):
         parkingspot = ParkingSpot.objects.get(id=request.GET['reserve'])
     except:
         return redirect(request.META.get('HTTP_REFERER', '/'))
-    parkingspot.open_date('12/01/2015') #DEV
-    parkingspot.open_date('12/02/2015') #DEV
-    parkingspot.open_date('12/03/2015') #DEV
-    parkingspot.open_date('1/03/2090') #DEV
+    message = request.session.pop('message', None)
+    message_type = request.session.pop('message_type', None)
     date_list = parkingspot.get_all_spots_available()
     date_list.sort(key=lambda x: datetime.datetime.strptime(x[0], '%m/%d/%Y'))
     context = {"parkingspot": parkingspot,
                 "date_list": date_list,
-                "date": request.GET['date'].split("/")
+                "date": request.GET['date'].split("/"),
+                "message": message,
+                "message_type" : message_type
               }
     return render(request, 'reserve.html', context)
 
 
 def finalize_reserve(request):
-    #date = request.POST['date']
-    date = '12/02/2015' # Grab date
-    message = "Hello!  I'd like to reserve a parking spot on %s." % date
-    subject = "Reservation Request"
-    sender = current_user
-    receiver = parkingspot.owner.extended_user.main_user
-    message = Message.objects.create(message=message, subject=subject, is_reservation=True, sender=sender, receiver=receiver)
-    message.save()
-    res_message = ResMessage.objects.create(message=message, parkingspot=parkingspot, res_date=date)
-    res_message.save()
-    msg = "Parking Request Sent"
-    return redirect('parkingspot.views.search', message=msg)
+    parkingspot_id = int(request.POST.get('pid'))
+    parkingspot = ParkingSpot.objects.get(id=parkingspot_id)
+    date = request.POST.get('dp1')
+    # check if spots available
+    if parkingspot.get_num_spots(date) <= 0:
+        request.session['message'] = "Reservation Failed. No space available for that date"
+        request.session['message_type'] = False
+        return redirect(reserve_request)
+    else:
+        message = request.POST.get('message')
+        date = date.split("/")
+        date = "{}-{}-{}".format(date[2], date[0], date[1])
+        subject = "Reservation Request"
+        sender = request.user
+        print sender
+        receiver = parkingspot.owner.extended_user.main_user
+        message = Message.objects.create(message=message, subject=subject, is_reservation=True, sender=sender, receiver=receiver)
+        print message.sender
+        res_message = ResMessage.objects.create(message=message, parkingspot=parkingspot, res_date=date)
+        msg = "Parking Request Sent"
+        request.session['message'] = "Reservation Request Sent Successfully"
+        request.session['message_type'] = True
+        return redirect(reserve_request)
 
 def AddReview(request):
     #DEV   test sample user, parkingspot info
