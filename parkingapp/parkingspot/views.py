@@ -56,6 +56,8 @@ def home(request):
 def search(request, message=None):
     try:
         location = request.GET['location']
+        if reques.GET['location'] == null:
+            location = "Madison, WI"
     except:
         location = "Madison, WI" #DEV
     try:
@@ -206,7 +208,8 @@ def finalize_reserve(request):
     msg = "Parking Request Sent"
     return redirect('parkingspot.views.search', message=msg)
 
-
+def AddReview(request):
+    return render(request, 'add_review.html')
 
 def about(request):
     return render(request, 'about_us.html')
