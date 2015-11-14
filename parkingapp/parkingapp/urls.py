@@ -29,7 +29,9 @@ urlpatterns = [
     url(r'^about/', 'parkingspot.views.about'),
     url(r'^contact/', 'parkingspot.views.contact'),
     url(r'^reserve/', 'parkingspot.views.reserve_request'),
-    url(r'^add_spot/', 'parkingspot.views.spotmodify')
+    url(r'^add_spot/', 'parkingspot.views.newspot'),
+    url(r'^profile/', 'userprof.views.profile'),
+
 
 ]
 

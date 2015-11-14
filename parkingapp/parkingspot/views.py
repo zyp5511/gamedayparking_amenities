@@ -1,5 +1,6 @@
 import json
 import datetime
+from userprof.views import profile
 from django.shortcuts import render, redirect
 from django.shortcuts import render_to_response, get_object_or_404
 from django.contrib.gis.measure import D
@@ -12,6 +13,7 @@ from message.models import Message, ResMessage
 from userprof.models import ExtendedUser, AdminUser
 from django.contrib.auth.models import User
 from parkingspot.forms import ParkingSpotEdit
+
 
 from django.contrib.auth.decorators import login_required
 from django.utils.six.moves.urllib.parse import urlparse
@@ -152,17 +154,19 @@ def newspot(request):
     if a_user.registered is not True:
         return redirect('/home')
     if request.method == 'POST':
-        button = request.POST['submit']
-        print button
-        try:
-            instance = get_object_or_404(ParkingSpot,id=button)
-        except:
-            instance = ParkingSpot(owner=a_user)
+        instance = ParkingSpot(owner=a_user)
         form = ParkingSpotEdit(request.POST, request.FILES, instance=instance)
         print form
+        form.owner = a_user
+        print "TEST1"
         if form.is_valid():
             form.save()
-            return render(request, "editspot.html", {'form': form})
+            message_type = True
+            message = "Parking spot created successfully."
+            print 'GOT HERE'
+            request.session['message'] = message
+            request.session['message_type'] = message_type
+            return redirect(profile)
     elif request.method == 'GET':
         form = ParkingSpotEdit()
     return render(request, "editspot.html", {'form': form})
