@@ -36,20 +36,29 @@ def profile(request):
   if not request.user.is_authenticated():
     return redirect('/home')
   current_user = request.user
+  m_user = get_object_or_404(ExtendedUser, main_user=current_user)
+  try:
+    a_user = get_object_or_404(AdminUser, extended_user=m_user)
+    parking_spots = ParkingSpot.objects.filter(owner=a_user)
+    incoming_requests = ResMessage.objects.filter(message__receiver=current_user).order_by('date')
+  except:
+    parking_spots=None
+    incoming_requests=None
   messages = Message.objects.filter(receiver=current_user, is_reservation=False).order_by('date')
-  incoming_requests = ResMessage.objects.filter(message__receiver=current_user).order_by('date')
   outgoing_requests = ResMessage.objects.filter(message__sender=current_user).order_by('date')
+  
   return render(request, "userInfo.html", {"message": message, "message_type":message_type, "incoming_requests": incoming_requests, "outgoing_requests": outgoing_requests, "messages": messages})
 
 def approve_request(request):
   if request.method == 'POST':
     value = request.POST['confirm']
     res_msg = ResMessage.objects.get(id=value)
-    res_msg.is_approved = True
-    res_msg.has_responded = True
+
     date = res_msg.res_date
     pspot = res_msg.parkingspot
     if pspot.get_num_spots(date) > 0:
+      res_msg.is_approved = True
+      res_msg.has_responded = True
       pspot.reserve_spot(res_msg.message.sender,date)
       subject = "Congratulations!  Your parking spot request has been approved."
       message = "You've successfully booked a parking spot at %s %s, %s for the date: %s." % (pspot.street_address, pspot.city, pspot.state, date)
@@ -61,7 +70,7 @@ def approve_request(request):
     else:
       msg = "You've overbooked for that date, or you haven't opened that date for booking.  You can increase your number of spots available."
       success = False
-    redirect('userprof.views.admin_page', message=msg, success=success)
+    return redirect('userprof.views.admin_page', message=msg, success=success)
 
 def deny_request(request):
   if request.method == "POST":
@@ -76,4 +85,4 @@ def deny_request(request):
     res_msg.save()
     msg = "Parking request denied."
     success = True
-    redirect('userprof.views.admin_page', message=msg, success=success)
+    return redirect('userprof.views.admin_page', message=msg, success=success)

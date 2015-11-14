@@ -12,7 +12,7 @@ from parkingspot.models import ParkingSpot
 from message.models import Message, ResMessage
 from userprof.models import ExtendedUser, AdminUser
 from django.contrib.auth.models import User
-from parkingspot.forms import ParkingSpotEdit
+from parkingspot.forms import ParkingSpotEdit, ParkingSpotAdd
 
 
 from django.contrib.auth.decorators import login_required
@@ -54,9 +54,10 @@ def home(request):
 
 
 def search(request, message=None):
+    
     try:
         location = request.GET['location']
-        if reques.GET['location'] == null:
+        if not location:
             location = "Madison, WI"
     except:
         location = "Madison, WI" #DEV
@@ -128,19 +129,20 @@ def spotmodify(request):
     if a_user.registered is not True:
         return redirect('/home')
     if request.method == 'POST':
-        button = request.POST['submit']
-        print button
-        try:
-            instance = get_object_or_404(ParkingSpot,id=button)
-        except:
-            instance = ParkingSpot(owner=a_user)
+        instance = get_object_or_404(ParkingSpot,id=1) #TODO, switch to ID
+        print "GOT HERE"
         form = ParkingSpotEdit(request.POST, request.FILES, instance=instance)
+        form.owner = a_user
         print form
         if form.is_valid():
+            print "GOT EM!"
             form.save()
             return render(request, "editspot.html", {'form': form})
     elif request.method == 'GET':
-        form = ParkingSpotEdit()
+        instance = get_object_or_404(ParkingSpot, id=1) #TODO, switch to ID
+        print instance.id
+        form = ParkingSpotEdit(instance=instance)
+        print form
     return render(request, "editspot.html", {'form': form})
 
 
@@ -157,20 +159,18 @@ def newspot(request):
         return redirect('/home')
     if request.method == 'POST':
         instance = ParkingSpot(owner=a_user)
-        form = ParkingSpotEdit(request.POST, request.FILES, instance=instance)
+        form = ParkingSpotAdd(request.POST, request.FILES, instance=instance)
         print form
         form.owner = a_user
-        print "TEST1"
         if form.is_valid():
             form.save()
             message_type = True
             message = "Parking spot created successfully."
-            print 'GOT HERE'
             request.session['message'] = message
             request.session['message_type'] = message_type
             return redirect(profile)
     elif request.method == 'GET':
-        form = ParkingSpotEdit()
+        form = ParkingSpotAdd()
     return render(request, "editspot.html", {'form': form})
 
 def reserve_request(request):
@@ -209,12 +209,11 @@ def finalize_reserve(request):
     return redirect('parkingspot.views.search', message=msg)
 
 def AddReview(request):
-    #DEV    test sample user, parkingspot info
-    #cur_user = request.user
-    #cur_parkingspot = parkingspot[0]
+    #DEV   test sample user, parkingspot info
+    
     #context = {
-    #    "user" = cur_user
-    #    "parkingspot" = cur_parkingspot
+    #"user" : request.user
+    #"parkingspot" : parkingspot[0]
     #}
     return render(request, 'add_review.html', context)
 
