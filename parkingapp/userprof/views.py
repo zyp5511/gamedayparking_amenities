@@ -36,7 +36,7 @@ def profile(request):
         print "Incoming Requests: {}".format(incoming_requests)
     except:
         print "Exception: Not admin user, no incoming requests"
-        uparking_spots = []
+        parking_spots = []
         incoming_requests = []
 
     messages = Message.objects.filter(receiver=current_user, is_reservation=False).order_by('date')
