@@ -228,6 +228,7 @@ hr { margin-top: 5px;margin-bottom: 10px; }
                             <span class="text-muted" style="font-size: 11px;">- {{x.messege}}</span> <span class="badge">{{x.date}}</span> <span class="pull-right"><span class="glyphicon glyphicon-paperclip">
                                 </a>
                           </a>
+                     {% endfor %}
                     </div>
                        <div id="popDiv" class="ontop">
                            <div class="popup">
@@ -290,13 +291,13 @@ hr { margin-top: 5px;margin-bottom: 10px; }
 
           <div class="tab-pane fade in" id="InComingReuest">
                     <div class="list-group">
-                    {% for y in incoming_requests%}
+                    {% for y in incoming_requests %}
                         <div class="list-group-item">
                           
                              <a class="popUpLink" href="#" onClick="pop('popDiv')">
                             <span class="name" style="min-width: 120px;
-                                display: inline-block;">{{y.message.sender}}</span> <span class="">{{y.Message.subject}}</span>
-                            <span class="text-muted" style="font-size: 11px;">- {{y.Message.messege}}</span> <span class="badge">{{y.Message.date}}</span> <span class="pull-right"><span class="glyphicon glyphicon-paperclip">
+                                display: inline-block;">{{y.message.sender}}</span> <span class="">{{y.message.subject}}</span>
+                            <span class="text-muted" style="font-size: 11px;">- {{y.message.message}}</span> <span class="badge">{{y.message.date}}</span> <span class="pull-right"><span class="glyphicon glyphicon-paperclip">
                                 </a>
                           </a>
                        <div id="popDiv" class="ontop">
