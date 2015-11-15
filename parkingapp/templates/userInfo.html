@@ -180,14 +180,15 @@
           <!-- SIDEBAR USER TITLE -->
           <div class="profile-usertitle">
             <div class="profile-usertitle-name">
-                 user.username
+                 {{ user.username }}
             </div>
             <div class="profile-usertitle-job">
                   <!-- normal users or admin-->
                   {% if user.extendeduser.adminuser.registered%}
                           ADMIN
-                  {% else% }
+                  {% else %}
                           COMMOM USER
+                  {% endif %}
             </div>
           </div>
           <!-- END SIDEBAR USER TITLE -->
