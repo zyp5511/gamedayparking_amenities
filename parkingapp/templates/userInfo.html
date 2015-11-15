@@ -235,10 +235,57 @@ hr { margin-top: 5px;margin-bottom: 10px; }
                              <h4>{{x.sender}}</h4>
                              <h5>{{x.sender}}</h5>
                                  {{x.message}}  
-                            <p><a href="#" onClick="hide('popDiv')">Close</a></p>
+
+
+                               <!--i copy from the reservation page -->
+                              <form id="confirmForm" action="../finalize_reservation/" method="post">
+                                  <p>(Please Provide owner with Information below)</p>
+
+                                    <input type="hidden" name="pid" value={{parkingspot.id}}> 
+
+                                    <!-- code for get the current date-->
+                                    <script type="text/javascript">
+                                    var currentTime = new Date()
+                                    var month = currentTime.getMonth() + 1
+                                    var day = currentTime.getDate()
+                                    var year = currentTime.getFullYear()
+                                    document.write(month + "/" + day + "/" + year)
+                                    </script>
+
+
+                                    <input  type="text" 
+                                            name="dp1"
+                                            id="dp1"
+                                            class="datepicker"
+                                            value="00/00/00">
+
+                                    <textarea   id="message"
+                                                name="message"
+                                                maxlength="200"
+                                                placeholder="Write a message to owner..."></textarea>
+
+                                    <input  id="confirmButton" 
+                                            type="submit"
+                                            value="Send Request">
+
+                                    <button id="popUpCancel" 
+                                            type="button"
+                                            onClick="hide('popDiv')">Cancel</button>
+                                    {% csrf_token%}
+                               
+                                </form>
                            </div>
                      </div>
                 </div>
+
+                   
+
+
+
+
+
+
+
 
 
           <div class="tab-pane fade in" id="InComingReuest">
@@ -290,7 +337,6 @@ hr { margin-top: 5px;margin-bottom: 10px; }
                 </div>
             </div>
            
-
         </div>
       </div>     
   </div>

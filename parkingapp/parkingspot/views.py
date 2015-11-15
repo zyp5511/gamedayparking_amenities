@@ -240,5 +240,5 @@ def about(request):
 def contact(request):
     return render(request, 'contact_us.html')
 
-def detail(request):
-    return render(request, 'detail.html' )
+def userInfo(request):
+    return render(request, 'userInfo.html' )
