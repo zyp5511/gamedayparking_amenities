@@ -5,16 +5,28 @@
   <head> 
     {% include "header.html" %}
       <link rel="stylesheet" href="{% static "bower_components/bootstrap/dist/css/bootstrap.min.css" %}">
+          
+          
+          <style>
+              tr.alt{
+                  line-height:20px;
+              }
+          </style>
+          
   </head>
+
+
+
 
   <body>
     {% block nav_bar %}{% endblock %}
   <div class="row">
 
-  <div class="col-md-4">
+  <div class="col-md-12">
   <div class="panel panel-default">
+      <div class="panel-heading" align =center>Edit ParkingSpot</div>
    <div class="datagrid">
-    <table cellspacing="20px" align= center >
+    <table class ="table-hover" align= center >
       <form method="post" action='.' enctype="multipart/form-data" >
         {% csrf_token %}
         <tbody>
@@ -108,6 +120,7 @@
           </tr>
           <tr class ="alt">   
             <td><button name="submit" type="submit" id="submit" value="{{form.id.value}}">Update Information</td></button>
+                </td>
           </tr>
         </tbody>
       </form>
