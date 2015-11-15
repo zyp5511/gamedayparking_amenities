@@ -12,44 +12,10 @@
         <link rel="stylesheet" href="https://ajax.googleapis.com/ajax/libs/angular_material/1.0.0-rc1/angular-material.min.css">
 
   
-       <style type="text/css">
-        .subheaderdemoBasicUsage .face {
-          border-radius: 30px;
-          border: 1px solid #ddd;
-          width: 48px;
-          margin: 16px; }
-      </style>
 
       <style type="text/css">
 
 
-
-  body {
-    background: #F1F3FA;
-  }
-
-  .left {
-    float: left;
-  }
-  .right {
-    float: right;
-  }
-
-  .clearfix {
-    zoom: 1;
-  }
-  .clearfix:before,
-  .clearfix:after {
-    content: "";
-    display: table;
-  }
-  .clearfix:after {
-    clear: both;
-  }
-  .sender-name {
-    line-height: 30px;
-    vertical-align: middle;
-  }
   /* Profile container */
   .profile {
     margin: 20px 0;
@@ -162,7 +128,30 @@
                 margin-left:-250px;
             }
 
+
+
+body{ margin-top:50px;}
+.nav-tabs .glyphicon:not(.no-margin) { margin-right:10px; }
+.tab-pane .list-group-item:first-child {border-top-right-radius: 0px;border-top-left-radius: 0px;}
+.tab-pane .list-group-item:last-child {border-bottom-right-radius: 0px;border-bottom-left-radius: 0px;}
+.tab-pane .list-group input[type="checkbox"]{ margin-top: 2px; }
+.tab-pane .list-group .glyphicon { margin-right:5px; }
+.tab-pane .list-group .glyphicon:hover { color:#FFBC00; }
+a.list-group-item.read { color: #222;background-color: #F3F3F3; }
+hr { margin-top: 5px;margin-bottom: 10px; }
+.nav-pills>li>a {padding: 5px 10px;}
+
+.ad { padding: 5px;background: #F5F5F5;color: #222;font-size: 80%;border: 1px solid #E5E5E5; }
+.ad a.title {color: #15C;text-decoration: none;font-weight: bold;font-size: 110%;}
+.ad a.url {color: #093;text-decoration: none;}
+
       </style>
+
+
+
+
+
+
     </head>
      <body>
 
@@ -221,145 +210,89 @@
       </div>
       <div class="col-md-9">
        
+        <ul class="nav nav-tabs" id="myTab">
+            <li class="active"><a href="#message" data-toggle="tab">Message</a></li>
+            <li><a href="#InComingReuest" data-toggle="tab">IncomingRequest</a></li>
+            <li><a href="#OutComingReuest" data-toggle="tab">OutComingReuest</a></li>
+          </ul>
 
-
-  <div ng-controller="SubheaderAppCtrl" layout="column" flex="" layout-fill="" ng-cloak="" class="subheaderdemoBasicUsage" ng-app="TestApp">
-
-  <md-toolbar md-scroll-shrink="">
-    <div class="md-toolbar-tools">Messages Inbox</div>
-  </md-toolbar>
-
-  <md-content style="height: 600px;" md-theme="altTheme">
-
-    <section>
-      <md-subheader class="md-primary">Messages</md-subheader>
-      <md-list layout-padding="">
-        <md-list-item class="md-3-line" ng-repeat="Message in messages">
-            <img ng-src="[[message.face]]" class="md-avatar" alt="[[message.sender]]">
-            <div class="md-list-item-text">
-              <div class="md-list-item-text">
-            <h3>[[RMessage.date]]</h3>
-              <h4>[[Message.sender]]</h4>
-              <p>
-               <h5> [[Message.subject]]</h5>
-                <a class="popUpLink" href="#" onClick="pop('popDiv')">
-                 <p class="message">{[[Message.message]]</p>
-                 </a>
-              </p>
-
-          <div id="popDiv" class="ontop">
-               <div class="popup">
-                  <h3>[[Message.subject]]</h3>
-                  <h4>[[Message.sender]]</h4>
-                  <h5>[[Message.sender]] </h5>
-                      [[Message.message]]   
-                  <p><a href="#" onClick="hide('popDiv')">Close</a></p>
+          <div class="tab-content">
+                <div class="tab-pane fade in active" id="message">
+                    <div class="list-group">
+                     {% for x in messages %}
+                        <a href="#" class="list-group-item">
+                            <a class="popUpLink" href="#" onClick="pop('popDiv')">
+                            <span class="name" style="min-width: 120px;
+                                display: inline-block;">{{x.sender}}</span> <span class="">{{x.subject}}</span>
+                            <span class="text-muted" style="font-size: 11px;">- {{x.messege}}</span> <span class="badge">{{x.date}}</span> <span class="pull-right"><span class="glyphicon glyphicon-paperclip">
+                                </a>
+                          </a>
                     </div>
+                       <div id="popDiv" class="ontop">
+                           <div class="popup">
+                             <h3>{{x.subject}}</h3>
+                             <h4>{{x.sender}}</h4>
+                             <h5>{{x.sender}}</h5>
+                                 {{x.message}}  
+                            <p><a href="#" onClick="hide('popDiv')">Close</a></p>
+                           </div>
+                     </div>
+                </div>
+
+
+          <div class="tab-pane fade in" id="InComingReuest">
+                    <div class="list-group">
+                    {% for y in incoming_requests%}
+                        <div class="list-group-item">
+                          
+                             <a class="popUpLink" href="#" onClick="pop('popDiv')">
+                            <span class="name" style="min-width: 120px;
+                                display: inline-block;">{{y.message.sender}}</span> <span class="">{{y.Message.subject}}</span>
+                            <span class="text-muted" style="font-size: 11px;">- {{y.Message.messege}}</span> <span class="badge">{{y.Message.date}}</span> <span class="pull-right"><span class="glyphicon glyphicon-paperclip">
+                                </a>
+                          </a>
+                       <div id="popDiv" class="ontop">
+                           <div class="popup">
+                             <h3>{{y.Message.subject}}</h3>
+                             <h4>{{y.Message.sender}}</h4>
+                             <h5>{{y.Message.sender}}</h5>
+                                 {{y.Message.message}}  
+                            <p><a href="#" onClick="hide('popDiv')">Close</a></p>
+                           </div>
                         </div>
-          </div>
+                               {% endfor %}
+                    </div>
+                </div>
+
+
+
+              <div class="tab-pane fade in" id="OutComingReuest">
+                    <div class="list-group">
+                     {% for z in outgoing_requests%}
+                        <a href="#" class="list-group-item">
+                            <a class="popUpLink" href="#" onClick="pop('popDiv')">
+                            <span class="name" style="min-width: 120px;
+                                display: inline-block;">{{z.message.sender}}</span> <span class="">{{z.Message.subject}}</span>
+                            <span class="text-muted" style="font-size: 11px;">- {{z.Message.messege}}</span> <span class="badge">{{z.Message.date}}</span> <span class="pull-right"><span class="glyphicon glyphicon-paperclip">
+                                </a>
+                          </a>
+                       <div id="popDiv" class="ontop">
+                           <div class="popup">
+                             <h3>{{z.Message.subject}}</h3>
+                             <h4>{{z.Message.sender}}</h4>
+                             <h5>{{z.Message.sender}}</h5>
+                                 {{z.Message.message}}  
+                            <p><a href="#" onClick="hide('popDiv')">Close</a></p>
+                           </div>
+                     </div>
+                     {% endfor %}
+                </div>
             </div>
-        </md-list-item>
-      </md-list>
-    </section>
+           
 
-    <section>
-      <md-subheader class="md-warn">Messages</md-subheader>
-      <md-list layout="column" layout-padding="">
-        <md-list-item class="md-3-line" ng-repeat="ResMessage in outgoing_requests">
-          <img ng-src="[[message.face]]" class="md-avatar" alt="[[ResMessage.Message.sender]]">
-          <div class="md-list-item-text">
-             <div class="md-list-item-text">
-            <h3>[[ResMessage.Message.date]]</h3>
-              <h4>[[ResMessage.Message.sender]]</h4>
-              <p>
-               <h5> [[ResMessage.Message.subject]]</h5>
-                <a class="popUpLink" href="#" onClick="pop('popDiv')">
-                 <p class="message">{[[ResMessage.Message.message]]</p>
-                 </a>
-              </p>
-
-          <div id="popDiv" class="ontop">
-               <div class="popup">
-                  <h3>[[ResMessage.Message.subject]]</h3>
-                  <h4>[[ResMessage.Message.sender]]</h4>
-                  <h5>[ResMessage.Message.sender]] </h5>
-                      [[ResMessage.Message.message]]   
-                                <p><a href="#" onClick="hide('popDiv')">Close</a></p>
-                            </div>
-                        </div>
-          </div>
-          </div>
-        </md-list-item>
-      </md-list>
-    </section>
-
-    <section>
-      <md-subheader></md-subheader>
-      <md-list layout="column" layout-padding="">
-        <md-list-item class="md-3-line" ng-repeat="ResMessage in incoming_requests">
-          <img ng-src="[[ResMessage.face]]" class="md-avatar" alt="[[ResMessage.Message.sender]]">
-          <div class="md-list-item-text">
-            <h3>[[ResMessage.Message.date]]</h3>
-              <h4>[[ResMessage.Message.sender]]</h4>
-              <p>
-               <h5> [[ResMessage.Message.subject]]</h5>
-                <a class="popUpLink" href="#" onClick="pop('popDiv')">
-                 <p class="message">{[[ResMessage.Message.message]]</p>
-                 </a>
-              </p>
-
-          <div id="popDiv" class="ontop">
-               <div class="popup">
-                  <h3>[[ResMessage.Message.subject]]</h3>
-                  <h4>[[ResMessage.Message.sender]]</h4>
-                  <h5>[ResMessage.Message.sender]] </h5>
-                      [[ResMessage.Message.message]]   
-                                <p><a href="#" onClick="hide('popDiv')">Close</a></p>
-                            </div>
-                        </div>
-          </div>
-        </md-list-item>
-      </md-list>
-    </section>
-
-<!--<section>
-      <md-subheader class="md-accent">Archived messages</md-subheader>
-      <md-list layout="column" layout-padding="">
-        <md-list-item class="md-3-line" ng-repeat="message in messages">
-          <img ng-src="[[message.face]]" class="md-avatar" alt="[[message.who]]">
-          <div class="md-list-item-text">
-            <h3>[[message.what]]</h3>
-            <h4>[[message.who]]</h4>
-            <p>
-              [[message.notes]]
-            </p>
-          </div>
-        </md-list-item>
-      </md-list>
-    </section>
--->
-  </md-content>
-</div>
-
-
-       </div>
+        </div>
       </div>     
   </div>
-
-<script type="text/javascript">
-    (function($) {  
-  var TestApp = angular.module('TestApp', ['ngMaterial'], function($interpolateProvider) {
-    $interpolateProvider.startSymbol('[[');
-    $interpolateProvider.endSymbol(']]');
-  });
-})
-</script>
-        
-        <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.4.7/angular.min.js"></script>
-        <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.4.7/angular-animate.min.js"></script>
-        <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.4.7/angular-aria.min.js"></script>
-
-       <script src="https://ajax.googleapis.com/ajax/libs/angular_material/1.0.0-rc1/angular-material.min.js"></script>
 
 
         </body>
