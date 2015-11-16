@@ -1,109 +1,109 @@
 <!DOCTYPE html>
-  {% load staticfiles %}
-
-  <html lang="en" ng-app="TestApp">
+{% load staticfiles %}
+<html lang="en" ng-app="TestApp">
     <head>  
-  <title>Search Results</title>
+        <title>Search Results</title>
 
-      {% include "header.html" %}
+        <link   rel="stylesheet" 
+                href="{% static "bower_components/bootstrap/dist/css/bootstrap.min.css" %}">
+        <link   rel="stylesheet" 
+                href="https://ajax.googleapis.com/ajax/libs/angular_material/1.0.0-rc1/angular-material.min.css">
 
-        <link   rel="stylesheet" href="{% static "bower_components/bootstrap/dist/css/bootstrap.min.css" %}">
+        <style type="text/css">
+            .container {
+                margin-top:-20px;
+                padding-top:20px;
+            }
 
-        <link rel="stylesheet" href="https://ajax.googleapis.com/ajax/libs/angular_material/1.0.0-rc1/angular-material.min.css">
+            /* Profile container */
+            .profile {
+                margin: 20px 0;
+            }
 
-  
+            /* Profile sidebar */
+            .profile-sidebar {
+                padding: 20px 0 10px 0;
+                background: #fff;
+            }
 
-      <style type="text/css">
+            .profile-userpic img {
+                float: none;
+                margin: 0 auto;
+                width: 50%;
+                height: 50%;
+                -webkit-border-radius: 50% !important;
+                -moz-border-radius: 50% !important;
+                border-radius: 50% !important;
+            }
 
+            .profile-usertitle {
+              text-align: center;
+              margin-top: 20px;
+            }
 
-  /* Profile container */
-  .profile {
-    margin: 20px 0;
-  }
+            .profile-usertitle-name {
+                color: #5a7391;
+                font-size: 16px;
+                font-weight: 600;
+                margin-bottom: 7px;
+            }
 
-  /* Profile sidebar */
-  .profile-sidebar {
-    padding: 20px 0 10px 0;
-    background: #fff;
-  }
+            .profile-usertitle-job {
+                text-transform: uppercase;
+                color: #5b9bd1;
+                font-size: 12px;
+                font-weight: 600;
+                margin-bottom: 15px;
+            }
 
-  .profile-userpic img {
-    float: none;
-    margin: 0 auto;
-    width: 50%;
-    height: 50%;
-    -webkit-border-radius: 50% !important;
-    -moz-border-radius: 50% !important;
-    border-radius: 50% !important;
-  }
+                
+            .profile-usermenu {
+                margin-top: 30px;
+            }
 
-  .profile-usertitle {
-    text-align: center;
-    margin-top: 20px;
-  }
+            .profile-usermenu ul li {
+                border-bottom: 1px solid #f0f4f7;
+            }
 
-  .profile-usertitle-name {
-    color: #5a7391;
-    font-size: 16px;
-    font-weight: 600;
-    margin-bottom: 7px;
-  }
+            .profile-usermenu ul li:last-child {
+                border-bottom: none;
+            }
 
-  .profile-usertitle-job {
-    text-transform: uppercase;
-    color: #5b9bd1;
-    font-size: 12px;
-    font-weight: 600;
-    margin-bottom: 15px;
-  }
+            .profile-usermenu ul li a {
+                color: #93a3b5;
+                font-size: 14px;
+                font-weight: 400;
+            }
 
-      
-  .profile-usermenu {
-    margin-top: 30px;
-  }
+            .profile-usermenu ul li a i {
+                margin-right: 8px;
+                font-size: 14px;
+            }
 
-  .profile-usermenu ul li {
-    border-bottom: 1px solid #f0f4f7;
-  }
+            .profile-usermenu ul li a:hover {
+                background-color: #fafcfd;
+                color: #5b9bd1;
+            }
 
-  .profile-usermenu ul li:last-child {
-    border-bottom: none;
-  }
+            .profile-usermenu ul li.active {
+                border-bottom: none;
+            }
 
-  .profile-usermenu ul li a {
-    color: #93a3b5;
-    font-size: 14px;
-    font-weight: 400;
-  }
+            .profile-usermenu ul li.active a {
+                color: #5b9bd1;
+                background-color: #f6f9fb;
+                border-left: 2px solid #5b9bd1;
+                margin-left: -2px;
+            }
 
-  .profile-usermenu ul li a i {
-    margin-right: 8px;
-    font-size: 14px;
-  }
+            /* Profile Content */
+            .profile-content {
+                padding: 20px;
+                background: #fff;
+                min-height: 460px;
+            }
 
-  .profile-usermenu ul li a:hover {
-    background-color: #fafcfd;
-    color: #5b9bd1;
-  }
-
-  .profile-usermenu ul li.active {
-    border-bottom: none;
-  }
-
-  .profile-usermenu ul li.active a {
-    color: #5b9bd1;
-    background-color: #f6f9fb;
-    border-left: 2px solid #5b9bd1;
-    margin-left: -2px;
-  }
-
-  /* Profile Content */
-  .profile-content {
-    padding: 20px;
-    background: #fff;
-    min-height: 460px;
-  }
-.ontop {
+            .ontop {
                 z-index:999;
                 width:100%;
                 height:100%;
@@ -115,7 +115,7 @@
                 color:#000000;
             }
 
-.popup {
+            .popup {
                 width:500px;
                 height:450px;
                 position:absolute;
@@ -128,172 +128,281 @@
                 margin-left:-250px;
             }
 
+            .nav-tabs .glyphicon:not(.no-margin) { 
+                margin-right:10px; 
+            }
 
+            .tab-pane .list-group-item:first-child {
+                border-top-right-radius: 0px;
+                border-top-left-radius: 0px;
+            }
 
-body{ margin-top:50px;}
-.nav-tabs .glyphicon:not(.no-margin) { margin-right:10px; }
-.tab-pane .list-group-item:first-child {border-top-right-radius: 0px;border-top-left-radius: 0px;}
-.tab-pane .list-group-item:last-child {border-bottom-right-radius: 0px;border-bottom-left-radius: 0px;}
-.tab-pane .list-group input[type="checkbox"]{ margin-top: 2px; }
-.tab-pane .list-group .glyphicon { margin-right:5px; }
-.tab-pane .list-group .glyphicon:hover { color:#FFBC00; }
-a.list-group-item.read { color: #222;background-color: #F3F3F3; }
-hr { margin-top: 5px;margin-bottom: 10px; }
-.nav-pills>li>a {padding: 5px 10px;}
+            .tab-pane .list-group-item:last-child {
+                border-bottom-right-radius: 0px;
+                border-bottom-left-radius: 0px;
+            }
 
-.ad { padding: 5px;background: #F5F5F5;color: #222;font-size: 80%;border: 1px solid #E5E5E5; }
-.ad a.title {color: #15C;text-decoration: none;font-weight: bold;font-size: 110%;}
-.ad a.url {color: #093;text-decoration: none;}
+            .tab-pane .list-group input[type="checkbox"] { 
+                margin-top: 2px; 
+            }
 
-      </style>
+            .tab-pane .list-group .glyphicon { 
+                margin-right:5px; 
+            }
 
+            .tab-pane .list-group .glyphicon:hover { 
+                color:#FFBC00; 
+            }
 
+            a.list-group-item.read { 
+                color: #222;background-color: #F3F3F3; 
+            }
 
+            hr { 
+                margin-top: 5px;
+                margin-bottom: 10px; 
+            }
 
+            .nav-pills>li>a {
+                padding: 5px 10px;
+            }
 
+            .ad { 
+                padding: 5px;
+                background: #F5F5F5;
+                color: #222;
+                font-size: 80%;
+                border: 1px solid #E5E5E5; 
+            }
 
+            .ad a.title {
+                color: #15C;
+                text-decoration: none;
+                font-weight: bold;
+                font-size: 110%;
+            }
+
+            .ad a.url {
+                color: #093;
+                text-decoration: none;
+            }
+        </style>
     </head>
-     <body>
 
+    <body>
+        {% include "header.html" %}
 
+        <div class="container">
+            <div class="row profile">
+                <div class="col-md-3">
+                    <div class="profile-sidebar">
+                        <!-- BEGIN SIDEBAR USERPIC -->
+                        <div class="profile-userpic">
+                            <img  src="http://keenthemes.com/preview/metronic/theme/assets/admin/pages/media/profile/profile_user.jpg" 
+                                  class="img-responsive" 
+                                  alt="Profile Picture">
+                        </div>
+                        <!-- END SIDEBAR USERPIC -->
 
-  <div class="container">
-      <div class="row profile">
-      <div class="col-md-3">
-        <div class="profile-sidebar">
-          <!-- SIDEBAR USERPIC -->
-          <div class="profile-userpic">
-            <img src="http://keenthemes.com/preview/metronic/theme/assets/admin/pages/media/profile/profile_user.jpg" class="img-responsive" alt="">
-          </div>
-          <!-- END SIDEBAR USERPIC -->
-          <!-- SIDEBAR USER TITLE -->
-          <div class="profile-usertitle">
-            <div class="profile-usertitle-name">
-                 {{ user.username }}
-            </div>
-            <div class="profile-usertitle-job">
-                  <!-- normal users or admin-->
-                  {% if user.extendeduser.adminuser.registered%}
-                          ADMIN
-                  {% else %}
-                          COMMOM USER
-                  {% endif %}
-            </div>
-          </div>
-          <!-- END SIDEBAR USER TITLE -->
-          <!-- SIDEBAR MENU -->
-          <div class="profile-usermenu">
-            <ul class="nav">
-              <li class="active">
-                <a href="#">
-                <i class="glyphicon glyphicon-home"></i>
-                Overview </a>
-              </li>
-              <li>
-                <a href="#">
-                <i class="glyphicon glyphicon-user"></i>
-                Account Settings </a>
-              </li>
-              <li>
-                <a href="#" target="_blank">
-                <i class="glyphicon glyphicon-ok"></i>
-                My trip </a>
-              </li>
-              <li>
-                <a href="#">
-                <i class="glyphicon glyphicon-flag"></i>
-                Help </a>
-              </li>
-            </ul>
-          </div>
-          <!-- END MENU -->
-        </div>
-      </div>
-      <div class="col-md-9">
-       
-        <ul class="nav nav-tabs" id="myTab">
-            <li class="active"><a href="#message" data-toggle="tab">Message</a></li>
-            <li><a href="#InComingReuest" data-toggle="tab">IncomingRequest</a></li>
-            <li><a href="#OutComingReuest" data-toggle="tab">OutComingReuest</a></li>
-          </ul>
+                        <!-- BEGIN SIDEBAR USER TITLE -->
+                        <div class="profile-usertitle">
+                            <div class="profile-usertitle-name">
+                                {{ user.username }}
+                            </div>
 
-          <div class="tab-content">
-                <div class="tab-pane fade in active" id="message">
-                      {% for x in messages %}
-                    <div class="list-group">
-                     <a class="popUpLink" href="#" onClick="pop('popDiv')">
-                        <a href="#" class="list-group-item">
-                            <span class="name" style="min-width: 120px;
-                                display: inline-block;">{{x.sender}}</span> <span class="">{{x.subject}}</span>
-                            <span class="text-muted" style="font-size: 11px;">- {{x.messege}}</span> <span class="badge">{{x.date}}</span> <span class="pull-right"><span class="glyphicon glyphicon-paperclip"></span></span></a>
-                        </a>
-                       <div id="popDiv" class="ontop">
-                           <div class="popup">
-                             <h3>{{x.subject}}</h3>
-                             <h4>{{x.sender}}</h4>
-                             <h5>{{x.sender}}</h5>
-                                 {{x.message}}  
-                             </div>
-                         </div>
-                         </div>
-                         {% endfor %}
-                </div>  
-              </div>
+                            <div class="profile-usertitle-job">
+                                <!-- normal users or admin-->
+                                {% if user.extendeduser.adminuser.registered%}
+                                    ADMIN
+                                {% else %}
+                                    COMMON USER
+                                {% endif %}
+                            </div>
+                        </div>
+                        <!-- END SIDEBAR USER TITLE -->
 
+                        <!-- BEGIN SIDEBAR MENU -->
+                        <div class="profile-usermenu">
+                            <ul class="nav">
+                                <li class="active">
+                                    <a href="#"><i class="glyphicon glyphicon-home"></i>Overview </a>
+                                </li>
 
+                                <li>
+                                    <a href="#"><i class="glyphicon glyphicon-user"></i>Account Settings </a>
+                                </li>
 
-          <div class="tab-pane fade in" id="InComingReuest">
-                    <div class="list-group">
-                    {% for y in incoming_requests %}
-                        <div class="list-group-item">
-                        <a class="popUpLink" href="#" onClick="pop('popDiv')">
-                            <span class="name" style="min-width: 120px;
-                                display: inline-block;">{{y.message.sender}}</span> <span class="">{{y.message.subject}}</span>
-                            <span class="text-muted" style="font-size: 11px;">- {{y.message.message}}</span> <span class="badge">{{y.message.date}}</span> <span class="pull-right"><span class="glyphicon glyphicon-paperclip">
-                                </a>
-                          </a>
-                       <div id="popDiv" class="ontop">
-                           <div class="popup">
-                             <h3>{{y.Message.subject}}</h3>
-                             <h4>{{y.Message.sender}}</h4>
-                             <h5>{{y.Message.sender}}</h5>
-                                 {{y.Message.message}}  
-                            <p><a href="#" onClick="hide('popDiv')">Close</a></p>
-                           </div>
-                        </div>  
-                        {% endfor %}
+                                <li>
+                                    <a href="#" target="_blank"><i class="glyphicon glyphicon-ok"></i>My trip </a>
+                                </li>
+
+                                <li>
+                                    <a href="#"><i class="glyphicon glyphicon-flag"></i>Help </a>
+                                </li>
+                            </ul>
+                        </div>
+                        <!-- END SIDEBAR MENU -->
                     </div>
                 </div>
 
+                <div class="col-md-9">
+                    <ul class="nav nav-tabs" id="myTab">
+                        <li class="active"><a href="#message" data-toggle="tab">Messages</a></li>
+                    </ul>
 
-              <div class="tab-pane fade in" id="OutComingReuest">
-                    <div class="list-group">
-                    {% if outgoing_requests %}
-                     {% for z in outgoing_requests%}
-                      <a class="popUpLink" href="#" onClick="pop('popDiv')">
-                        <a href="#" class="list-group-item">
-                            <span class="name" style="min-width: 120px;
-                                display: inline-block;">{{z.message.sender}}</span> <span class="">{{z.Message.subject}}</span>
-                            <span class="text-muted" style="font-size: 11px;">- {{z.Message.messege}}</span> <span class="badge">{{z.Message.date}}</span> <span class="pull-right"><span class="glyphicon glyphicon-paperclip">
-                                </a>
-                          </a>
-                       <div id="popDiv" class="ontop">
-                           <div class="popup">
-                             <h3>{{z.Message.subject}}</h3>
-                             <h4>{{z.Message.sender}}</h4>
-                             <h5>{{z.Message.sender}}</h5>
-                                 {{z.Message.message}}  
-                            <p><a href="#" onClick="hide('popDiv')">Close</a></p>
-                           </div>
-                     </div>
-                     {% endfor %}
-                     {% else %}
-                     <h3> NO MESSAGE</h3>
-                     {% endif %}
+                    <div class="tab-content">
+                        <div class="tab-pane fade in active" id="message">
+                            {% for x in messages %}
+                                <div class="list-group">
+                                    <a class="popUpLink" href="#" onClick="pop('popDiv')">
+                                        <a href="#" class="list-group-item">
+                                            <span class="name" style="min-width:120px; display:inline-block;">
+                                                {{x.sender}}
+                                            </span> 
+
+                                            <span class="">
+                                                {{x.subject}}
+                                            </span>
+
+                                            <span class="text-muted" style="font-size: 11px;">
+                                                - {{x.messege}}
+                                            </span> 
+
+                                            <span class="badge">
+                                                {{x.date}}
+                                            </span> 
+
+                                            <span class="pull-right">
+                                                <span class="glyphicon glyphicon-paperclip"></span>
+                                            </span>
+                                        </a>
+                    
+                                        <div id="popDiv" class="ontop">
+                                            <div class="popup">
+                                                <h3>{{x.subject}}</h3>
+                                                <h4>{{x.sender}}</h4>
+                                                <h5>{{x.sender}}</h5>
+                                                {{x.message}}  
+                                            </div>
+                                        </div>
+                                    </a>
+                                </div>
+                            {% endfor %}
+                        </div>  
+                    </div>
+
+                    <div class="tab-pane fade in" id="incomingRequest">
+                        <div class="list-group">
+                            {% for y in incoming_requests %}
+                                <div class="list-group-item">
+                                    <a class="popUpLink" href="#" onClick="pop('popDiv')">
+                                        <span class="name" style="min-width: 120px; display: inline-block;">
+                                            {{y.message.sender}}
+                                        </span> 
+
+                                        <span class="">
+                                            {{y.message.subject}}
+                                        </span>
+
+                                        <span class="text-muted" style="font-size: 11px;">
+                                            - {{y.message.message}}
+                                        </span> 
+
+                                        <span class="badge">
+                                            {{y.message.date}}
+                                        </span> 
+
+                                        <span class="pull-right">
+                                            <span class="glyphicon glyphicon-paperclip"></span>
+                                        </span>
+                                    </a>
+
+                                    <div id="popDiv" class="ontop">
+                                        <div class="popup">
+                                            <h3>{{y.Message.subject}}</h3>
+                                            <h4>{{y.Message.sender}}</h4>
+                                            <h5>{{y.Message.sender}}</h5>
+
+                                            {{y.Message.message}}  
+
+                                            <p>
+                                                <a href="#" onClick="hide('popDiv')">Close</a>
+                                            </p>
+                                        </div>
+                                    </div>  
+                                </div>
+                            {% endfor %}
+                        </div>
+
+                        <div class="tab-pane fade in" id="outgoingRequest">
+                            <div class="list-group">
+                                {% if outgoing_requests %}
+                                    {% for z in outgoing_requests %}
+                                        <a class="popUpLink" href="#" onClick="pop('popDiv')">
+                                            <a href="#" class="list-group-item">
+                                                <span class="name" style="min-width: 120px; display: inline-block;">
+                                                    {{z.message.sender}}
+                                                </span> 
+
+                                                <span class="">
+                                                    {{z.Message.subject}}
+                                                </span>
+
+                                                <span class="text-muted" style="font-size: 11px;">
+                                                    - {{z.Message.messege}}
+                                                </span> 
+
+                                                <span class="badge">
+                                                    {{z.Message.date}}
+                                                </span> 
+
+                                                <span class="pull-right">
+                                                    <span class="glyphicon glyphicon-paperclip"></span>
+                                                </span>
+                                            </a>
+                                        </a>
+
+                                        <div id="popDiv" class="ontop">
+                                            <div class="popup">
+                                                <h3>{{z.Message.subject}}</h3>
+                                                <h4>{{z.Message.sender}}</h4>
+                                                <h5>{{z.Message.sender}}</h5>
+                                                {{z.Message.message}}  
+                                                
+                                                <p>
+                                                    <a href="#" onClick="hide('popDiv')">Close</a>
+                                                </p>
+                                            </div>
+                                        </div>
+                                    {% endfor %}
+                                {% else %}
+                                    <h3> NO MESSAGE</h3>
+                                {% endif %}
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </div>
-         </div>
-  
+        </div>
+
+        <script>
+            //Function To Display Popup
+            function pop(div) {
+                document.getElementById(div).style.display = 'block';
+            }
+
+            function hide(div) {
+                document.getElementById(div).style.display = 'none';
+            }
+
+            //To detect escape button
+            document.onkeydown = function(evt) {
+                evt = evt || window.event;
+                if (evt.keyCode == 27) {
+                    hide('popDiv');
+                }
+            };
+        </script>    
                             <!--i copy from the reservation page 
                               <form id="confirmForm" action="../finalize_reservation/" method="post">
                                   <p>(Please Provide owner with Information below)</p>
@@ -333,10 +442,6 @@ hr { margin-top: 5px;margin-bottom: 10px; }
                                 </form>
                     
                 -->
-
-  </div>
-
-
-        </body>
-  </html> 
+    </body>
+</html> 
 
