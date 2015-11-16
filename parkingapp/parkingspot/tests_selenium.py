@@ -137,6 +137,7 @@ class SeleniumTests(StaticLiveServerTestCase):
         search_input.clear()
         search_input.send_keys("Madison, WI")
         date_input = self.selenium.find_element_by_id("parkingday")
+        date_input.clear()
         date_input.send_keys("12/03/2015")
         search_input.submit()
         # verify three madison parkingspots appear
