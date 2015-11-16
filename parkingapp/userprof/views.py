@@ -89,3 +89,18 @@ def deny_request(request):
     msg = "Parking request denied."
     success = True
     return redirect('userprof.views.admin_page', message=msg, success=success)
+
+
+def reply(request):
+    if not request.user.is_authenticated():
+        return redirect('/home')
+    sender = request.user
+    pid = request.POST.get('pid', None)
+    receiver = Users.objects.get(id=pid)
+    subject = request.POST.get('subject', None)
+    text = request.POST.get('text', None)
+    reply = Message(sender=sender, receiver=receiver, subject=subject, mesasge=text)
+    reply.save()
+    request.session['message'] = "Message Sent Successfully"
+    request.session['message_type'] = True
+    return redirect(profile)
