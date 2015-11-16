@@ -81,6 +81,7 @@ def request_response(request):
       res_msg = ResMessage.objects.get(id=value)
       date = res_msg.res_date
       pspot = res_msg.parkingspot
+      date = date.strftime('%m/%d/%Y')   
       if pspot.get_num_spots(date) > 0:
         res_msg.is_approved = True
         res_msg.has_responded = True
