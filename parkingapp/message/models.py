@@ -2,6 +2,7 @@ from django.db import models
 from userprof.models import ExtendedUser
 from parkingspot.models import ParkingSpot
 from django.contrib.auth.models import User
+from review.models import Review
 
 # Create your models here.
 
@@ -24,6 +25,7 @@ class ResMessage(models.Model):
   res_date = models.DateTimeField(blank=True, null=True)
   is_approved = models.BooleanField(default=False)
   has_responded = models.BooleanField(default=False)
+  reviewed = models.ForeignKey(Review, null=True, blank=True)
 
   def __str__(self):
     return "%s -> %s, %s" % (self.message.sender, self.message.receiver, self.parkingspot)

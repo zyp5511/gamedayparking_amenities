@@ -33,7 +33,12 @@ urlpatterns = [
     url(r'^edit_spot/', 'parkingspot.views.spotmodify'),
     url(r'^profile/', 'userprof.views.profile'),
     url(r'^finalize_reservation/', 'parkingspot.views.finalize_reserve'),
-    url(r'^add_review/', 'parkingspot.views.AddReview')
+    url(r'^add_review/', 'parkingspot.views.AddReview'),
+    url(r'^submit_review/', 'review.views.submit_review'),
+    url(r'^reservations/', 'userprof.views.reservations'),
+    url(r'^request_response/', 'userprof.views.request_response'),
+    url(r'^cancel_reservation/', 'userprof.views.cancel_reservation'),
+    url(r'^review/', 'userprof.views.review'),   
 ]
 
 if settings.DEBUG:

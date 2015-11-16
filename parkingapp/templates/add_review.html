@@ -212,11 +212,11 @@
 		 	<!--for-->
 		 	 <div class="parkingSpotReview">
 		 	 	<p class="parkingImageContainer">
-                	<img class="parkingImage" src="{{parkingspot.photos.url}}" alt="Parking Image">
+                	<img class="parkingImage" src="{{res.parkingspot.photos.url}}" alt="Parking Image">
                 </p>
                 <p class="streetAddress">
-                	{{parkingspot.street_address}}<br>
-                	{{parkingspot.description}}<br>
+                	{{res.parkingspot.street_address}}<br>
+                	{{res.parkingspot.description}}<br>
                 	<div class"reviewInput">
                 	<form id="submit_form" action="../submit_review/" method="post" name="submit_form">
                			 <select name="rating" id="rating">
@@ -233,7 +233,7 @@
                          <p>Your Review:</p>
                          <input id="review_text" type="text" name="review_text"/>
                          <br><br>
-                		 <button name="button" type="submit" id="button" value="{{parkingspot.id}}" class="btn btn-primary btn-large">Submit
+                		 <button name="review" type="submit" id="review" value="{{res.id}}" class="btn btn-primary btn-large">Submit
                         </button>
             		</form>
             	</div>
