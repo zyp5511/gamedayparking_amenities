@@ -129,3 +129,19 @@ def cancel_reservation(request):
     request.session['message'] = msg
     request.session['message_type'] = success
     return redirect('/reservations')
+
+
+
+def reply(request):
+    if not request.user.is_authenticated():
+        return redirect('/home')
+    sender = request.user
+    pid = request.POST.get('pid', None)
+    receiver = Users.objects.get(id=pid)
+    subject = request.POST.get('subject', None)
+    text = request.POST.get('text', None)
+    reply = Message(sender=sender, receiver=receiver, subject=subject, mesasge=text)
+    reply.save()
+    request.session['message'] = "Message Sent Successfully"
+    request.session['message_type'] = True
+    return redirect(profile)
