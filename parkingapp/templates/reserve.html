@@ -303,11 +303,11 @@
             <div id="infoContainer">
                 <div id="parkingDetailsContainer">
                     {% if message %}
-                        {%if message_type%}
-                            <div id="success1" style="display:flex"  class="alert alert-success" role="alert">{{message}}</div>
-                        {%else %}
-                            <div id="error1" style="display:flex" class="alert alert-danger" role="alert">{{message}}</div>
-                        {%endif%}
+                        {% if message_type %}
+                            <div id="success1" style="display:flex"  class="alert alert-success" role="alert">{{ message }}</div>
+                        {% else %}
+                            <div id="error1" style="display:flex" class="alert alert-danger" role="alert">{{ message }}</div>
+                        {% endif %}
                     {%endif%}
 
                     <div id='iconRow'>
@@ -339,19 +339,26 @@
                         <hr>
                     </div> 
 
-                    <span id="addressHeader"><b>{{parkingspot.street_address}}, {{parkingspot.city}}, {{parkingspot.state}}, {{parkingspot.zipcode}}</b></span>
-                    <span class="stars">{{parkingspot.get_avg_rating}}</span></br>
-                    <span>Owner: <b>{{parkingspot.owner}}</b></span></br>
-                    <span>Number of Spots: <b>{{parkingspot.default_num_spots}}</b></span></br>
-                    <span>Cost Per Spot: $<b>{{parkingspot.cost}}</b></span></br>
+                    <span id="addressHeader"><b>{{ parkingspot.street_address }}, {{ parkingspot.city }}, {{ parkingspot.state }}, {{ parkingspot.zipcode }}</b></span>
+                    <span class="stars">{{ parkingspot.get_avg_rating }}</span></br>
+                    <span>Owner: <b>{{ parkingspot.owner }}</b></span></br>
+                    <span>Number of Spots: <b>{{ parkingspot.default_num_spots }}</b></span></br>
+                    <span>Cost Per Spot: $<b>{{ parkingspot.cost }}</b></span></br>
                     <span>Description: </span></br>
 
                     <div id="descriptionContainer">
-                        {{parkingspot.description}}
+                        {{ parkingspot.description }}
                     </div></br>
                 </div>
 
                 <div id="bookingDetails">
+                    <div>
+                        <!-- BEGIN REVIEWS LISTINGS -->
+
+                        <!-- END REVIEWS LISTINGS -->
+                    </div>
+
+                    <!-- BEGIN RESERVATION REQUEST FORM -->
                     <form id="requestForm">
                         <input  id="requestSpotButton" 
                                 type="button"
@@ -362,8 +369,9 @@
                                 onClick="history.go(-1);">Cancel</button>
                         {% csrf_token %}
                     </form>
+                    <!-- END RESERVATION REQUEST FORM -->
 
-                    <!-- Popup Div Starts Here -->
+                    <!-- BEGIN POPUP DIV -->
                     <div id="popDiv" class="ontop">
                         <div class="popup">
                             <div id="popUpHeader">
@@ -371,6 +379,7 @@
                             </div>
 
                             <div id="popUpMainContainer">
+                                <!-- BEGIN FINALIZE RESERVATION REQUEST FORM -->
                                 <form id="confirmForm" action="../finalize_reservation/" method="post">
                                     <p>(Please Provide owner with Information below)</p>
 
@@ -396,10 +405,11 @@
                                             onClick="hide('popDiv')">Cancel</button>
                                     {% csrf_token%}
                                 </form>
+                                <!-- END FINALIZE RESERVATION REQUEST FORM -->
                             </div>
                         </div>
                     </div>
-                    <!-- Popup Div Ends Here -->
+                    <!-- END POPUP DIV -->
                 </div>
             </div>
         </div>

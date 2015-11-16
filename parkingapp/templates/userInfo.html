@@ -222,7 +222,7 @@
                 height:120px;
                 float:right;
                 margin-left:10px;
-                margin-bottom:5px;
+                margin-bottom:12px;
                 padding-left:10px;
                 padding-top:5px;
                 border-style:solid;
@@ -319,81 +319,79 @@
                         <div class="tab-pane fade in active" id="message">
                             {% for x in messages %}
                                 <div class="list-group" onClick="pop('popDiv')">
-                                    <a>
-                                        <a href="#" class="list-group-item">
-                                            <span class="name" style="min-width:120px; display:inline-block;">
-                                                <b>{{x.sender}}</b>
-                                            </span> 
+                                    <a href="#" class="list-group-item">
+                                        <span class="name" style="min-width:120px; display:inline-block;">
+                                            <b>{{x.sender}}</b>
+                                        </span> 
 
-                                            <span class="">
-                                                {{x.subject}}
-                                            </span>
+                                        <span class="">
+                                            {{x.subject}}
+                                        </span>
 
-                                            <span class="badge">
-                                                {{x.date}}
-                                            </span>
+                                        <span class="badge">
+                                            {{x.date}}
+                                        </span>
 
-                                            <br />
+                                        <br />
 
-                                            <span  id="messageSpan" class="text-muted" style="font-size: 11px;">
-                                                {{x.message}}
-                                            </span>  
-                                        </a>
-                    
-                                        <div id="popDiv" class="ontop">
-                                            <div class="popup">
-                                                <div id="popUpHeader">
-                                                    <span>Reply Owner</span>
-                                                </div>
-
-                                                <div id="popUpMainContainer">
-                                                    <form id="replyForm" action="" method="post">
-                                                        <div class="fieldContainers">
-                                                            <label  class="inputLabels"
-                                                                    for="owner">To: </label>
-                                                            <input  id="owner"
-                                                                    type="text"
-                                                                    name="owner"
-                                                                    value="{{ x.sender }}">
-                                                        </div>
-
-                                                        <br />
-
-                                                        <div class="fieldContainers">
-                                                            <label  class="inputLabels"
-                                                                    for="subject">Subject: </label>
-                                                            <input  type="text" 
-                                                                    name="subject"
-                                                                    id="subject"
-                                                                    class="subject"
-                                                                    value="RE: {{ x.subject }}">
-                                                        </div>
-
-                                                        <br />
-
-                                                        <div class="fieldContainers">
-                                                            <label  class="inputLabels"
-                                                                    for="message">Message: </label>
-                                                            <textarea   id="replyMessage"
-                                                                        name="message"
-                                                                        maxlength="3000">&#13;&#10;&#13;&#10;&#13;&#10;-------------------------------------------------&#13;&#10;{{x.message}}</textarea>
-                                                        </div>
-
-                                                        <br />
-
-                                                        <button id="popupCancel" 
-                                                                type="button"
-                                                                onClick="hide('popDiv')">Cancel</button>
-
-                                                        <input  id="replyButton" 
-                                                                type="submit"
-                                                                value="Send Reply">
-                                                        {% csrf_token%}
-                                                    </form>
-                                                </div>
-                                            </div>
-                                        </div>
+                                        <span  id="messageSpan" class="text-muted" style="font-size: 11px;">
+                                            {{x.message}}
+                                        </span>  
                                     </a>
+                                </div>
+
+                                <div id="popDiv" class="ontop">
+                                    <div class="popup">
+                                        <div id="popUpHeader">
+                                            <span>Reply Owner</span>
+                                        </div>
+
+                                        <div id="popUpMainContainer">
+                                            <form id="replyForm" action="" method="post">
+                                                <div class="fieldContainers">
+                                                    <label  class="inputLabels"
+                                                            for="owner">To: </label>
+                                                    <input  id="owner"
+                                                            type="text"
+                                                            name="owner"
+                                                            value="{{ x.sender }}">
+                                                </div>
+
+                                                <br />
+
+                                                <div class="fieldContainers">
+                                                    <label  class="inputLabels"
+                                                            for="subject">Subject: </label>
+                                                    <input  type="text" 
+                                                            name="subject"
+                                                            id="subject"
+                                                            class="subject"
+                                                            value="RE: {{ x.subject }}">
+                                                </div>
+
+                                                <br />
+
+                                                <div class="fieldContainers">
+                                                    <label  class="inputLabels"
+                                                            for="message">Message: </label>
+                                                    <textarea   id="replyMessage"
+                                                                name="message"
+                                                                maxlength="3000">&#13;&#10;&#13;&#10;&#13;&#10;-------------------------------------------------&#13;&#10;{{x.message}}</textarea>
+                                                </div>
+
+                                                <br />
+
+                                                <button id="popupCancel" 
+                                                        type="button"
+                                                        onClick="hide('popDiv')">Cancel</button>
+
+                                                <input  id="replyButton" 
+                                                        type="submit"
+                                                        value="Send Reply">
+                                                {% csrf_token%}
+                                            </form>
+                                        </div>
+                                    </div>
                                 </div>
                             {% endfor %}
                         </div>  
