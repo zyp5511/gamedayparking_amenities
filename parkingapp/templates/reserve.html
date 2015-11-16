@@ -238,48 +238,6 @@
                 color:grey;
             }
 
-            #name {
-                display:block;
-                width:300px;
-                height:35px;
-                margin-left:auto;
-                margin-right:auto;
-                padding-left:5px;
-                margin-bottom:25px;
-                border-style:solid;
-                border-width:1px;
-                border-color:grey;
-                border-radius:3px;
-            }
-
-            #email {
-                display:block;
-                width:300px;
-                height:35px;
-                margin-left:auto;
-                margin-right:auto;
-                padding-left:5px;
-                margin-bottom:25px;
-                border-style:solid;
-                border-width:1px;
-                border-color:grey;
-                border-radius:3px;
-            }
-
-            #phone {
-                display:block;
-                width:300px;
-                height:35px;
-                margin-left:auto;
-                margin-right:auto;
-                padding-left:5px;
-                margin-bottom:25px;
-                border-style:solid;
-                border-width:1px;
-                border-color:grey;
-                border-radius:3px;
-            }
-
             #dp1 {
                 display:block;
                 width:300px;
@@ -293,6 +251,7 @@
                 border-color:grey;
                 border-radius:3px;
             }
+
             #message {
                 display:block;
                 width:300px;
@@ -355,7 +314,7 @@
                              <div class="iconSet" style="text-align:center;">
                                 {% if value %}
                                     {% with 'media/icons/on/'|add:key|add:'.png' as image %}
-                                        <span class="iconLabel">{{ key }}</span>
+                                        <span class="iconLabel">{{ key|title }}</span>
                                         <div class="iconContainer">
                                             <img    class='icon' 
                                                     src="{% static image %}" 
@@ -364,7 +323,7 @@
                                     {% endwith %}
                                 {% else %}
                                     {% with 'media/icons/off/'|add:key|add:'.png' as image %}
-                                        <span class="iconLabel">{{ key }}</span>
+                                        <span class="iconLabel">{{ key|title }}</span>
                                         <div class="iconContainer">
                                             <img    class='icon' 
                                                     src="{% static image %}" 
@@ -425,7 +384,7 @@
                                     <textarea   id="message"
                                                 name="message"
                                                 maxlength="200"
-                                                placeholder="Write a message to owner..."></textarea>
+                                                placeholder="Write a message to the owner..."></textarea>
 
                                     <input  id="confirmButton" 
                                             type="submit"

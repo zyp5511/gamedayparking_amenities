@@ -96,54 +96,12 @@
                 margin-left: -2px;
             }
 
-            /* Profile Content */
-            .profile-content {
-                padding: 20px;
-                background: #fff;
-                min-height: 460px;
-            }
-
-            .ontop {
-                z-index:999;
-                width:100%;
-                height:100%;
-                top:0;
-                left:0;
-                display:none;
-                position:fixed;
-                background-color:rgba(40,40,40,0.9);
-                color:#000000;
-            }
-
-            .popup {
-                width:500px;
-                height:450px;
-                position:absolute;
-                color:#000000;
-                background-color:white;
-                /* To align popup window at the center of screen*/
-                top:50%;
-                left:50%;
-                margin-top:-200px;
-                margin-left:-250px;
-            }
-
             .nav-tabs .glyphicon:not(.no-margin) { 
                 margin-right:10px; 
             }
 
-            .tab-pane .list-group-item:first-child {
-                border-top-right-radius: 0px;
-                border-top-left-radius: 0px;
-            }
-
-            .tab-pane .list-group-item:last-child {
-                border-bottom-right-radius: 0px;
-                border-bottom-left-radius: 0px;
-            }
-
-            .tab-pane .list-group input[type="checkbox"] { 
-                margin-top: 2px; 
+            .tab-pane .list-group {
+                margin-bottom:0px;
             }
 
             .tab-pane .list-group .glyphicon { 
@@ -158,33 +116,141 @@
                 color: #222;background-color: #F3F3F3; 
             }
 
-            hr { 
-                margin-top: 5px;
-                margin-bottom: 10px; 
+            .ontop {
+                z-index:999;
+                width:100%;
+                height:100%;
+                top:0;
+                left:0;
+                display:none;
+                position:fixed;
+                background-color:rgba(40,40,40,.5);
+                color:#000000;
             }
 
-            .nav-pills>li>a {
-                padding: 5px 10px;
+            .popup {
+                width:600px;
+                height:350px;
+                position:absolute;
+                color:#000000;
+                background-color:#4da5ff;
+                /* To align popup window at the center of screen*/
+                top:50%;
+                left:45%;
+                margin-top:-200px;
+                margin-left:-250px;
             }
 
-            .ad { 
-                padding: 5px;
-                background: #F5F5F5;
-                color: #222;
-                font-size: 80%;
-                border: 1px solid #E5E5E5; 
+            #popUpHeader {
+                text-align:left;
+                padding-left:15px;
             }
 
-            .ad a.title {
-                color: #15C;
-                text-decoration: none;
-                font-weight: bold;
-                font-size: 110%;
+            #popUpHeader span {
+                display:inline-block;
+                color:white;
+                width:100%;
+                font-size:20px;
+                font-weight:bold;
+                margin-top:8px;
+
             }
 
-            .ad a.url {
-                color: #093;
-                text-decoration: none;
+            #popUpMainContainer {
+                position:absolute;
+                top:40px;
+                bottom:0;
+                left:0px;
+                right:0px;
+                background-color:white;
+            }
+
+            #replyForm {
+                position:absolute;
+                display:inline-block;
+                text-align:right;
+                top:0;
+                left:0;
+                right:0;
+                bottom:0;
+                padding-right:25px;
+                padding-top:22px;
+            }
+
+            .fieldContainers {
+                display:inline-block;
+                width:100%;
+                height:auto;
+                margin-top:5px;
+                margin-bottom:5px;
+            }
+
+            .inputLabels {
+                display:inline-block;
+                padding-top:7px;
+            }
+
+            #owner {
+                display:inline-block;
+                font-weight:bold;
+                width:450px;
+                height:35px;
+                float:right;
+                margin-left:10px;
+                padding-left:10px;
+                border-style:solid;
+                border-width:1px;
+                border-color:lightblue;
+                border-radius:3px;
+            }
+
+            #subject {
+                display:inline-block;
+                width:450px;
+                height:35px;
+                float:right;
+                margin-left:10px;
+                padding-left:10px;
+                border-style:solid;
+                border-width:1px;
+                border-color:lightblue;
+                border-radius:3px;
+            }
+
+            #replyMessage {
+                display:inline-block;
+                width:450px;
+                height:120px;
+                float:right;
+                margin-left:10px;
+                margin-bottom:5px;
+                padding-left:10px;
+                padding-top:5px;
+                border-style:solid;
+                border-width:1px;
+                border-color:lightblue;
+            }
+
+            #replyButton {
+                background-color:#4da5ff;
+                color:white;
+                width:120px;
+                height:35px;
+                margin-left:8px;
+                border-style:solid;
+                border-width:1px;
+                border-color:#4da5ff;
+                border-radius:5px;
+            }
+
+            #popUpCancel {
+                width:120px;
+                height:40px;
+                margin-right:8px;
+                border-style:solid;
+                border-width:1px;
+                border-color:lightgrey;
+                border-radius:5px;
             }
         </style>
     </head>
@@ -253,133 +319,85 @@
                     <div class="tab-content">
                         <div class="tab-pane fade in active" id="message">
                             {% for x in messages %}
-                                <div class="list-group">
-                                    <a class="popUpLink" href="#" onClick="pop('popDiv')">
+                                <div class="list-group" onClick="pop('popDiv')">
+                                    <a>
                                         <a href="#" class="list-group-item">
                                             <span class="name" style="min-width:120px; display:inline-block;">
-                                                {{x.sender}}
+                                                <b>{{x.sender}}</b>
                                             </span> 
 
                                             <span class="">
                                                 {{x.subject}}
                                             </span>
 
-                                            <span class="text-muted" style="font-size: 11px;">
-                                                - {{x.messege}}
-                                            </span> 
-
                                             <span class="badge">
                                                 {{x.date}}
-                                            </span> 
-
-                                            <span class="pull-right">
-                                                <span class="glyphicon glyphicon-paperclip"></span>
                                             </span>
+
+                                            <br />
+
+                                            <span  id="messageSpan" class="text-muted" style="font-size: 11px;">
+                                                {{x.message}}
+                                            </span>  
                                         </a>
                     
                                         <div id="popDiv" class="ontop">
                                             <div class="popup">
-                                                <h3>{{x.subject}}</h3>
-                                                <h4>{{x.sender}}</h4>
-                                                <h5>{{x.sender}}</h5>
-                                                {{x.message}}  
+                                                <div id="popUpHeader">
+                                                    <span>Reply Owner</span>
+                                                </div>
+
+                                                <div id="popUpMainContainer">
+                                                    <form id="replyForm" action="" method="post">
+                                                        <div class="fieldContainers">
+                                                            <label  class="inputLabels"
+                                                                    for="owner">To: </label>
+                                                            <input  id="owner"
+                                                                    type="text"
+                                                                    name="owner"
+                                                                    value="{{ x.sender }}">
+                                                        </div>
+
+                                                        <br />
+
+                                                        <div class="fieldContainers">
+                                                            <label  class="inputLabels"
+                                                                    for="subject">Subject: </label>
+                                                            <input  type="text" 
+                                                                    name="subject"
+                                                                    id="subject"
+                                                                    class="subject"
+                                                                    value="RE: {{ x.subject }}">
+                                                        </div>
+
+                                                        <br />
+
+                                                        <div class="fieldContainers">
+                                                            <label  class="inputLabels"
+                                                                    for="message">Message: </label>
+                                                            <textarea   id="replyMessage"
+                                                                        name="message"
+                                                                        maxlength="1500">&#13;&#10;&#13;&#10;&#13;&#10;******************************************&#13;&#10;{{x.message}}</textarea>
+                                                        </div>
+
+                                                        <br />
+
+                                                        <button id="popUpCancel" 
+                                                                type="button"
+                                                                onClick="hide('popDiv')">Cancel</button>
+
+                                                        <input  id="replyButton" 
+                                                                type="submit"
+                                                                value="Send Reply">
+                                                        {% csrf_token%}
+                                                    </form>
+                                                </div>
                                             </div>
                                         </div>
                                     </a>
                                 </div>
                             {% endfor %}
                         </div>  
-                    </div>
-
-                    <div class="tab-pane fade in" id="incomingRequest">
-                        <div class="list-group">
-                            {% for y in incoming_requests %}
-                                <div class="list-group-item">
-                                    <a class="popUpLink" href="#" onClick="pop('popDiv')">
-                                        <span class="name" style="min-width: 120px; display: inline-block;">
-                                            {{y.message.sender}}
-                                        </span> 
-
-                                        <span class="">
-                                            {{y.message.subject}}
-                                        </span>
-
-                                        <span class="text-muted" style="font-size: 11px;">
-                                            - {{y.message.message}}
-                                        </span> 
-
-                                        <span class="badge">
-                                            {{y.message.date}}
-                                        </span> 
-
-                                        <span class="pull-right">
-                                            <span class="glyphicon glyphicon-paperclip"></span>
-                                        </span>
-                                    </a>
-
-                                    <div id="popDiv" class="ontop">
-                                        <div class="popup">
-                                            <h3>{{y.Message.subject}}</h3>
-                                            <h4>{{y.Message.sender}}</h4>
-                                            <h5>{{y.Message.sender}}</h5>
-
-                                            {{y.Message.message}}  
-
-                                            <p>
-                                                <a href="#" onClick="hide('popDiv')">Close</a>
-                                            </p>
-                                        </div>
-                                    </div>  
-                                </div>
-                            {% endfor %}
-                        </div>
-
-                        <div class="tab-pane fade in" id="outgoingRequest">
-                            <div class="list-group">
-                                {% if outgoing_requests %}
-                                    {% for z in outgoing_requests %}
-                                        <a class="popUpLink" href="#" onClick="pop('popDiv')">
-                                            <a href="#" class="list-group-item">
-                                                <span class="name" style="min-width: 120px; display: inline-block;">
-                                                    {{z.message.sender}}
-                                                </span> 
-
-                                                <span class="">
-                                                    {{z.Message.subject}}
-                                                </span>
-
-                                                <span class="text-muted" style="font-size: 11px;">
-                                                    - {{z.Message.messege}}
-                                                </span> 
-
-                                                <span class="badge">
-                                                    {{z.Message.date}}
-                                                </span> 
-
-                                                <span class="pull-right">
-                                                    <span class="glyphicon glyphicon-paperclip"></span>
-                                                </span>
-                                            </a>
-                                        </a>
-
-                                        <div id="popDiv" class="ontop">
-                                            <div class="popup">
-                                                <h3>{{z.Message.subject}}</h3>
-                                                <h4>{{z.Message.sender}}</h4>
-                                                <h5>{{z.Message.sender}}</h5>
-                                                {{z.Message.message}}  
-                                                
-                                                <p>
-                                                    <a href="#" onClick="hide('popDiv')">Close</a>
-                                                </p>
-                                            </div>
-                                        </div>
-                                    {% endfor %}
-                                {% else %}
-                                    <h3> NO MESSAGE</h3>
-                                {% endif %}
-                            </div>
-                        </div>
                     </div>
                 </div>
             </div>
@@ -391,6 +409,7 @@
                 document.getElementById(div).style.display = 'block';
             }
 
+            //Function to close popup
             function hide(div) {
                 document.getElementById(div).style.display = 'none';
             }
@@ -403,45 +422,6 @@
                 }
             };
         </script>    
-                            <!--i copy from the reservation page 
-                              <form id="confirmForm" action="../finalize_reservation/" method="post">
-                                  <p>(Please Provide owner with Information below)</p>
-
-                                    <input type="hidden" name="pid" value={{parkingspot.id}}> 
-
-                                     code for get the current date
-                                    <script type="text/javascript">
-                                    var currentTime = new Date()
-                                    var month = currentTime.getMonth() + 1
-                                    var day = currentTime.getDate()
-                                    var year = currentTime.getFullYear()
-                                    document.write(month + "/" + day + "/" + year)
-                                    </script>
-
-
-                                    <input  type="text" 
-                                            name="dp1"
-                                            id="dp1"
-                                            class="datepicker"
-                                            value="00/00/00">
-
-                                    <textarea   id="message"
-                                                name="message"
-                                                maxlength="200"
-                                                placeholder="Write a message to owner..."></textarea>
-
-                                    <input  id="confirmButton" 
-                                            type="submit"
-                                            value="Send Request">
-
-                                    <button id="popUpCancel" 
-                                            type="button"
-                                            onClick="hide('popDiv')">Cancel</button>
-                                    {% csrf_token%}
-                               
-                                </form>
-                    
-                -->
     </body>
 </html> 
 
