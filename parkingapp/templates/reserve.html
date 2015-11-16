@@ -302,13 +302,14 @@
 
             <div id="infoContainer">
                 <div id="parkingDetailsContainer">
-                  {% if message %}
-                  {%if message_type%}
-                  <div id="success1" style="display:flex"  class="alert alert-success" role="alert">{{message}}</div>
-                  {%else %}
-                  <div id="error1" style="display:flex" class="alert alert-danger" role="alert">{{message}}</div>
-                  {%endif%}
-                  {%endif%}
+                    {% if message %}
+                        {%if message_type%}
+                            <div id="success1" style="display:flex"  class="alert alert-success" role="alert">{{message}}</div>
+                        {%else %}
+                            <div id="error1" style="display:flex" class="alert alert-danger" role="alert">{{message}}</div>
+                        {%endif%}
+                    {%endif%}
+
                     <div id='iconRow'>
                          {% for key, value in parkingspot.amenities.items %}
                              <div class="iconSet" style="text-align:center;">
@@ -409,11 +410,12 @@
                 document.getElementById(div).style.display = 'block';
             }
 
+            //Function to Hide Popup
             function hide(div) {
                 document.getElementById(div).style.display = 'none';
             }
 
-            //To detect escape button
+            //Function to detect escape button
             document.onkeydown = function(evt) {
                 evt = evt || window.event;
                 if (evt.keyCode == 27) {
@@ -434,6 +436,7 @@
                     });
             $('#dp1').datepicker('update', new Date({{date.2}}, {{date.0}}-1, {{date.1}}));
         </script>
+
         <script>
             $('#dp2').datepicker( {
                     format: 'mm/dd/yyyy'
