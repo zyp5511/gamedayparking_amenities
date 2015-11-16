@@ -219,32 +219,88 @@ hr { margin-top: 5px;margin-bottom: 10px; }
 
           <div class="tab-content">
                 <div class="tab-pane fade in active" id="message">
+                      {% for x in messages %}
                     <div class="list-group">
-                     {% for x in messages %}
+                     <a class="popUpLink" href="#" onClick="pop('popDiv')">
                         <a href="#" class="list-group-item">
-                            <a class="popUpLink" href="#" onClick="pop('popDiv')">
                             <span class="name" style="min-width: 120px;
                                 display: inline-block;">{{x.sender}}</span> <span class="">{{x.subject}}</span>
-                            <span class="text-muted" style="font-size: 11px;">- {{x.messege}}</span> <span class="badge">{{x.date}}</span> <span class="pull-right"><span class="glyphicon glyphicon-paperclip">
-                                </a>
-                          </a>
-                     {% endfor %}
-                    </div>
+                            <span class="text-muted" style="font-size: 11px;">- {{x.messege}}</span> <span class="badge">{{x.date}}</span> <span class="pull-right"><span class="glyphicon glyphicon-paperclip"></span></span></a>
+                        </a>
                        <div id="popDiv" class="ontop">
                            <div class="popup">
                              <h3>{{x.subject}}</h3>
                              <h4>{{x.sender}}</h4>
                              <h5>{{x.sender}}</h5>
                                  {{x.message}}  
+                             </div>
+                         </div>
+                         </div>
+                         {% endfor %}
+                </div>  
+              </div>
 
 
-                               <!--i copy from the reservation page -->
+
+          <div class="tab-pane fade in" id="InComingReuest">
+                    <div class="list-group">
+                    {% for y in incoming_requests %}
+                        <div class="list-group-item">
+                        <a class="popUpLink" href="#" onClick="pop('popDiv')">
+                            <span class="name" style="min-width: 120px;
+                                display: inline-block;">{{y.message.sender}}</span> <span class="">{{y.message.subject}}</span>
+                            <span class="text-muted" style="font-size: 11px;">- {{y.message.message}}</span> <span class="badge">{{y.message.date}}</span> <span class="pull-right"><span class="glyphicon glyphicon-paperclip">
+                                </a>
+                          </a>
+                       <div id="popDiv" class="ontop">
+                           <div class="popup">
+                             <h3>{{y.Message.subject}}</h3>
+                             <h4>{{y.Message.sender}}</h4>
+                             <h5>{{y.Message.sender}}</h5>
+                                 {{y.Message.message}}  
+                            <p><a href="#" onClick="hide('popDiv')">Close</a></p>
+                           </div>
+                        </div>  
+                        {% endfor %}
+                    </div>
+                </div>
+
+
+              <div class="tab-pane fade in" id="OutComingReuest">
+                    <div class="list-group">
+                    {% if outgoing_requests %}
+                     {% for z in outgoing_requests%}
+                      <a class="popUpLink" href="#" onClick="pop('popDiv')">
+                        <a href="#" class="list-group-item">
+                            <span class="name" style="min-width: 120px;
+                                display: inline-block;">{{z.message.sender}}</span> <span class="">{{z.Message.subject}}</span>
+                            <span class="text-muted" style="font-size: 11px;">- {{z.Message.messege}}</span> <span class="badge">{{z.Message.date}}</span> <span class="pull-right"><span class="glyphicon glyphicon-paperclip">
+                                </a>
+                          </a>
+                       <div id="popDiv" class="ontop">
+                           <div class="popup">
+                             <h3>{{z.Message.subject}}</h3>
+                             <h4>{{z.Message.sender}}</h4>
+                             <h5>{{z.Message.sender}}</h5>
+                                 {{z.Message.message}}  
+                            <p><a href="#" onClick="hide('popDiv')">Close</a></p>
+                           </div>
+                     </div>
+                     {% endfor %}
+                     {% else %}
+                     <h3> NO MESSAGE</h3>
+                     {% endif %}
+                </div>
+            </div>
+         </div>
+  
+                            <!--i copy from the reservation page 
                               <form id="confirmForm" action="../finalize_reservation/" method="post">
                                   <p>(Please Provide owner with Information below)</p>
 
                                     <input type="hidden" name="pid" value={{parkingspot.id}}> 
 
-                                    <!-- code for get the current date-->
+                                     code for get the current date
                                     <script type="text/javascript">
                                     var currentTime = new Date()
                                     var month = currentTime.getMonth() + 1
@@ -275,71 +331,9 @@ hr { margin-top: 5px;margin-bottom: 10px; }
                                     {% csrf_token%}
                                
                                 </form>
-                           </div>
-                     </div>
-                </div>
+                    
+                -->
 
-                   
-
-
-
-
-
-
-
-
-
-          <div class="tab-pane fade in" id="InComingReuest">
-                    <div class="list-group">
-                    {% for y in incoming_requests %}
-                        <div class="list-group-item">
-                          
-                             <a class="popUpLink" href="#" onClick="pop('popDiv')">
-                            <span class="name" style="min-width: 120px;
-                                display: inline-block;">{{y.message.sender}}</span> <span class="">{{y.message.subject}}</span>
-                            <span class="text-muted" style="font-size: 11px;">- {{y.message.message}}</span> <span class="badge">{{y.message.date}}</span> <span class="pull-right"><span class="glyphicon glyphicon-paperclip">
-                                </a>
-                          </a>
-                       <div id="popDiv" class="ontop">
-                           <div class="popup">
-                             <h3>{{y.Message.subject}}</h3>
-                             <h4>{{y.Message.sender}}</h4>
-                             <h5>{{y.Message.sender}}</h5>
-                                 {{y.Message.message}}  
-                            <p><a href="#" onClick="hide('popDiv')">Close</a></p>
-                           </div>
-                        </div>
-                               {% endfor %}
-                    </div>
-                </div>
-
-
-
-              <div class="tab-pane fade in" id="OutComingReuest">
-                    <div class="list-group">
-                     {% for z in outgoing_requests%}
-                        <a href="#" class="list-group-item">
-                            <a class="popUpLink" href="#" onClick="pop('popDiv')">
-                            <span class="name" style="min-width: 120px;
-                                display: inline-block;">{{z.message.sender}}</span> <span class="">{{z.Message.subject}}</span>
-                            <span class="text-muted" style="font-size: 11px;">- {{z.Message.messege}}</span> <span class="badge">{{z.Message.date}}</span> <span class="pull-right"><span class="glyphicon glyphicon-paperclip">
-                                </a>
-                          </a>
-                       <div id="popDiv" class="ontop">
-                           <div class="popup">
-                             <h3>{{z.Message.subject}}</h3>
-                             <h4>{{z.Message.sender}}</h4>
-                             <h5>{{z.Message.sender}}</h5>
-                                 {{z.Message.message}}  
-                            <p><a href="#" onClick="hide('popDiv')">Close</a></p>
-                           </div>
-                     </div>
-                     {% endfor %}
-                </div>
-            </div>
-           
-        </div>
-      </div>     
   </div>
 
 

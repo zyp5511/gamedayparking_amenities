@@ -20,8 +20,6 @@ from django.utils.six.moves.urllib.parse import urlparse
 
 # Create your views here.
 def home(request):
-    mess = Message.objects.all()
-    print mess
     # get Point from request IP address
     g = GeoIP()
     ip = request.META.get('REMOTE_ADDR', None)
