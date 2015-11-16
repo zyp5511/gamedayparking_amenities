@@ -131,7 +131,7 @@
 
             .parkingImageContainer, .parkingImage {
                 display:inline-block; 
-                width:50%; 
+                width:150px; 
                 height:150px; 
                 float:left;
                 border-style:solid;
@@ -212,14 +212,14 @@
 		 	<!--for-->
 		 	 <div class="parkingSpotReview">
 		 	 	<p class="parkingImageContainer">
-                	<img class="parkingImage" src="{{x.photos.url}}" alt="Parking Image">
+                	<img class="parkingImage" src="{{parkingspot.photos.url}}" alt="Parking Image">
                 </p>
                 <p class="streetAddress">
-                	1402 Regent St<br>
-                	Front Yard Parking<br>
+                	{{parkingspot.street_address}}<br>
+                	{{parkingspot.description}}<br>
                 	<div class"reviewInput">
-                	<form id="starReview" action="../AddReview/" method="get" name="search_bar">
-               			 <select name="mydropdown">
+                	<form id="submit_form" action="../submit_review/" method="post" name="submit_form">
+               			 <select name="rating" id="rating">
 							<option value="1">1 star</option>
 							<option value="2">2 stars</option>
 							<option value="3">3 stars</option>
@@ -227,8 +227,14 @@
 							<option value="5">5 stars</option>
 						</select>
                 		{% csrf_token %}
-                		 <br><br><input id="123review" type="text" name="parkingdate123"/><br><br>
-                		 <button name="review" type="submit" id="review" value="xid" class="btn btn-primary btn-large">Submit</button>
+                        <br>
+                        <p>Review Title:</p>
+                        <input id="headline" type="text" name="headline"/>
+                         <p>Your Review:</p>
+                         <input id="review_text" type="text" name="review_text"/>
+                         <br><br>
+                		 <button name="button" type="submit" id="button" value="{{parkingspot.id}}" class="btn btn-primary btn-large">Submit
+                        </button>
             		</form>
             	</div>
                 </p>
