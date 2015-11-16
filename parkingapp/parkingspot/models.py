@@ -56,7 +56,7 @@ class ParkingSpot(models.Model):
     def reserve_spot(self, user, date):
         try:
             if self.get_num_spots(date) > 0:
-                self.parking_spot_avail["dates"][date]["res"].append(user)
+                self.parking_spot_avail["dates"][date]["res"].append(user.id)
                 self.save()
                 return 0
             else:
