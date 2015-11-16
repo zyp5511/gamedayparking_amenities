@@ -184,9 +184,12 @@ def reserve_request(request):
     message_type = request.session.pop('message_type', None)
     date_list = parkingspot.get_all_spots_available()
     date_list.sort(key=lambda x: datetime.datetime.strptime(x[0], '%m/%d/%Y'))
+    reviews = parkingspot.review_set.all()
+    print reviews
     context = {"parkingspot": parkingspot,
                 "date_list": date_list,
                 "date": request.GET['date'].split("/"),
+                "reviews" : reviews,
                 "message": message,
                 "message_type" : message_type
               }
