@@ -153,7 +153,6 @@
                 font-size:20px;
                 font-weight:bold;
                 margin-top:8px;
-
             }
 
             #popUpMainContainer {
@@ -243,7 +242,7 @@
                 border-radius:5px;
             }
 
-            #popUpCancel {
+            #popupCancel {
                 width:120px;
                 height:40px;
                 margin-right:8px;
@@ -377,12 +376,12 @@
                                                                     for="message">Message: </label>
                                                             <textarea   id="replyMessage"
                                                                         name="message"
-                                                                        maxlength="1500">&#13;&#10;&#13;&#10;&#13;&#10;******************************************&#13;&#10;{{x.message}}</textarea>
+                                                                        maxlength="3000">&#13;&#10;&#13;&#10;&#13;&#10;-------------------------------------------------&#13;&#10;{{x.message}}</textarea>
                                                         </div>
 
                                                         <br />
 
-                                                        <button id="popUpCancel" 
+                                                        <button id="popupCancel" 
                                                                 type="button"
                                                                 onClick="hide('popDiv')">Cancel</button>
 
