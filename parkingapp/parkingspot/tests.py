@@ -74,7 +74,7 @@ class ParkingSpotTests(TestCase):
     def test_one_rating(self):
         review1 = Review(
                     rating = 5,
-                    reviewer = self.extended_user,
+                    reviewer = self.user,
                     parkingspot= self.test_spot1
                 )
         review1.save()
@@ -86,17 +86,17 @@ class ParkingSpotTests(TestCase):
     def test_multiple_ratings(self):
         review1 = Review(
                     rating = 5,
-                    reviewer = self.extended_user,
+                    reviewer = self.user,
                     parkingspot= self.test_spot1
                 )
         review2 = Review(
                     rating = 4,
-                    reviewer = self.extended_user,
+                    reviewer = self.user,
                     parkingspot= self.test_spot1
                 )
         review3 = Review(
                     rating = 3,
-                    reviewer = self.extended_user,
+                    reviewer = self.user,
                     parkingspot= self.test_spot1
                 )
         review1.save()
@@ -116,7 +116,7 @@ class ParkingSpotTests(TestCase):
     def test_make_reservation_open_date(self):
         self.test_spot1.default_num_spots = 1
         self.test_spot1.open_date('12/31/2016')
-        ret = self.test_spot1.reserve_spot(self.user.id, '12/31/2016')
+        ret = self.test_spot1.reserve_spot(self.user, '12/31/2016')
         self.assertEqual(ret, 0)
         self.clear_dates(self.test_spot1)
 
@@ -124,10 +124,10 @@ class ParkingSpotTests(TestCase):
         test_date = '12/31/2016'
         self.test_spot1.default_num_spots = 2
         self.test_spot1.open_date(test_date)
-        ret = self.test_spot1.reserve_spot(self.user.id, test_date)
+        ret = self.test_spot1.reserve_spot(self.user, test_date)
         self.assertEqual(ret, 0)
         self.assertEqual(self.test_spot1.get_num_spots(test_date), 1)
-        ret = self.test_spot1.reserve_spot(self.user.id, test_date)
+        ret = self.test_spot1.reserve_spot(self.user, test_date)
         self.assertEqual(self.test_spot1.get_num_spots(test_date), 0)
         self.clear_dates(self.test_spot1)
 

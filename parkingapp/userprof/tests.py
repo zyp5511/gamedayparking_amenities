@@ -12,6 +12,10 @@ from django.contrib.auth import get_user_model
 
 from django.test import Client
 
+from parkingspot.models import ParkingSpot
+from django.contrib.auth.models import User
+from userprof.models import AdminUser, ExtendedUser
+
 from allauth.account import app_settings, signals
 from allauth.account.forms import SignupForm
 from allauth.account.views import SignupView
@@ -138,6 +142,44 @@ class UserprofSelenium(StaticLiveServerTestCase):
         prof = self.selenium.find_element_by_link_text("testuser")
         prof.click()
 
+    def test_4_reservation_request(self):
+        user = User.objects.create()
+        user.save()
+        #allauth_user = create_allauth_user("rschaefer@wisc.edu")
+        extended_user = ExtendedUser.objects.create(
+            main_user = user,
+        )
+        extended_user.save()
+        admin_user = AdminUser.objects.create(
+            extended_user = extended_user
+        )
+        admin_user.save()
+        test_spot = ParkingSpot.objects.create(
+            street_address = "4 N Park Street",
+            city = "Madison",
+            state = "WI",
+            zipcode = 53703,
+            owner = admin_user,
+            description = "Madison Parking Spot. Location Field should be automatically populated",
+        )
+        test_spot.default_num_spots = 5
+        test_spot.open_date("12/03/2015")
+        test_spot.save()
+        self.test_1_sign_up()
+        self.selenium.get("{}{}".format(self.live_server_url, '/search/?location=Madison&parkingdate=12%2F03%2F2015'))
+        self.selenium.find_element_by_id("reserve").click()
+        self.selenium.find_element_by_id("requestSpotButton").click()
+        self.selenium.find_element_by_id("message").send_keys("test message")
+        self.selenium.find_element_by_id("confirmButton").click()
+        success = self.selenium.find_element_by_id("success1")
+        self.selenium.get("{}{}".format(self.live_server_url, '/reservations/'))
+        pending = self.selenium.find_elements_by_xpath('//tr')
+        rows = [x.text for x in pending]
+        self.assertTrue(any("Pending {}".format(test_spot.street_address) in s for s in rows))
+        for p in pending:
+            print p.text
+
+        
 
     def login(self):
         username = 'testuser'
