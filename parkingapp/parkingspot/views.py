@@ -186,6 +186,7 @@ def reserve_request(request):
     date_list.sort(key=lambda x: datetime.datetime.strptime(x[0], '%m/%d/%Y'))
     reviews = parkingspot.review_set.all()
     print reviews
+    parkingspot.default_num_spots = parkingspot.get_num_spots(request.GET['date'])
     context = {"parkingspot": parkingspot,
                 "date_list": date_list,
                 "date": request.GET['date'].split("/"),
