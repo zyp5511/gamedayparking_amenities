@@ -7,19 +7,28 @@
         <link   rel="stylesheet" 
                 href="{% static "bower_components/bootstrap/dist/css/bootstrap.min.css" %}">
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
-        <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js" integrity="sha512-K1qjQ+NcF2TYO/eI3M6v8EiNYZfA95pQumfvcVrTHtwQVDG+aHRqLi/ETn2uB+1JqwYqVG3LIvdm9lj6imS/pQ==" crossorigin="anonymous"></script>
-
-
+        <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js" 
+                integrity="sha512-K1qjQ+NcF2TYO/eI3M6v8EiNYZfA95pQumfvcVrTHtwQVDG+aHRqLi/ETn2uB+1JqwYqVG3LIvdm9lj6imS/pQ==" 
+                crossorigin="anonymous"></script>
 
         <style type="text/css">
+            html, body {
+                width:100%;
+                height:100%;
+            }
+
             .container {
+                display:block;
                 margin-top:-20px;
                 padding-top:20px;
+                height:90%;
             }
 
             /* Profile container */
             .profile {
-                margin: 20px 0;
+                display:block;
+                margin:20px 0;
+                height:80%;
             }
 
             /* Profile sidebar */
@@ -57,7 +66,6 @@
                 font-weight: 600;
                 margin-bottom: 15px;
             }
-
                 
             .profile-usermenu {
                 margin-top: 30px;
@@ -96,6 +104,17 @@
                 background-color: #f6f9fb;
                 border-left: 2px solid #5b9bd1;
                 margin-left: -2px;
+            }
+
+            #messagesContainer {
+                display:block;
+                height:100%;
+            }
+
+            #messagesDiv {
+                display:block;
+                height:100%;
+                overflow-y:auto;
             }
 
             .nav-tabs .glyphicon:not(.no-margin) { 
@@ -253,6 +272,17 @@
                 border-color:lightgrey;
                 border-radius:5px;
             }
+            
+            #pendingResDiv {
+                display:none;
+                height:110%;
+            }
+
+            #tableContainer {
+                display:block;
+                height:100%;
+                overflow-y:auto;
+            }
         </style>
     </head>
 
@@ -291,24 +321,25 @@
                         <!-- BEGIN SIDEBAR MENU -->
                         <div class="profile-usermenu">
                             <ul class="nav">
-                                <li class="active">
-                                    <a href="../profile"><i class="glyphicon glyphicon-home"></i>Overview </a>
+                                <li class="active" id="messagesTab" >
+                                    <a href="#" onclick="showMessages()"><i class="glyphicon glyphicon-home"></i>Messages </a>
                                 </li>
 
-                                <li>
-                                    <a href="../reservations"><i class="glyphicon glyphicon-ok"></i>My reservation </a>
+                                <li class="" id="pendingResTab">
+                                    <a href="#" onclick="showMyReservations()"><i class="glyphicon glyphicon-ok"></i>Pending Reservations </a>
                                 </li>
-                                <li>
-                                <!-- normal users or admin-->
-                                {% if user.extendeduser.adminuser.registered%}
-                                     <a href="#"><i class="glyphicon glyphicon-flag"></i>My parkingspots </a>
-                                {% else %}
-                                    
-                                {% endif %}
+
+                                <li class="" id="parkingSpotsTab">
+                                    <!-- normal users or admin-->
+                                    {% if user.extendeduser.adminuser.registered%}
+                                         <a href="#" onclick="showParkingSpots()"><i class="glyphicon glyphicon-flag"></i>My Parking Spots </a>
+                                    {% else %}
+                                        
+                                    {% endif %}
                                  </li>
 
-                                  <li>
-                                    <a href="../accounts/password/change"><i class="glyphicon glyphicon-user"></i>Account Settings </a>
+                                  <li class="" id="accountSettingsTab">
+                                    <a href="../accounts/password/change" onclick="showAccountSettings()"><i class="glyphicon glyphicon-user"></i>Account Settings </a>
                                 </li>
                             </ul>
                         </div>
@@ -316,12 +347,13 @@
                     </div>
                 </div>
 
-                <div class="col-md-9">
+                <div class="col-md-9" id="messagesContainer">
+                    <!-- BEGIN MESSAGES TAB -->
                     <ul class="nav nav-tabs" id="myTab">
                         <li class="active"><a href="#message" data-toggle="tab">Messages</a></li>
                     </ul>
 
-                    <div class="tab-content">
+                    <div class="tab-content" id="messagesDiv">
                         <div class="tab-pane fade in active" id="message">
                             {% if messages %}
                                 {% for x in messages %}
@@ -407,6 +439,58 @@
                             {% endif %}
                         </div>  
                     </div>
+                    <!-- END MESSAGES TAB -->
+
+                    <!-- BEGIN PENDING RESERVATIONS TAB -->
+                    <div class="panel panel-default" id="pendingResDiv">
+                        <!-- Default panel contents -->
+                        <div id="tableContainer">
+                            <table class="table">
+                                {% if outgoing_requests %}
+                                    <form method="post" action='../cancel_reservation/' enctype="multipart/form-data" >
+                                        {%csrf_token%}
+                                        <tr>
+                                            <td><h4>Status</h4></td>
+                                            <td><h4>Seller</h4></td>
+                                            <td><h4>Requested Spot</h4></td>
+                                            <td><h4>Requested Date</h4></td>
+                                            <td><h4>Cancel Reservation</h4></td>
+                                        </tr>
+
+                                        {% for res in outgoing_requests%}
+                                            {% if res.has_responded and not res.is_approved%}
+                                                <tr bgcolor="#cd2626">
+                                                    <td>Denied</td>
+                                            {% elif res.has_responded and res.is_approved%}
+                                                <tr bgcolor="#58FA58">
+                                                    <td>Approved</td>
+                                            {% else %}
+                                                <tr bgcolor="#F3F781">
+                                                    <td>Pending</td>
+                                            {% endif %}
+
+                                            <td>{{res.message.receiver}}</td>
+                                            <td>{{res.parkingspot.street_address}}</td>
+                                            <td>{{res.res_date}}</td>
+
+                                            {% if not res.has_responded %}
+                                                <td><button name="cancel" type="submit" id="cancel" value="{{res.id}}" class="btn btn-primary btn-large">Cancel</button>
+                                            {%else%}
+                                                <td>Email Seller Directly</td>
+                                            {% endif %}
+
+                                            </tr>
+                                        {% endfor %}
+                                    </form>
+                                {% else %}
+                                    <tr>
+                                        <td><center>No Reservations Requested</center></td>
+                                    </tr>
+                                {% endif%}
+                            </table>
+                        </div>
+                    </div>
+                    <!-- END PENDING RESERVATIONS TAB -->
                 </div>
             </div>
         </div>
@@ -430,6 +514,53 @@
                 }
             };
 
+            function showMessages() {
+                document.getElementById('myTab').style.display = 'block';
+                document.getElementById('messagesDiv').style.display = 'block';
+                document.getElementById('pendingResDiv').style.display = 'none';
+                //document.getElementById('parkingSpotsDiv').style.display = 'none';
+                //document.getElementById('accountSettingsDiv').style.display = 'none';
+                document.getElementById('messagesTab').className = 'active';
+                document.getElementById('pendingResTab').className = '';
+                document.getElementById('parkingSpotsTab').className = '';
+                document.getElementById('accountSettingsTab').className = '';
+            }
+
+            function showMyReservations() {
+                document.getElementById('myTab').style.display = 'none';
+                document.getElementById('messagesDiv').style.display = 'none';
+                document.getElementById('pendingResDiv').style.display = 'block';
+                //document.getElementById('parkingSpotsDiv').style.display = 'none';
+                //document.getElementById('accountSettingsDiv').style.display = 'none';
+                document.getElementById('messagesTab').className = '';
+                document.getElementById('pendingResTab').className = 'active';
+                document.getElementById('parkingSpotsTab').className = '';
+                document.getElementById('accountSettingsTab').className = '';
+            }
+
+            function showParkingSpots() {
+                document.getElementById('myTab').style.display = 'none';
+                document.getElementById('messagesDiv').style.display = 'none';
+                document.getElementById('pendingResDiv').style.display = 'none';
+                //document.getElementById('parkingSpotsDiv').style.display = 'none';
+                //document.getElementById('accountSettingsDiv').style.display = 'none';
+                document.getElementById('messagesTab').className = '';
+                document.getElementById('pendingResTab').className = '';
+                document.getElementById('parkingSpotsTab').className = 'active';
+                document.getElementById('accountSettingsTab').className = '';
+            }
+
+            function showAccountSettings() {
+                document.getElementById('myTab').style.display = 'none';
+                document.getElementById('messagesDiv').style.display = 'none';
+                document.getElementById('pendingResDiv').style.display = 'none';
+                //document.getElementById('parkingSpotsDiv').style.display = 'none';
+                //document.getElementById('accountSettingsDiv').style.display = 'none';
+                document.getElementById('messagesTab').className = '';
+                document.getElementById('pendingResTab').className = '';
+                document.getElementById('parkingSpotsTab').className = '';
+                document.getElementById('accountSettingsTab').className = 'active';
+            }
         </script>    
     </body>
 </html> 

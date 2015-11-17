@@ -1,10 +1,10 @@
 <!DOCTYPE html>
 {% load staticfiles %}
 <html lang="en">
-  <head> 
-    {% include "header.html" %}
+    <head> 
+        {% include "header.html" %}
 
-      <link   rel="stylesheet" 
+        <link   rel="stylesheet" 
                 href="{% static "bower_components/bootstrap/dist/css/bootstrap.min.css" %}">
 
         <script src="{% static "bower_components/jquery/dist/jquery.min.js" %}"></script>
@@ -330,154 +330,162 @@
 
             input:focus {outline: none;}
         </style>
-  </head>
+    </head>
 
-  <body>
-    {% block nav_bar %}{% endblock %}
+    <body>
+        {% block nav_bar %}{% endblock %}
         <div id="main">
-        {% if message %}
-        <div class="row">
-            <div class="col-md-12">
-                <div id="error2" style="display:none" class="alert alert-danger" role="alert"></div>
-                {%if message_type%}
-                <div id="success1" style="display:flex"  class="alert alert-success" role="alert">{{message}}</div>
-                {%else %}
-                <div id="error1" style="display:flex" class="alert alert-danger" role="alert">{{message}}</div>
-                {%endif%}
-            </div>
-        </div>
-    
+            {% if message %}
+                <div class="row">
+                    <div class="col-md-12">
+                        <div id="error2" style="display:none" class="alert alert-danger" role="alert"></div>
+                        {% if message_type %}
+                            <div id="success1" style="display:flex"  class="alert alert-success" role="alert">{{ message }}</div>
+                        {%else %}
+                            <div id="error1" style="display:flex" class="alert alert-danger" role="alert">{{ message }}</div>
+                        {% endif %}
+                    </div>
+                </div>
             {%endif%}
+
             {% if admin_user %}
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="panel panel-default">
+                            <!-- Default panel contents -->
+                            <div class="panel-heading">
+                                <h2>Pending Reservation Requests</h2>
+                            </div>
+
+                            <table class="table">
+                                {% if incoming_requests %}
+                                    <tr>
+                                        <td><h4>User</h4></td>
+                                        <td><h4>Requested Spot</h4></td>
+                                        <td><h4>Requested Date</h4></td>
+                                        <td><h4>Approve/Deny</h4></td>
+                                    </tr>
+                                    <form method="post" action='../request_response/' enctype="multipart/form-data" >
+                                        {%csrf_token%}
+                                        {% for res in incoming_requests%}
+                                            <tr>
+                                                <td>{{res.message.sender}}</td>
+                                                <td>{{res.parkingspot.street_address}}</td>
+                                                <td>{{res.res_date}}</td>
+                                                <td><button name="confirm" type="submit" id="confirm" value="{{res.id}}" class="btn btn-primary btn-large">Approve</button>
+                                                <button name="deny" type="submit" id="deny" value="{{res.id}}" class="btn btn-primary btn-large">Decline</button></td>
+                                            </tr>
+                                        {% endfor %}
+                                    </form>
+                                {% else %}
+                                    <tr>
+                                        <td><center>No Pending Requests</center></td>
+                                    </tr>
+                                {% endif %}
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            {% endif %}
+
             <div class="row">
                 <div class="col-md-12">
                     <div class="panel panel-default">
-                    <!-- Default panel contents -->
+                        <!-- Default panel contents -->
                         <div class="panel-heading">
-                            <h2>Pending Reservation Requests</h2>
+                            <h2>Your Pending Reservations</h2>
                         </div>
-                        <table class="table">
-                        {% if incoming_requests %}
-                        <tr>
-                            <td><h4>User</h4></td>
-                            <td><h4>Requested Spot</h4></td>
-                            <td><h4>Requested Date</h4></td>
-                            <td><h4>Approve/Deny</h4></td>
 
-                        </tr>
-                        <form method="post" action='../request_response/' enctype="multipart/form-data" >
-                        {%csrf_token%}
-                        {% for res in incoming_requests%}
-                        <tr>
-                            <td>{{res.message.sender}}</td>
-                            <td>{{res.parkingspot.street_address}}</td>
-                            <td>{{res.res_date}}</td>
-                            <td><button name="confirm" type="submit" id="confirm" value="{{res.id}}" class="btn btn-primary btn-large">Approve</button>
-                            <button name="deny" type="submit" id="deny" value="{{res.id}}" class="btn btn-primary btn-large">Decline</button></td>
-                        </tr>
-                        {% endfor %}
-                        </form>
-                        {% else %}
-                        <tr>
-                            <td><center>No Pending Requests</center></td>
-                        </tr>
-                        {% endif %}
+                        <table class="table">
+                            {% if outgoing_requests %}
+                                <form method="post" action='../cancel_reservation/' enctype="multipart/form-data" >
+                                    {%csrf_token%}
+                                    <tr>
+                                        <td><h4>Status</h4></td>
+                                        <td><h4>Seller</h4></td>
+                                        <td><h4>Requested Spot</h4></td>
+                                        <td><h4>Requested Date</h4></td>
+                                        <td><h4>Cancel Reservation</h4></td>
+                                    </tr>
+
+                                    {% for res in outgoing_requests%}
+                                        {% if res.has_responded and not res.is_approved%}
+                                            <tr bgcolor = "#cd2626">
+                                                <td>Denied</td>
+                                        {% elif res.has_responded and res.is_approved%}
+                                            <tr bgcolor = "#58FA58">
+                                                <td>Approved</td>
+                                        {% else %}
+                                            <tr bgcolor ="#F3F781">
+                                                <td>Pending</td>
+                                        {% endif %}
+
+                                        <td>{{res.message.receiver}}</td>
+                                        <td>{{res.parkingspot.street_address}}</td>
+                                        <td>{{res.res_date}}</td>
+
+                                        {% if not res.has_responded %}
+                                            <td><button name="cancel" type="submit" id="cancel" value="{{res.id}}" class="btn btn-primary btn-large">Cancel</button>
+                                        {%else%}
+                                            <td>Email Seller Directly</td>
+                                        {% endif %}
+
+                                        </tr>
+                                    {% endfor %}
+                                </form>
+                            {% else %}
+                                <tr>
+                                    <td><center>No Reservations Requested</center></td>
+                                </tr>
+                            {% endif%}
                         </table>
                     </div>
                 </div>
             </div>
-            {% endif %}
+
             <div class="row">
                 <div class="col-md-12">
-                        <div class="panel panel-default">
-                    <!-- Default panel contents -->
+                    <div class="panel panel-default">
+                        <!-- Default panel contents -->
                         <div class="panel-heading">
-                            <h2>Your Pending Reservations</h2>
+                            <h2>Reservation History</h2>
                         </div>
+
                         <table class="table">
-                        {% if outgoing_requests %}
-                        <form method="post" action='../cancel_reservation/' enctype="multipart/form-data" >
-                        {%csrf_token%}
-                        <tr>
-                            <td><h4>Status</h4></td>
-                            <td><h4>Seller</h4></td>
-                            <td><h4>Requested Spot</h4></td>
-                            <td><h4>Requested Date</h4></td>
-                            <td><h4>Cancel Reservation</h4></td>
-                        </tr>
-                        {% for res in outgoing_requests%}
-                        {% if res.has_responded and not res.is_approved%}
-                        <tr bgcolor = "#cd2626">
-                        <td>Denied</td>
-                        {% elif res.has_responded and res.is_approved%}
-                        <tr bgcolor = "#58FA58">
-                         <td>Approved</td>
-                        {% else %}
-                        <tr bgcolor ="#F3F781">
-                        <td>Pending</td>
-                        {% endif %}
-                            <td>{{res.message.receiver}}</td>
-                            <td>{{res.parkingspot.street_address}}</td>
-                            <td>{{res.res_date}}</td>
-                            {% if not res.has_responded %}
-                            <td><button name="cancel" type="submit" id="cancel" value="{{res.id}}" class="btn btn-primary btn-large">Cancel</button>
-                            {%else%}
-                            <td>Email Seller Directly</td>
-                            {% endif %}
-                        </tr>
-                        {% endfor %}
-                        </form>
-                        {% else %}
-                        <tr>
-                            <td><center>No Reservations Requested</center></td>
-                        </tr>
-                        {% endif%}
-                        </table>
-                        </div>
-                </div>
-
-            </div>
-            <div class="row">
-                <div class="col-md-12">
-                        <div class="panel panel-default">
-                    <!-- Default panel contents -->
-                            <div class="panel-heading">
-                                <h2>Reservation History</h2>
-                            </div>
-                            <table class="table">
-                                {%if history%}
+                            {%if history%}
                                 <form method="post" action='../review/' enctype="multipart/form-data" >
-                                {%csrf_token%}
-
+                                    {%csrf_token%}
                                 
-                                <tr>
-                                    <td><h4>Seller</h4></td>
-                                    <td><h4>Requested Spot</h4></td>
-                                    <td><h4>Requested Date</h4></td>
-                                    <td><h4>Review</h4></td>
-                                </tr>
-                                {% for res in history%}
-                                <tr>
-                                    <td>{{res.message.receiver}}</td>
-                                    <td>{{res.parkingspot.street_address}}</td>
-                                    <td>{{res.res_date}}</td>
-                                    {% if not res.reviewed%}
-                                    <td><button name="review" type="submit" id="review" value="{{res.id}}" class="btn btn-primary btn-large">Write Review</button>
-                                    {% else%}
-                                    <td> Already Reviewed</td>
-                                    {% endif %}
-                                </tr>
-                                {% endfor %}
+                                    <tr>
+                                        <td><h4>Seller</h4></td>
+                                        <td><h4>Requested Spot</h4></td>
+                                        <td><h4>Requested Date</h4></td>
+                                        <td><h4>Review</h4></td>
+                                    </tr>
+
+                                    {% for res in history%}
+                                        <tr>
+                                            <td>{{res.message.receiver}}</td>
+                                            <td>{{res.parkingspot.street_address}}</td>
+                                            <td>{{res.res_date}}</td>
+
+                                            {% if not res.reviewed%}
+                                                <td><button name="review" type="submit" id="review" value="{{res.id}}" class="btn btn-primary btn-large">Write Review</button>
+                                            {% else%}
+                                                <td> Already Reviewed</td>
+                                            {% endif %}
+                                        </tr>
+                                    {% endfor %}
                                 </form>
-                                {%else%}
+                            {%else%}
                                 <tr>
                                     <td><center>No Reservation History</center></td>
                                 </tr>
-                                {%endif%}
-                            </table>
-                        </div>
+                            {%endif%}
+                        </table>
+                    </div>
                 </div>
             </div>
         </div>
-  </body>
+    </body>
 </html>

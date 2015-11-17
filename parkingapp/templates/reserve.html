@@ -441,7 +441,8 @@
 
                                     <input  id="confirmButton" 
                                             type="submit"
-                                            value="Send Request">
+                                            value="Send Request"
+                                            onClick="moveReviews('reviewsContainer')">
 
                                     <button id="popUpCancel" 
                                             type="button"
@@ -475,6 +476,10 @@
                     hide('popDiv');
                 }
             };
+
+            function moveReviews(div) {
+                document.getElementById(div).style.top = '195';
+            }
         </script>
 
         <script>
