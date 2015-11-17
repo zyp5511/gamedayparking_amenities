@@ -38,7 +38,8 @@ urlpatterns = [
     url(r'^reservations/', 'userprof.views.reservations'),
     url(r'^request_response/', 'userprof.views.request_response'),
     url(r'^cancel_reservation/', 'userprof.views.cancel_reservation'),
-    url(r'^review/', 'userprof.views.review'),   
+    url(r'^review/', 'userprof.views.review'),
+    url(r'^reply/', 'userprof.views.reply'),
 ]
 
 if settings.DEBUG:

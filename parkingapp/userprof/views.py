@@ -81,7 +81,7 @@ def request_response(request):
       res_msg = ResMessage.objects.get(id=value)
       date = res_msg.res_date
       pspot = res_msg.parkingspot
-      date = date.strftime('%m/%d/%Y')   
+      date = date.strftime('%m/%d/%Y')
       if pspot.get_num_spots(date) > 0:
         res_msg.is_approved = True
         res_msg.has_responded = True
@@ -138,10 +138,10 @@ def reply(request):
         return redirect('/home')
     sender = request.user
     pid = request.POST.get('pid', None)
-    receiver = Users.objects.get(id=pid)
+    receiver = User.objects.get(id=pid)
     subject = request.POST.get('subject', None)
-    text = request.POST.get('text', None)
-    reply = Message(sender=sender, receiver=receiver, subject=subject, mesasge=text)
+    text = request.POST.get('message', None)
+    reply = Message(sender=sender, receiver=receiver, subject=subject, message=text)
     reply.save()
     request.session['message'] = "Message Sent Successfully"
     request.session['message_type'] = True
