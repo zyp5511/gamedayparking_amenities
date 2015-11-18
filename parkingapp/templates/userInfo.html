@@ -272,17 +272,6 @@
                 border-color:lightgrey;
                 border-radius:5px;
             }
-            
-            #pendingResDiv {
-                display:none;
-                height:110%;
-            }
-
-            #tableContainer {
-                display:block;
-                height:100%;
-                overflow-y:auto;
-            }
         </style>
     </head>
 
@@ -325,21 +314,30 @@
                                     <a href="#" onclick="showMessages()"><i class="glyphicon glyphicon-home"></i>Messages </a>
                                 </li>
 
-                                <li class="" id="pendingResTab">
-                                    <a href="#" onclick="showMyReservations()"><i class="glyphicon glyphicon-ok"></i>Pending Reservations </a>
-                                </li>
-
                                 <li class="" id="parkingSpotsTab">
                                     <!-- normal users or admin-->
                                     {% if user.extendeduser.adminuser.registered%}
-                                         <a href="#" onclick="showParkingSpots()"><i class="glyphicon glyphicon-flag"></i>My Parking Spots </a>
+                                         <a href="#" onclick="showParkingSpots()"><i class="glyphicon glyphicon-flag"></i>Parking Spots </a>
                                     {% else %}
                                         
                                     {% endif %}
-                                 </li>
+                                </li>
 
-                                  <li class="" id="accountSettingsTab">
-                                    <a href="../accounts/password/change" onclick="showAccountSettings()"><i class="glyphicon glyphicon-user"></i>Account Settings </a>
+                                <li class="" id="pendingResTab">
+                                    <a href="#" onclick="showPendingReservations()"><i class="glyphicon glyphicon-ok"></i>Pending Reservations </a>
+                                </li>
+
+                                <li class="" id="pendingReqTab">
+                                    <!-- normal users or admin-->
+                                    {% if user.extendeduser.adminuser.registered%}
+                                         <a href="#" onclick="showPendingRequests()"><i class="glyphicon glyphicon-flag"></i>Pending Requests</a>
+                                    {% else %}
+                                        
+                                    {% endif %}
+                                </li>
+
+                                <li class="" id="accountSettingsTab">
+                                    <a href="../accounts/password/change" onclick="showAccountSettings()"><i class="glyphicon glyphicon-user"></i>Account Settings</a>
                                 </li>
                             </ul>
                         </div>
@@ -350,7 +348,7 @@
                 <div class="col-md-9" id="messagesContainer">
                     <!-- BEGIN MESSAGES TAB -->
                     <ul class="nav nav-tabs" id="myTab">
-                        <li class="active"><a href="#message" data-toggle="tab">Messages</a></li>
+                        <li class="active"><a href="#message" data-toggle="tab"><b>Messages</b></a></li>
                     </ul>
 
                     <div class="tab-content" id="messagesDiv">
@@ -360,7 +358,7 @@
                                 <div class="list-group" onClick="pop('popDiv{{x.id}}')">
                                         <a href="#" class="list-group-item">
                                             <span class="name" style="min-width:120px; display:inline-block;">
-                                                <b>{{x.sender}}</b>
+                                                <b style="color:#4da5ff;">{{x.sender}}</b>
                                             </span> 
 
                                             <span class="">
@@ -396,9 +394,7 @@
                                                                 name="owner"
                                                                 value="{{ x.sender }}">
                                                     </div>
-
                                                     <br/>
-
                                                     <div class="fieldContainers">
                                                         <label  class="inputLabels"
                                                                 for="subject">Subject: </label>
@@ -408,9 +404,7 @@
                                                                 class="subject"
                                                                 value="RE: {{ x.subject }}">
                                                     </div>
-
                                                     <br/>
-
                                                     <div class="fieldContainers">
                                                         <label  class="inputLabels"
                                                                 for="message">Message: </label>
@@ -418,9 +412,7 @@
                                                                     name="message"
                                                                     maxlength="3000">&#13;&#10;&#13;&#10;&#13;&#10;-------------------------------------------------&#13;&#10;{{x.message}}</textarea>
                                                     </div>
-
                                                     <br />
-
                                                     <button id="popupCancel" 
                                                             type="button"
                                                             onClick="hide('popDiv{{x.id}}')">Cancel</button>
@@ -440,57 +432,6 @@
                         </div>  
                     </div>
                     <!-- END MESSAGES TAB -->
-
-                    <!-- BEGIN PENDING RESERVATIONS TAB -->
-                    <div class="panel panel-default" id="pendingResDiv">
-                        <!-- Default panel contents -->
-                        <div id="tableContainer">
-                            <table class="table">
-                                {% if outgoing_requests %}
-                                    <form method="post" action='../cancel_reservation/' enctype="multipart/form-data" >
-                                        {%csrf_token%}
-                                        <tr>
-                                            <td><h4>Status</h4></td>
-                                            <td><h4>Seller</h4></td>
-                                            <td><h4>Requested Spot</h4></td>
-                                            <td><h4>Requested Date</h4></td>
-                                            <td><h4>Cancel Reservation</h4></td>
-                                        </tr>
-
-                                        {% for res in outgoing_requests%}
-                                            {% if res.has_responded and not res.is_approved%}
-                                                <tr bgcolor="#cd2626">
-                                                    <td>Denied</td>
-                                            {% elif res.has_responded and res.is_approved%}
-                                                <tr bgcolor="#58FA58">
-                                                    <td>Approved</td>
-                                            {% else %}
-                                                <tr bgcolor="#F3F781">
-                                                    <td>Pending</td>
-                                            {% endif %}
-
-                                            <td>{{res.message.receiver}}</td>
-                                            <td>{{res.parkingspot.street_address}}</td>
-                                            <td>{{res.res_date}}</td>
-
-                                            {% if not res.has_responded %}
-                                                <td><button name="cancel" type="submit" id="cancel" value="{{res.id}}" class="btn btn-primary btn-large">Cancel</button>
-                                            {%else%}
-                                                <td>Email Seller Directly</td>
-                                            {% endif %}
-
-                                            </tr>
-                                        {% endfor %}
-                                    </form>
-                                {% else %}
-                                    <tr>
-                                        <td><center>No Reservations Requested</center></td>
-                                    </tr>
-                                {% endif%}
-                            </table>
-                        </div>
-                    </div>
-                    <!-- END PENDING RESERVATIONS TAB -->
                 </div>
             </div>
         </div>
@@ -515,50 +456,67 @@
             };
 
             function showMessages() {
+                // Change Active Displays
                 document.getElementById('myTab').style.display = 'block';
                 document.getElementById('messagesDiv').style.display = 'block';
-                document.getElementById('pendingResDiv').style.display = 'none';
-                //document.getElementById('parkingSpotsDiv').style.display = 'none';
-                //document.getElementById('accountSettingsDiv').style.display = 'none';
-                document.getElementById('messagesTab').className = 'active';
-                document.getElementById('pendingResTab').className = '';
-                document.getElementById('parkingSpotsTab').className = '';
-                document.getElementById('accountSettingsTab').className = '';
-            }
 
-            function showMyReservations() {
-                document.getElementById('myTab').style.display = 'none';
-                document.getElementById('messagesDiv').style.display = 'none';
-                document.getElementById('pendingResDiv').style.display = 'block';
-                //document.getElementById('parkingSpotsDiv').style.display = 'none';
-                //document.getElementById('accountSettingsDiv').style.display = 'none';
-                document.getElementById('messagesTab').className = '';
-                document.getElementById('pendingResTab').className = 'active';
+                // Change Active Tabs
+                document.getElementById('messagesTab').className = 'active';
                 document.getElementById('parkingSpotsTab').className = '';
+                document.getElementById('pendingResTab').className = '';
+                document.getElementById('pendingReqTab').className = '';
                 document.getElementById('accountSettingsTab').className = '';
             }
 
             function showParkingSpots() {
+                // Change Active Displays
                 document.getElementById('myTab').style.display = 'none';
                 document.getElementById('messagesDiv').style.display = 'none';
-                document.getElementById('pendingResDiv').style.display = 'none';
-                //document.getElementById('parkingSpotsDiv').style.display = 'none';
-                //document.getElementById('accountSettingsDiv').style.display = 'none';
+
+                // Change Active Tabs
                 document.getElementById('messagesTab').className = '';
-                document.getElementById('pendingResTab').className = '';
                 document.getElementById('parkingSpotsTab').className = 'active';
+                document.getElementById('pendingResTab').className = '';
+                document.getElementById('pendingReqTab').className = '';
+                document.getElementById('accountSettingsTab').className = '';
+            }
+
+            function showPendingReservations() {
+                // Change Active Displays
+                document.getElementById('myTab').style.display = 'none';
+                document.getElementById('messagesDiv').style.display = 'none';
+
+                // Change Active Tabs
+                document.getElementById('messagesTab').className = '';
+                document.getElementById('parkingSpotsTab').className = '';
+                document.getElementById('pendingResTab').className = 'active';
+                document.getElementById('pendingReqTab').className = '';
+                document.getElementById('accountSettingsTab').className = '';
+            }
+
+            function showPendingRequests() {
+                // Change Active Displays
+                document.getElementById('myTab').style.display = 'none';
+                document.getElementById('messagesDiv').style.display = 'none';
+
+                // Change Active Tabs
+                document.getElementById('messagesTab').className = '';
+                document.getElementById('parkingSpotsTab').className = '';
+                document.getElementById('pendingResTab').className = '';
+                document.getElementById('pendingReqTab').className = 'active';
                 document.getElementById('accountSettingsTab').className = '';
             }
 
             function showAccountSettings() {
+                // Change Active Displays
                 document.getElementById('myTab').style.display = 'none';
                 document.getElementById('messagesDiv').style.display = 'none';
-                document.getElementById('pendingResDiv').style.display = 'none';
-                //document.getElementById('parkingSpotsDiv').style.display = 'none';
-                //document.getElementById('accountSettingsDiv').style.display = 'none';
+
+                // Change Active Tabs
                 document.getElementById('messagesTab').className = '';
-                document.getElementById('pendingResTab').className = '';
                 document.getElementById('parkingSpotsTab').className = '';
+                document.getElementById('pendingResTab').className = '';
+                document.getElementById('pendingReqTab').className = '';
                 document.getElementById('accountSettingsTab').className = 'active';
             }
         </script>    
