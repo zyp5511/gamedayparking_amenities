@@ -273,7 +273,7 @@
         {% block nav_bar %}{% endblock %}
         <div id="filterContainer">
             <form id="searchBarForm" action="../search/" method="get" name="search_bar">
-                <input id="searchBar" type="text" name="location" value={{prev_search}}>
+                <input id="searchBar" type="text" name="location" value={{ prev_search }}>
                 <input id="parkingday" type="text" name="parkingdate"/>
                 <input id="searchButton" type="submit" data-inline="true" value="Submit"/>
                 {% csrf_token %}
@@ -707,5 +707,4 @@
         <script src="{% static "bower_components/bootstrap/dist/js/bootstrap.min.js" %}"></script>
         <!-- SCRIPTS END -->
     </body>
-    
 </html>
