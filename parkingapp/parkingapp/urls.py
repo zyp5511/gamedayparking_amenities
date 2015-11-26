@@ -40,6 +40,8 @@ urlpatterns = [
     url(r'^cancel_reservation/', 'userprof.views.cancel_reservation'),
     url(r'^review/', 'userprof.views.review'),
     url(r'^reply/', 'userprof.views.reply'),
+    url(r'^payment', 'userprof.views.payment_info'),
+    url(r'^update_payment', 'userprof.views.update_payment')
 ]
 
 if settings.DEBUG:

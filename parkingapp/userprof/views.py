@@ -6,8 +6,38 @@ from userprof.models import ExtendedUser, AdminUser
 from message.models import Message, ResMessage
 from django.shortcuts import get_object_or_404
 import datetime
+import stripe
 
 
+stripe.api_key = "sk_test_kcb7axQdlCrGuI9cpfQNbjfu"
+
+def update_payment(request):
+    token = request.POST['stripeToken']
+    current_user = request.user
+    m_user = get_object_or_404(ExtendedUser, main_user=current_user)
+    if not m_user.stripe_id:
+        print "no customer id"
+        customer = stripe.Customer.create(
+            description = "Gameday UserID = {}".format(current_user.id),
+            metadata = {
+                "app_id" : m_user.main_user_id,
+            }
+        )
+        m_user.stripe_id = customer.id
+        m_user.save()
+    else:
+        customer = stripe.Customer.retrieve(m_user.stripe_id)
+        cards = customer.sources
+        for c in cards.data:
+            customer.sources.retrieve(c['id']).delete()
+
+    customer.sources.create(source=token)
+    request.session['message'] = "Payment Details Updated Successfully"
+    request.session['message_type'] = True
+    return redirect(profile)
+
+def payment_info(request):
+    return render(request, 'payment.html')
 
 def admin_page(request, message=None, success=None):
   if not request.user.is_authenticated():
@@ -52,6 +82,7 @@ def profile(request):
         "messages"  : messages
     }
     return render(request, "userInfo.html", context)
+
 def reservations(request):
     message = request.session.pop('message', None)
     message_type = request.session.pop('message_type', None)
