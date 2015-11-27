@@ -70,7 +70,7 @@ def profile(request):
         parking_spots = []
         incoming_requests = []
 
-    messages = Message.objects.filter(receiver=current_user, is_reservation=False).order_by('date')
+    messages = Message.objects.filter(receiver=current_user, is_reservation=False).order_by('-date')
     outgoing_requests = ResMessage.objects.filter(message__sender=current_user).order_by('res_date')
     print "Messages: {}".format(messages)
     print "Outgoing Requests: {}".format(outgoing_requests)
