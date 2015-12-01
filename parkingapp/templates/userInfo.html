@@ -279,6 +279,13 @@
         {% include "header.html" %}
 
         <div class="container">
+                    {% if message %}
+                        {% if message_type %}
+                            <div id="success1" style="display:flex"  class="alert alert-success" role="alert">{{ message }}</div>
+                        {% else %}
+                            <div id="error1" style="display:flex" class="alert alert-danger" role="alert">{{ message }}</div>
+                        {% endif %}
+                    {%endif%}
             <div class="row profile">
                 <div class="col-md-3">
                     <div class="profile-sidebar">

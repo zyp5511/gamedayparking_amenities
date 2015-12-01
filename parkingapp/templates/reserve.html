@@ -505,8 +505,30 @@
             $('#dp2').datepicker( {
                     format: 'mm/dd/yyyy'
                     });
-            $('#dp2').datepicker('update', new Date());
             $('#dp2').datepicker('update', new Date({{date.2}}, {{date.0}}-1, {{date.1}}));
         </script>
+        <script type="text/javascript" src="https://js.stripe.com/v2/"></script>
+
+
+        <script type="text/javascript">
+            // This identifies your website in the createToken call below
+            Stripe.setPublishableKey('pk_test_6pRNASCoBOKtIshFeQd4XMUh');
+        
+            jQuery(function($) {
+              $('#payment-form').submit(function(event) {
+                var $form = $(this);
+
+                // Disable the submit button to prevent repeated clicks
+                $form.find('button').prop('disabled', true);
+
+                Stripe.card.createToken($form, stripeResponseHandler);
+
+                // Prevent the form from submitting with the default action
+                return false;
+              });
+            });
+        </script>
+
+
 	</body>
 </html>

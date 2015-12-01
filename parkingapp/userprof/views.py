@@ -6,8 +6,38 @@ from userprof.models import ExtendedUser, AdminUser
 from message.models import Message, ResMessage
 from django.shortcuts import get_object_or_404
 import datetime
+import stripe
 
 
+stripe.api_key = "sk_test_kcb7axQdlCrGuI9cpfQNbjfu"
+
+def update_payment(request):
+    token = request.POST['stripeToken']
+    current_user = request.user
+    m_user = get_object_or_404(ExtendedUser, main_user=current_user)
+    if not m_user.stripe_id:
+        print "no customer id"
+        customer = stripe.Customer.create(
+            description = "Gameday UserID = {}".format(current_user.id),
+            metadata = {
+                "app_id" : m_user.main_user_id,
+            }
+        )
+        m_user.stripe_id = customer.id
+        m_user.save()
+    else:
+        customer = stripe.Customer.retrieve(m_user.stripe_id)
+        cards = customer.sources
+        for c in cards.data:
+            customer.sources.retrieve(c['id']).delete()
+
+    customer.sources.create(source=token)
+    request.session['message'] = "Payment Details Updated Successfully"
+    request.session['message_type'] = True
+    return redirect(profile)
+
+def payment_info(request):
+    return render(request, 'payment.html')
 
 def admin_page(request, message=None, success=None):
   if not request.user.is_authenticated():
@@ -40,7 +70,7 @@ def profile(request):
         parking_spots = []
         incoming_requests = []
 
-    messages = Message.objects.filter(receiver=current_user, is_reservation=False).order_by('date')
+    messages = Message.objects.filter(receiver=current_user, is_reservation=False).order_by('-date')
     outgoing_requests = ResMessage.objects.filter(message__sender=current_user).order_by('res_date')
     print "Messages: {}".format(messages)
     print "Outgoing Requests: {}".format(outgoing_requests)
@@ -52,6 +82,7 @@ def profile(request):
         "messages"  : messages
     }
     return render(request, "userInfo.html", context)
+
 def reservations(request):
     message = request.session.pop('message', None)
     message_type = request.session.pop('message_type', None)
@@ -82,17 +113,51 @@ def request_response(request):
       date = res_msg.res_date
       pspot = res_msg.parkingspot
       date = date.strftime('%m/%d/%Y')
+      m_user = get_object_or_404(ExtendedUser, main_user=res_msg.message.sender)
       if pspot.get_num_spots(date) > 0:
-        res_msg.is_approved = True
-        res_msg.has_responded = True
-        pspot.reserve_spot(res_msg.message.sender,date)
-        subject = "Congratulations!  Your parking spot request has been approved."
-        message = "You've successfully booked a parking spot at %s %s, %s for the date: %s." % (pspot.street_address, pspot.city, pspot.state, date)
-        messageO = Message.objects.create(message=message, subject=subject, is_reservation=False, sender=res_msg.message.receiver, receiver=res_msg.message.sender)
-        messageO.save()
-        res_msg.save()
-        msg = "Parking spot approved successfully."
-        success = True
+        # attempt to charge user before accepting them
+        if pspot.cost > 0:
+          try:
+            charge = stripe.Charge.create(
+              amount = pspot.cost*100, #charge is in cents
+              currency="usd",
+              customer=m_user.stripe_id,
+              metadata = {
+                "res_msg id" : res_msg.id,
+              }
+            )
+          except stripe.error.CardError, e:
+            # handle card being declined
+            msg = "The users card was declined. Cannot accept this request at this time. The user has been notified to update their payment information"
+            message = """
+              {owner} attempted to approve your  reservation request for a parking spot at {address}, but was unable to
+              becuase your payment information was rejected. Please update your payment information, which can be done so
+              through your user profile settings
+              """.format(owner=res_msg.message.receiver, address=pspot)
+            subject = "Your payment information is out of date"
+            message0 = Message.objects.create(
+              message=message,
+              subject=subject,
+              is_reservation=False,
+              sender=res_msg.message.receiver,
+              receiver=res_msg.message.sender
+            )
+            message0.save()
+            success = False
+            request.session['message'] = msg
+            request.session['message_type'] = success
+            return redirect('/reservations')
+          res_msg.transaction_id = charge.id
+          res_msg.is_approved = True
+          res_msg.has_responded = True
+          pspot.reserve_spot(res_msg.message.sender,date)
+          subject = "Congratulations!  Your parking spot request has been approved."
+          message = "You've successfully booked a parking spot at %s %s, %s for the date: %s." % (pspot.street_address, pspot.city, pspot.state, date)
+          messageO = Message.objects.create(message=message, subject=subject, is_reservation=False, sender=res_msg.message.receiver, receiver=res_msg.message.sender)
+          messageO.save()
+          res_msg.save()
+          msg = "Parking spot approved successfully."
+          success = True
       else:
         msg = "You've overbooked for that date, or you haven't opened that date for booking.  You can increase your number of spots available."
         success = False

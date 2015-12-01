@@ -26,6 +26,7 @@ class ResMessage(models.Model):
   is_approved = models.BooleanField(default=False)
   has_responded = models.BooleanField(default=False)
   reviewed = models.ForeignKey(Review, null=True, blank=True)
+  transaction_id = models.CharField(max_length=255, null=True, blank=True)
 
   def __str__(self):
     return "%s -> %s, %s" % (self.message.sender, self.message.receiver, self.parkingspot)

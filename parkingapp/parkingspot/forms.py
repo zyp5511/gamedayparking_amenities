@@ -12,7 +12,6 @@ class ImageUploadForm(forms.Form):
     image = forms.ImageField()
 
 class ParkingSpotAdd(forms.ModelForm):
-
   class Meta:
     model = ParkingSpot
     exclude = ['location', 'amenities', 'parking_spot_avail', 'owner']
