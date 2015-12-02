@@ -15,7 +15,7 @@
             html, body {
                 background-color:lightgrey;
                 width:100%;
-                height:100%;
+                min-height:100%;
                 margin:0;
                 padding:0;
             }
@@ -178,7 +178,7 @@
             #descriptionContainer {
                 display:inline-block;
                 width:100%;
-                height:70%;
+                max-height:70%;
                 overflow-y:auto;
                 margin-bottom:5%;
             }
@@ -374,20 +374,25 @@
                     <span id="addressHeader"><b>{{ parkingspot.street_address }}, {{ parkingspot.city }}, {{ parkingspot.state }}, {{ parkingspot.zipcode }}</b></span>
                     <span id="ownerHeader"><b> - {{ parkingspot.owner }}</b></span>
                     <span class="stars">{{ parkingspot.get_avg_rating }}</span></br>
+
                     <div id="reviewsContainer">
                         <!-- BEGIN REVIEWS LISTINGS -->
-                        {% for x in reviews %}
-                            <div class="singleReviewContainer">
-                                <div style="width:100%;margin-bottom:1px;">
-                                    <span class="reviewReviewer"><b>{{ x.reviewer }}</b></span>
-                                    <span class="reviewHeadline"> | {{ x.headline }}</span>
+                        {% if reviews %}
+                            {% for x in reviews %}
+                                <div class="singleReviewContainer">
+                                    <div style="width:100%;margin-bottom:1px;">
+                                        <span class="reviewReviewer"><b>{{ x.reviewer }}</b></span>
+                                        <span class="reviewHeadline"> | {{ x.headline }}</span>
+                                    </div>
+                                    <span><span class="reviewStars">{{ x.rating }}</span></span>
+                                    <br/>
+                                    {{ x.review_text }}
+                                    <hr>
                                 </div>
-                                <span><span class="reviewStars">{{ x.rating }}</span></span>
-                                <br/>
-                                {{ x.review_text }}
-                                <hr>
-                            </div>
-                        {%endfor%}
+                            {% endfor %}
+                        {% else %}
+                            No Reviews
+                        {% endif %}
                         <!-- END REVIEWS LISTINGS -->
                     </div>
                     

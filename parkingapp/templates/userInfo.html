@@ -6,6 +6,10 @@
 
         <link   rel="stylesheet" 
                 href="{% static "bower_components/bootstrap/dist/css/bootstrap.min.css" %}">
+
+        <script src="{% static "bower_components/jquery/dist/jquery.min.js" %}"></script>
+        <script src="{% static "bower_components/bootstrap/dist/js/bootstrap.min.js" %}"></script>
+        <script src="{% static "bower_components/bootstrap-datepicker-1.5.0-dist/js/bootstrap-datepicker.js" %}"></script>
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
         <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js" 
                 integrity="sha512-K1qjQ+NcF2TYO/eI3M6v8EiNYZfA95pQumfvcVrTHtwQVDG+aHRqLi/ETn2uB+1JqwYqVG3LIvdm9lj6imS/pQ==" 
@@ -272,6 +276,86 @@
                 border-color:lightgrey;
                 border-radius:5px;
             }
+
+            /* BEGIN PARKING SPOTS CONTAINER */
+
+            #parkingSpotsContainer {
+                display:none;
+            }
+
+            #parkingContainer {
+                text-align:center;
+                margin-top:30px;
+                width:100%;
+            }
+
+            .parkingSpots {
+                display:inline-block;
+                width:42%; 
+                margin-bottom:30px;
+                margin-right:15px;
+                margin-left:15px;
+                border-style:solid;
+                border-color:grey;
+                border-width:1px;
+                -webkit-box-shadow: 0 8px 6px -7px grey;
+                -moz-box-shadow: 0 8px 6px -7px grey;
+                box-shadow: 0 8px 6px -7px grey;
+            }
+
+            .parkingImageContainer, .parkingImage {
+                display:inline-block; 
+                width:100%; 
+                height:175px; 
+                float:left;
+                border-style:solid;
+                border-color:lightgrey;
+                border-width:0px;
+                border-bottom-width:1px;
+            }
+
+            .streetAddress {
+                float:left;
+                clear:right;
+                padding-left:10px;
+                text-decoration:underline;
+            }
+
+            .popUpLink:visited  {color:black; text-decoration:none; background-color:none;}
+            .popUpLink:link     {color:black; text-decoration:none; background-color:none;}
+            .popUpLink:hover    {color:blue; text-decoration:none; background-color:none;}
+            .popUpLink:active   {color:red; text-decoration:underline; background-color:none;}
+
+            .reviewRating {
+                float:left;
+                clear:left;
+                padding-left:10px;
+            }
+
+            /*
+            .descriptionContainer {
+                display:inline-block;
+                width:100%;
+                height:22px;
+                text-align:left;
+                float:left;
+                clear:left;
+                padding-left:10px;
+                padding-right:10px;
+                font-style:italic;
+                overflow-y:hidden;
+            }
+            */
+
+            .reserveButtonContainer {
+                float:left;
+                clear:left;
+                padding-left:10px;
+                font-style:italic;
+                padding-bottom:10px;
+            }
+
+            /* END PARKING SPOTS CONTAINER */
         </style>
     </head>
 
@@ -279,13 +363,14 @@
         {% include "header.html" %}
 
         <div class="container">
-                    {% if message %}
-                        {% if message_type %}
-                            <div id="success1" style="display:flex"  class="alert alert-success" role="alert">{{ message }}</div>
-                        {% else %}
-                            <div id="error1" style="display:flex" class="alert alert-danger" role="alert">{{ message }}</div>
-                        {% endif %}
-                    {%endif%}
+            {% if message %}
+                {% if message_type %}
+                    <div id="success1" style="display:flex"  class="alert alert-success" role="alert">{{ message }}</div>
+                {% else %}
+                    <div id="error1" style="display:flex" class="alert alert-danger" role="alert">{{ message }}</div>
+                {% endif %}
+            {%endif%}
+
             <div class="row profile">
                 <div class="col-md-3">
                     <div class="profile-sidebar">
@@ -321,27 +406,31 @@
                                     <a href="#" onclick="showMessages()"><i class="glyphicon glyphicon-home"></i>Messages </a>
                                 </li>
 
-                                <li class="" id="parkingSpotsTab">
-                                    <!-- normal users or admin-->
-                                    {% if user.extendeduser.adminuser.registered%}
-                                         <a href="#" onclick="showParkingSpots()"><i class="glyphicon glyphicon-flag"></i>Parking Spots </a>
-                                    {% else %}
-                                        
-                                    {% endif %}
-                                </li>
+                                {% if user.extendeduser.adminuser.registered %}
+                                    <li class="" id="parkingSpotsTab">
+                                        <!-- normal users or admin-->
+                                        {% if user.extendeduser.adminuser.registered%}
+                                             <a href="#" onclick="showParkingSpots()"><i class="glyphicon glyphicon-flag"></i>Parking Spots </a>
+                                        {% else %}
+                                            
+                                        {% endif %}
+                                    </li>
+                                {% endif %}
 
                                 <li class="" id="pendingResTab">
                                     <a href="#" onclick="showPendingReservations()"><i class="glyphicon glyphicon-ok"></i>Pending Reservations </a>
                                 </li>
 
-                                <li class="" id="pendingReqTab">
-                                    <!-- normal users or admin-->
-                                    {% if user.extendeduser.adminuser.registered%}
-                                         <a href="#" onclick="showPendingRequests()"><i class="glyphicon glyphicon-flag"></i>Pending Requests</a>
-                                    {% else %}
-                                        
-                                    {% endif %}
-                                </li>
+                                {% if user.extendeduser.adminuser.registered %}
+                                    <li class="" id="pendingReqTab">
+                                        <!-- normal users or admin-->
+                                        {% if user.extendeduser.adminuser.registered%}
+                                             <a href="#" onclick="showPendingRequests()"><i class="glyphicon glyphicon-flag"></i>Pending Requests</a>
+                                        {% else %}
+                                            
+                                        {% endif %}
+                                    </li>
+                                {% endif %}
 
                                 <li class="" id="accountSettingsTab">
                                     <a href="../accounts/password/change" onclick="showAccountSettings()"><i class="glyphicon glyphicon-user"></i>Account Settings</a>
@@ -352,8 +441,8 @@
                     </div>
                 </div>
 
+                <!-- BEGIN MESSAGES TAB -->
                 <div class="col-md-9" id="messagesContainer">
-                    <!-- BEGIN MESSAGES TAB -->
                     <ul class="nav nav-tabs" id="myTab">
                         <li class="active"><a href="#message" data-toggle="tab"><b>Messages</b></a></li>
                     </ul>
@@ -434,12 +523,61 @@
                                     </div>
                                 {% endfor %}
                             {% else %}
-                                  <h3> NO MESSAGE</h3>
+                                  <h3>You have no messages</h3>
                             {% endif %}
                         </div>  
                     </div>
-                    <!-- END MESSAGES TAB -->
                 </div>
+                <!-- END MESSAGES TAB -->
+
+                <!-- BEGIN PARKING SPOTS TAB -->
+                {% if user.extendeduser.adminuser.registered %}
+                    <div class="col-md-9" id="parkingSpotsContainer">
+                        <ul class="nav nav-tabs" id="myTab">
+                            <li class="active"><a href="#" data-toggle="tab"><b>Your Parking Spots</b></a></li>
+                        </ul>
+
+                        <div id="parkingContainer">
+                            {% for x in parkingspots %}
+                                <div class="parkingSpots">
+                                    <p class="parkingImageContainer">
+                                        <img class="parkingImage" src="{{x.photos.url}}" alt="Parking Image">
+                                    </p>
+                                    <a class="popUpLink" href="#" onClick="pop('popDiv')">
+                                        <p class="streetAddress">{{ x.street_address }}, {{ x.city }}, {{ x.state }}</p>
+                                    </a>
+                                    <p class="reviewRating"><b>Rating:&nbsp
+                                        <span class="stars">{{x.get_avg_rating}}</span></b>
+                                    </p>
+
+                                    <!--
+                                    <p class="descriptionContainer">{{ x.description }}</p>
+                                    -->
+
+                                    <div id="popDiv" class="ontop">
+                                        <div class="popup">
+                                            <h4> {{x.street_address}}</h4>
+                                            <img class="parkingImage" src="{{x.photos.url}}" alt="Parking Image">
+                                            <p><b>Cost:</b></p>
+                                            <p>{{x.cost}}</p>
+                                            <p><b>Amenities:</b></p><p>
+                                                {% for key, value in x.amenities.items %}
+                                                    {% if value %}
+                                                        {{key}}
+                                                    {% endif %}
+                                                {% endfor %}
+                                            </p>
+                                            <p><b>Description:</b></p>
+                                            <p>{{x.description}}</p>
+                                            <p><a href="#" onClick="hide('popDiv')">Close</a></p>
+                                        </div>
+                                    </div>
+                                </div>
+                            {% endfor %}
+                        </div>
+                    </div>
+                {% endif %}
+                <!-- END PARKING SPOTS TAB -->
             </div>
         </div>
 
@@ -464,8 +602,8 @@
 
             function showMessages() {
                 // Change Active Displays
-                document.getElementById('myTab').style.display = 'block';
-                document.getElementById('messagesDiv').style.display = 'block';
+                document.getElementById('messagesContainer').style.display = 'block';
+                document.getElementById('parkingSpotsContainer').style.display = 'none';
 
                 // Change Active Tabs
                 document.getElementById('messagesTab').className = 'active';
@@ -477,8 +615,8 @@
 
             function showParkingSpots() {
                 // Change Active Displays
-                document.getElementById('myTab').style.display = 'none';
-                document.getElementById('messagesDiv').style.display = 'none';
+                document.getElementById('messagesContainer').style.display = 'none';
+                document.getElementById('parkingSpotsContainer').style.display = 'block';
 
                 // Change Active Tabs
                 document.getElementById('messagesTab').className = '';
@@ -490,8 +628,8 @@
 
             function showPendingReservations() {
                 // Change Active Displays
-                document.getElementById('myTab').style.display = 'none';
-                document.getElementById('messagesDiv').style.display = 'none';
+                document.getElementById('messagesContainer').style.display = 'none';
+                document.getElementById('parkingSpotsContainer').style.display = 'none';
 
                 // Change Active Tabs
                 document.getElementById('messagesTab').className = '';
@@ -503,8 +641,8 @@
 
             function showPendingRequests() {
                 // Change Active Displays
-                document.getElementById('myTab').style.display = 'none';
-                document.getElementById('messagesDiv').style.display = 'none';
+                document.getElementById('messagesContainer').style.display = 'none';
+                document.getElementById('parkingSpotsContainer').style.display = 'none';
 
                 // Change Active Tabs
                 document.getElementById('messagesTab').className = '';
@@ -516,8 +654,8 @@
 
             function showAccountSettings() {
                 // Change Active Displays
-                document.getElementById('myTab').style.display = 'none';
-                document.getElementById('messagesDiv').style.display = 'none';
+                document.getElementById('messagesContainer').style.display = 'none';
+                document.getElementById('parkingSpotsContainer').style.display = 'none';
 
                 // Change Active Tabs
                 document.getElementById('messagesTab').className = '';
