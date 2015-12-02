@@ -79,7 +79,8 @@ def profile(request):
         "message_type" : message_type,
         "incoming requests" : incoming_requests,
         "outgoing_requests" : outgoing_requests,
-        "messages"  : messages
+        "messages"  : messages,
+        "parkingspots" : parkingspots,
     }
     return render(request, "userInfo.html", context)
 
