@@ -277,6 +277,72 @@
                 border-radius:5px;
             }
 
+            /* BEGIN RESERVATIONS CONTAINER */
+
+            #reservationsContainer {
+                display:none;
+            }
+
+            td span {
+                display:inline-block;
+                margin-top:10px;
+            }
+
+            td button {
+                display:inline-block;
+                margin-top:3px;
+            }
+
+            .reservationsHeaderCell {
+                text-align:center;
+                font-weight:bold;
+            }
+
+            .ownerCell {
+                text-align:center;
+                color:#4da5ff;
+            }
+
+            .stayCell {
+                text-align:center;
+            }
+
+            .statusCell {
+                text-align:center;
+            }
+
+            .cancelCell {
+                text-align:center;
+            }
+
+            /* END RESERVATIONS CONTAINER */
+
+            /* BEGIN REQUESTS CONTAINER */
+
+            #requestsContainer {
+                display:none;
+            }
+
+            .requestsHeaderCell {
+                text-align:center;
+                font-weight:bold;
+            }
+
+            .userCell {
+                text-align:center;
+                color:#4da5ff;
+            }
+
+            .spotCell {
+                text-align:center;
+            }
+
+            .dateCell {
+                text-align:center;
+            }
+
+            /* END REQUESTS CONTAINER */
+
             /* BEGIN PARKING SPOTS CONTAINER */
 
             #parkingSpotsContainer {
@@ -355,6 +421,19 @@
                 padding-bottom:10px;
             }
 
+            span.stars, span.stars span {
+                display: inline-block;
+                background: url({% static "media/stars.png" %}) 0 -16px repeat-x;
+                width: 80px;
+                height: 16px;
+                text-align:left;
+            }
+
+            span.stars span {
+                max-width:80px;
+                background-position: 0 0;
+            }
+
             /* END PARKING SPOTS CONTAINER */
         </style>
     </head>
@@ -406,17 +485,6 @@
                                     <a href="#" onclick="showMessages()"><i class="glyphicon glyphicon-home"></i>Messages </a>
                                 </li>
 
-                                {% if user.extendeduser.adminuser.registered %}
-                                    <li class="" id="parkingSpotsTab">
-                                        <!-- normal users or admin-->
-                                        {% if user.extendeduser.adminuser.registered%}
-                                             <a href="#" onclick="showParkingSpots()"><i class="glyphicon glyphicon-flag"></i>Parking Spots </a>
-                                        {% else %}
-                                            
-                                        {% endif %}
-                                    </li>
-                                {% endif %}
-
                                 <li class="" id="pendingResTab">
                                     <a href="#" onclick="showPendingReservations()"><i class="glyphicon glyphicon-ok"></i>Pending Reservations </a>
                                 </li>
@@ -426,6 +494,17 @@
                                         <!-- normal users or admin-->
                                         {% if user.extendeduser.adminuser.registered%}
                                              <a href="#" onclick="showPendingRequests()"><i class="glyphicon glyphicon-flag"></i>Pending Requests</a>
+                                        {% else %}
+                                            
+                                        {% endif %}
+                                    </li>
+                                {% endif %}
+
+                                {% if user.extendeduser.adminuser.registered %}
+                                    <li class="" id="parkingSpotsTab">
+                                        <!-- normal users or admin-->
+                                        {% if user.extendeduser.adminuser.registered%}
+                                             <a href="#" onclick="showParkingSpots()"><i class="glyphicon glyphicon-flag"></i>Parking Spots </a>
                                         {% else %}
                                             
                                         {% endif %}
@@ -443,8 +522,8 @@
 
                 <!-- BEGIN MESSAGES TAB -->
                 <div class="col-md-9" id="messagesContainer">
-                    <ul class="nav nav-tabs" id="myTab">
-                        <li class="active"><a href="#message" data-toggle="tab"><b>Messages</b></a></li>
+                    <ul class="nav nav-tabs" id="myTab" style="margin-bottom:-1px;">
+                        <li class="active"><a href="#message" data-toggle="tab"><b>Your Messages</b></a></li>
                     </ul>
 
                     <div class="tab-content" id="messagesDiv">
@@ -530,6 +609,141 @@
                 </div>
                 <!-- END MESSAGES TAB -->
 
+                <!-- BEGIN RESERVATIONS TAB -->
+                <div class="col-md-9" id="reservationsContainer">
+                    <ul class="nav nav-tabs" id="myTab" style="margin-bottom:-1px;">
+                        <li class="active"><a href="#message" data-toggle="tab"><b>Your Pending Reservations</b></a></li>
+                    </ul>
+
+                    <table class="table">
+                        {% if outgoing_requests %}
+                            <form method="post" action='../cancel_reservation/' enctype="multipart/form-data" >
+                                {%csrf_token%}
+                                <tr>
+                                    <td class="reservationsHeaderCell">Owner</td>
+                                    <td class="reservationsHeaderCell">Stay</td>
+                                    <td class="reservationsHeaderCell">Status</td>
+                                    <td class="reservationsHeaderCell">Cancel Reservation</td>
+                                </tr>
+
+                                {% for res in outgoing_requests %}
+                                    {% if res.has_responded and not res.is_approved%}
+                                        <tr>
+                                            <td class="ownerCell">
+                                                <span>{{res.message.receiver}}</span>
+                                            </td>
+
+                                            <td class="stayCell">
+                                                <i>{{res.res_date}}</i>
+                                                <br />
+                                                {{res.parkingspot.street_address}}
+                                            </td>
+
+                                            <td class="statusCell" bgcolor = "#cd2626">
+                                                <span>Denied</span>
+                                            </td>
+                                    {% elif res.has_responded and res.is_approved%}
+                                        <tr>
+                                            <td class="ownerCell">
+                                                <span>{{res.message.receiver}}</span>
+                                            </td>
+
+                                            <td class="stayCell">
+                                                <i>{{res.res_date}}</i>
+                                                <br />
+                                                {{res.parkingspot.street_address}}
+                                            </td>
+
+                                            <td class="statusCell" bgcolor = "#58FA58">
+                                                <span>Approved</span>
+                                            </td>
+                                    {% else %}
+                                        <tr>
+                                            <td class="ownerCell">
+                                                <span>{{res.message.receiver}}</span>
+                                            </td>
+
+                                            <td class="stayCell">
+                                                <i>{{res.res_date}}</i>
+                                                <br />
+                                                {{res.parkingspot.street_address}}
+                                            </td>
+
+                                            <td class="statusCell" bgcolor ="#F3F781">
+                                                <span>Pending</span>
+                                            </td>
+                                    {% endif %}
+
+                                    {% if not res.has_responded %}
+                                        <td class="cancelCell">
+                                            <button name="cancel" type="submit" id="cancel" value="{{res.id}}" class="btn btn-primary btn-large">Cancel</button>
+                                        </td>
+                                    {%else%}
+                                        <td class="cancelCell">
+                                            <span>Email Seller Directly</span>
+                                        </td>
+                                    {% endif %}
+
+                                    </tr>
+                                {% endfor %}
+                            </form>
+                        {% else %}
+                            <tr>
+                                <td><center>No Reservations Requested</center></td>
+                            </tr>
+                        {% endif%}
+                    </table>
+                </div>
+                <!-- END RESERVATIONS TAB -->
+
+                <!-- BEGIN REQUESTS TAB -->
+                {% if user.extendeduser.adminuser.registered %}
+                    <div class="col-md-9" id="requestsContainer">
+                        <ul class="nav nav-tabs" id="myTab" style="margin-bottom:-1px;">
+                            <li class="active"><a href="#" data-toggle="tab"><b>Your Pending Requests</b></a></li>
+                        </ul>
+
+                        <table class="table">
+                            {% if incoming_requests %}
+                                <tr>
+                                    <td class="requestsHeaderCell">User</td>
+                                    <td class="requestsHeaderCell">Requested Spot</td>
+                                    <td class="requestsHeaderCell">Requested Date</td>
+                                    <td class="requestsHeaderCell">Approve/Deny</td>
+                                </tr>
+
+                                <form method="post" action='../request_response/' enctype="multipart/form-data" >
+                                    {%csrf_token%}
+                                    {% for res in incoming_requests %}
+                                        <tr>
+                                            <td class="userCell">{{res.message.sender}}</td>
+                                            <td class="spotCell">{{res.parkingspot.street_address}}</td>
+                                            <td class="dateCell"><i>{{res.res_date}}</i></td>
+                                            <td class="">
+                                                <button name="confirm" 
+                                                        type="submit" 
+                                                        id="confirm" 
+                                                        value="{{res.id}}" 
+                                                        class="btn btn-primary btn-large">Approve</button>
+                                                <button name="deny" 
+                                                        type="submit" 
+                                                        id="deny" 
+                                                        value="{{res.id}}" 
+                                                        class="btn btn-primary btn-large">Decline</button>
+                                            </td>
+                                        </tr>
+                                    {% endfor %}
+                                </form>
+                            {% else %}
+                                <tr>
+                                    <td><center>No Pending Requests</center></td>
+                                </tr>
+                            {% endif %}
+                        </table>
+                    </div>
+                {% endif %}
+                <!-- END REQUESTS TAB -->
+
                 <!-- BEGIN PARKING SPOTS TAB -->
                 {% if user.extendeduser.adminuser.registered %}
                     <div class="col-md-9" id="parkingSpotsContainer">
@@ -538,42 +752,44 @@
                         </ul>
 
                         <div id="parkingContainer">
-                            {% for x in parkingspots %}
-                                <div class="parkingSpots">
-                                    <p class="parkingImageContainer">
-                                        <img class="parkingImage" src="{{x.photos.url}}" alt="Parking Image">
-                                    </p>
-                                    <a class="popUpLink" href="#" onClick="pop('popDiv')">
-                                        <p class="streetAddress">{{ x.street_address }}, {{ x.city }}, {{ x.state }}</p>
-                                    </a>
-                                    <p class="reviewRating"><b>Rating:&nbsp
-                                        <span class="stars">{{x.get_avg_rating}}</span></b>
-                                    </p>
-
-                                    <!--
-                                    <p class="descriptionContainer">{{ x.description }}</p>
-                                    -->
-
-                                    <div id="popDiv" class="ontop">
-                                        <div class="popup">
-                                            <h4> {{x.street_address}}</h4>
+                            {% if parkingspots %}
+                                {% for x in parkingspots %}
+                                    <div class="parkingSpots">
+                                        <p class="parkingImageContainer">
                                             <img class="parkingImage" src="{{x.photos.url}}" alt="Parking Image">
-                                            <p><b>Cost:</b></p>
-                                            <p>{{x.cost}}</p>
-                                            <p><b>Amenities:</b></p><p>
-                                                {% for key, value in x.amenities.items %}
-                                                    {% if value %}
-                                                        {{key}}
-                                                    {% endif %}
-                                                {% endfor %}
-                                            </p>
-                                            <p><b>Description:</b></p>
-                                            <p>{{x.description}}</p>
-                                            <p><a href="#" onClick="hide('popDiv')">Close</a></p>
+                                        </p>
+                                        <a class="popUpLink" href="#" onClick="pop('popDiv')">
+                                            <p class="streetAddress">{{ x.street_address }}, {{ x.city }}, {{ x.state }}</p>
+                                        </a>
+                                        <p class="reviewRating"><b>Rating:&nbsp
+                                            <span class="stars">{{x.get_avg_rating}}</span></b>
+                                        </p>
+
+                                        <!--
+                                        <p class="descriptionContainer">{{ x.description }}</p>
+                                        -->
+
+                                        <div id="popDiv" class="ontop">
+                                            <div class="popup">
+                                                <h4> {{x.street_address}}</h4>
+                                                <img class="parkingImage" src="{{x.photos.url}}" alt="Parking Image">
+                                                <p><b>Cost:</b></p>
+                                                <p>{{x.cost}}</p>
+                                                <p><b>Amenities:</b></p><p>
+                                                    {% for key, value in x.amenities.items %}
+                                                        {% if value %}
+                                                            {{key}}
+                                                        {% endif %}
+                                                    {% endfor %}
+                                                </p>
+                                                <p><b>Description:</b></p>
+                                                <p>{{x.description}}</p>
+                                                <p><a href="#" onClick="hide('popDiv')">Close</a></p>
+                                            </div>
                                         </div>
                                     </div>
-                                </div>
-                            {% endfor %}
+                                {% endfor %}
+                            {% endif %}
                         </div>
                     </div>
                 {% endif %}
@@ -603,67 +819,83 @@
             function showMessages() {
                 // Change Active Displays
                 document.getElementById('messagesContainer').style.display = 'block';
+                document.getElementById('reservationsContainer').style.display = 'none';
+                document.getElementById('requestsContainer').style.display = 'none';
                 document.getElementById('parkingSpotsContainer').style.display = 'none';
 
                 // Change Active Tabs
                 document.getElementById('messagesTab').className = 'active';
+                document.getElementById('pendingResTab').className = '';
+                document.getElementById('pendingReqTab').className = '';
                 document.getElementById('parkingSpotsTab').className = '';
-                document.getElementById('pendingResTab').className = '';
-                document.getElementById('pendingReqTab').className = '';
-                document.getElementById('accountSettingsTab').className = '';
-            }
-
-            function showParkingSpots() {
-                // Change Active Displays
-                document.getElementById('messagesContainer').style.display = 'none';
-                document.getElementById('parkingSpotsContainer').style.display = 'block';
-
-                // Change Active Tabs
-                document.getElementById('messagesTab').className = '';
-                document.getElementById('parkingSpotsTab').className = 'active';
-                document.getElementById('pendingResTab').className = '';
-                document.getElementById('pendingReqTab').className = '';
                 document.getElementById('accountSettingsTab').className = '';
             }
 
             function showPendingReservations() {
                 // Change Active Displays
                 document.getElementById('messagesContainer').style.display = 'none';
+                document.getElementById('reservationsContainer').style.display = 'block';
+                document.getElementById('requestsContainer').style.display = 'none';
                 document.getElementById('parkingSpotsContainer').style.display = 'none';
 
                 // Change Active Tabs
                 document.getElementById('messagesTab').className = '';
-                document.getElementById('parkingSpotsTab').className = '';
                 document.getElementById('pendingResTab').className = 'active';
                 document.getElementById('pendingReqTab').className = '';
+                document.getElementById('parkingSpotsTab').className = '';
                 document.getElementById('accountSettingsTab').className = '';
             }
 
             function showPendingRequests() {
                 // Change Active Displays
                 document.getElementById('messagesContainer').style.display = 'none';
+                document.getElementById('reservationsContainer').style.display = 'none';
+                document.getElementById('requestsContainer').style.display = 'block';
                 document.getElementById('parkingSpotsContainer').style.display = 'none';
 
                 // Change Active Tabs
                 document.getElementById('messagesTab').className = '';
-                document.getElementById('parkingSpotsTab').className = '';
                 document.getElementById('pendingResTab').className = '';
                 document.getElementById('pendingReqTab').className = 'active';
+                document.getElementById('parkingSpotsTab').className = '';
+                document.getElementById('accountSettingsTab').className = '';
+            }
+
+            function showParkingSpots() {
+                // Change Active Displays
+                document.getElementById('messagesContainer').style.display = 'none';
+                document.getElementById('reservationsContainer').style.display = 'none';
+                document.getElementById('requestsContainer').style.display = 'none';
+                document.getElementById('parkingSpotsContainer').style.display = 'block';
+
+                // Change Active Tabs
+                document.getElementById('messagesTab').className = '';
+                document.getElementById('pendingResTab').className = '';
+                document.getElementById('pendingReqTab').className = '';
+                document.getElementById('parkingSpotsTab').className = 'active';
                 document.getElementById('accountSettingsTab').className = '';
             }
 
             function showAccountSettings() {
                 // Change Active Displays
                 document.getElementById('messagesContainer').style.display = 'none';
+                document.getElementById('reservationsContainer').style.display = 'none';
+                document.getElementById('requestsContainer').style.display = 'none';
                 document.getElementById('parkingSpotsContainer').style.display = 'none';
 
                 // Change Active Tabs
                 document.getElementById('messagesTab').className = '';
-                document.getElementById('parkingSpotsTab').className = '';
                 document.getElementById('pendingResTab').className = '';
                 document.getElementById('pendingReqTab').className = '';
+                document.getElementById('parkingSpotsTab').className = '';
                 document.getElementById('accountSettingsTab').className = 'active';
             }
+        </script>
+
+        <script>
+            $('.stars').each(function() {
+                    $(this).html($('<span/>').width(Math.max(0, (Math.min(5, parseFloat($(this).html())))) * 16));
+            });
         </script>    
     </body>
 </html> 
