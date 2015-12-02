@@ -126,7 +126,7 @@ def request_response(request):
                 "res_msg id" : res_msg.id,
               }
             )
-          except stripe.error.CardError, e:
+          except (stripe.error.CardError, stripe.error.InvalidRequestError):
             # handle card being declined
             msg = "The users card was declined. Cannot accept this request at this time. The user has been notified to update their payment information"
             message = """
