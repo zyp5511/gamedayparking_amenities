@@ -147,7 +147,7 @@ def request_response(request):
             success = False
             request.session['message'] = msg
             request.session['message_type'] = success
-            return redirect('/reservations')
+            return redirect(profile)
           res_msg.transaction_id = charge.id
           res_msg.is_approved = True
           res_msg.has_responded = True
@@ -164,7 +164,7 @@ def request_response(request):
         success = False
       request.session['message'] = msg
       request.session['message_type'] = success
-      return redirect('/reservations')
+      return redirect(profile)
     elif request.POST.get("deny"):
       value = request.POST['deny']
       res_msg = ResMessage.objects.get(id=value)
@@ -181,7 +181,7 @@ def request_response(request):
       success = True
       request.session['message'] = msg
       request.session['message_type'] = success
-      return redirect('/reservations')
+      return redirect(profile)
 
 
 def cancel_reservation(request):
@@ -195,7 +195,7 @@ def cancel_reservation(request):
     success = True
     request.session['message'] = msg
     request.session['message_type'] = success
-    return redirect('/reservations')
+    return redirect(profile)
 
 
 
