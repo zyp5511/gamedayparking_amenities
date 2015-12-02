@@ -10,7 +10,7 @@ from localflavor.us.forms import USPhoneNumberField
 class ExtendedUser(models.Model):
   main_user = models.OneToOneField(User, primary_key=True)
   phone_number = USPhoneNumberField()
-  stripe_id = models.CharField(default=None, max_length=255, blank=True)
+  stripe_id = models.CharField(default=None, max_length=255, blank=True, null=True)
   def __str__(self):
     return self.main_user.username
 
