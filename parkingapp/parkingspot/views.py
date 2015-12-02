@@ -201,9 +201,11 @@ def finalize_reserve(request):
     parkingspot_id = int(request.POST.get('pid'))
     parkingspot = ParkingSpot.objects.get(id=parkingspot_id)
     date = request.POST.get('dp1')
+    num_spots = request.POST.get('number_spots')
+    avail_spots = parkingspot.get_num_spots(date)
     # check if spots available
-    if parkingspot.get_num_spots(date) <= 0:
-        request.session['message'] = "Reservation Failed. No space available for that date"
+    if avail_spots < int(num_spots):
+        request.session['message'] = "Reservation Failed. Only {} available for that date".format(avail_spots)
         request.session['message_type'] = False
         return redirect(reserve_request)
     else:
