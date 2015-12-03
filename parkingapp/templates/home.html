@@ -14,35 +14,35 @@
 
         <style>
             body {
-                height:100%;
+                min-height:100%;
                 width:100%;
             }
 
-            /*img.background {
-                /* Set rules to fill background 
+            img.background {
+                /* Set rules to fill background */
                 min-height: 100%;
                 min-width: 1024px;
                 
-                /* Set up proportionate scaling 
+                /* Set up proportionate scaling */
                 width: 100%;
                 height: auto;
                 
-                /* Set up positioning 
+                /* Set up positioning */
                 position: fixed;
                 top: 0;
                 left: 0;
 
                 z-index:-1;
-            } */
+            }
 
             #homeTitle {
-                margin-top:150px; 
+                margin-top:250px; 
                 margin-bottom:0px; 
                 padding-top:0px !important; 
                 padding-bottom:42px; 
-                font-weight:600; 
                 font-size:45px; 
                 line-height:1;
+                color:white;
             }
 
             #inputForm {
@@ -51,7 +51,7 @@
             }
 
             #location {
-                background-color:rgba(0,0,0,.15);
+                background-color:rgba(0,0,0,.4);
                 border-radius:5px;
                 border-style:solid;
                 border-width:1px;
@@ -60,10 +60,11 @@
                 margin-bottom:10px;
                 height:40px;
                 width:30%;
+                color:white;
             }
 
             #parkingday {
-                background-color:rgba(0,0,0,.15);
+                background-color:rgba(0,0,0,.4);
                 border-radius:5px;
                 border-style:solid;
                 border-width:1px;
@@ -74,6 +75,7 @@
                 margin-bottom:;
                 height:40px;
                 width:20%;
+                color:lightgrey;
             }
 
             #searchButton {
@@ -85,15 +87,31 @@
                 border-radius:5px;
             }
 
+            input::-webkit-input-placeholder {
+                color: lightgrey !important;
+            }
+             
+            input:-moz-placeholder { /* Firefox 18- */
+                color: lightgrey !important;  
+            }
+             
+            input::-moz-placeholder {  /* Firefox 19+ */
+                color: lightgrey !important;  
+            }
+             
+            input:-ms-input-placeholder {  
+                color: lightgrey !important;  
+            }
+
             input:focus {outline: none;}
         </style>
     </head>
 
     <body>
-        <!--<img class="background" src="{% static 'media/homeBackground1.jpg' %}" alt="background">-->
+        <img class="background" src="{% static 'media/field.jpg' %}" alt="background">-->
         <h1 align="center">
             <p id="homeTitle">
-                Gameday Amenities Finder
+                <b>Gameday Amenities Finder</b>
             </p>
         </h1>
         <div style="text-align:center;">
