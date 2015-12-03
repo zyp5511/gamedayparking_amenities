@@ -119,6 +119,7 @@ def spotmodify(request):
     if not request.user.is_authenticated():
         return redirect('/accounts/login')
     current_user = request.user
+    
     e_user = ExtendedUser.objects.get(main_user=current_user)
     try:
         a_user = get_object_or_404(AdminUser, extended_user=e_user)
@@ -127,7 +128,8 @@ def spotmodify(request):
     if a_user.registered is not True:
         return redirect('/home')
     if request.method == 'POST':
-        instance = get_object_or_404(ParkingSpot,id=1) #TODO, switch to ID
+        pid = int(request.POST['submit'])
+        instance = get_object_or_404(ParkingSpot, id=pid) #TODO, switch to ID
         print "GOT HERE"
         form = ParkingSpotEdit(request.POST, request.FILES, instance=instance)
         form.owner = a_user
@@ -137,7 +139,8 @@ def spotmodify(request):
             form.save()
             return render(request, "editspot.html", {'form': form})
     elif request.method == 'GET':
-        instance = get_object_or_404(ParkingSpot, id=1) #TODO, switch to ID
+        pid=int(request.GET['edit'])
+        instance = get_object_or_404(ParkingSpot, id=pid) #TODO, switch to ID
         print instance.id
         form = ParkingSpotEdit(instance=instance)
         print form

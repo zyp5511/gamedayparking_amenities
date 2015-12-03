@@ -61,26 +61,29 @@ def profile(request):
     current_user = request.user
     parkingspots = []
     incoming_requests = []
+    admin_user = False
     m_user = get_object_or_404(ExtendedUser, main_user=current_user)
     try:
         a_user = get_object_or_404(AdminUser, extended_user=m_user)
         parkingspots = ParkingSpot.objects.filter(owner=a_user)
-        incoming_requests = ResMessage.objects.filter(message__receiver=current_user).order_by('res_date')
-        print "Incoming Requests: {}".format(incoming_requests)
+        incoming_requests = ResMessage.objects.filter(message__receiver=current_user, has_responded=False).order_by('res_date')
+        admin_user = True
     except:
         print "Exception: Not admin user, no incoming requests"
-
+    print "incoming requests: %s" % incoming_requests
     messages = Message.objects.filter(receiver=current_user, is_reservation=False).order_by('-date')
     outgoing_requests = ResMessage.objects.filter(message__sender=current_user).order_by('res_date')
-    print "Messages: {}".format(messages)
-    print "Outgoing Requests: {}".format(outgoing_requests)
+    now = datetime.datetime.now()
+    history = ResMessage.objects.filter(message__sender=current_user, res_date__lte = now, is_approved=True).order_by('res_date')
     context = {
+        "admin_user": admin_user,
         "message" : message,
         "message_type" : message_type,
-        "incoming requests" : incoming_requests,
+        "incoming_requests" : incoming_requests,
         "outgoing_requests" : outgoing_requests,
         "messages"  : messages,
         "parkingspots" : parkingspots,
+        "history": history
     }
     return render(request, "userInfo.html", context)
 

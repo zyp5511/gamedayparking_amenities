@@ -3,9 +3,9 @@
 
 <html lang="en">
     <head>
-        <title>Search Results</title>
-
         {% include "header.html" %}
+
+        <title>Search Results</title>
 
         <link   rel="stylesheet" 
                 href="{% static "bower_components/bootstrap/dist/css/bootstrap.min.css" %}" />
@@ -20,6 +20,7 @@
         <script src="{% static "js/parking_sort.js" %}"></script>
 
         <meta charset=utf-8 />
+
         <style>
             html, body {
                 width:100%;
@@ -28,7 +29,7 @@
             }
 
             body {
-                padding-top:52px;
+                padding-top:50px;
             }
 
             #filterContainer {
@@ -135,7 +136,7 @@
 
             #parkingSpotsContainer {
                 position:absolute;
-                top:142px;
+                top:140px;
                 bottom:0px;
                 width:53%;  
                 float:left; 
@@ -217,7 +218,7 @@
             #mapContainer {
                 display:inline-block;
                 position:absolute;
-                top:142px;
+                top:140px;
                 bottom:0px;
                 right:0px;
                 width:47%; 
@@ -275,12 +276,10 @@
                 max-width:80px;
                 background-position: 0 0;
             }
-        
         </style>
     </head>
     
     <body>
-        {% block nav_bar %}{% endblock %}
         <div id="filterContainer">
             <form id="searchBarForm" action="../search/" method="get" name="search_bar">
                 <input id="searchBar" type="text" name="location" value={{ prev_search }}>

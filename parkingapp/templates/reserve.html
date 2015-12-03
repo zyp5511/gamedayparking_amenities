@@ -4,12 +4,15 @@
 	<head> 
 		{% include "header.html" %}
 
+        <title>Reserve Spot</title>
+
   		<link   rel="stylesheet" 
                 href="{% static "bower_components/bootstrap/dist/css/bootstrap.min.css" %}">
-
         <script src="{% static "bower_components/jquery/dist/jquery.min.js" %}"></script>
         <script src="{% static "bower_components/bootstrap/dist/js/bootstrap.min.js" %}"></script>
         <script src="{% static "bower_components/bootstrap-datepicker-1.5.0-dist/js/bootstrap-datepicker.js" %}"></script>
+
+        <meta charset=utf-8 />
 
         <style>
             html, body {
@@ -327,7 +330,6 @@
 	</head>
 
 	<body>
-	 	{% block nav_bar %}{% endblock %}
         <div id="main">
     		<div id="reservationParkingImageContainer">
                 <img    id="reservationParkingImage" 

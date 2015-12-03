@@ -2,18 +2,16 @@
 {% load staticfiles %}
 <html lang="en" ng-app="TestApp">
     <head>  
-        <title>Search Results</title>
+        {% include "header.html" %}
+
+        <title>My Profile</title>
 
         <link   rel="stylesheet" 
                 href="{% static "bower_components/bootstrap/dist/css/bootstrap.min.css" %}">
-
         <script src="{% static "bower_components/jquery/dist/jquery.min.js" %}"></script>
         <script src="{% static "bower_components/bootstrap/dist/js/bootstrap.min.js" %}"></script>
-        <script src="{% static "bower_components/bootstrap-datepicker-1.5.0-dist/js/bootstrap-datepicker.js" %}"></script>
-        <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
-        <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js" 
-                integrity="sha512-K1qjQ+NcF2TYO/eI3M6v8EiNYZfA95pQumfvcVrTHtwQVDG+aHRqLi/ETn2uB+1JqwYqVG3LIvdm9lj6imS/pQ==" 
-                crossorigin="anonymous"></script>
+
+        <meta charset=utf-8 />
 
         <style type="text/css">
             html, body {
@@ -27,7 +25,6 @@
 
             .container {
                 display:block;
-                margin-top:-20px;
                 padding-top:20px;
                 height:90%;
             }
@@ -343,12 +340,36 @@
                 color:#4da5ff;
             }
 
-            .spotCell {
+            .requestStayCell {
                 text-align:center;
             }
 
-            .dateCell {
+            .confirmDenyCell {
                 text-align:center;
+            }
+
+            button#confirm {
+                display:inline-block;
+                margin-left:auto;  
+                background-color:#4da5ff;
+                color:white;
+                width:100px;
+                height:40px;
+                border-style:solid;
+                border-width:1px;
+                border-color:#4da5ff;
+                border-radius:5px;          
+            }
+
+            button#deny {
+                display:inline-block;
+                margin-right:auto;
+                width:100px;
+                height:40px;
+                border-style:solid;
+                border-width:1px;
+                border-color:lightgrey;
+                border-radius:5px;
             }
 
             /* END REQUESTS CONTAINER */
@@ -482,7 +503,7 @@
     </head>
 
     <body>
-        {% include "header.html" %}
+        {% block nav_bar %}{% endblock %}
 
         <div class="container">
             {% if message %}
@@ -561,10 +582,6 @@
 
                                 <li class="" id="resHistoryTab">
                                     <a href="#" onclick="showReservationHistory()"><i class="glyphicon glyphicon-book"></i>Reservation History </a>
-                                </li>
-
-                                <li class="" id="accountSettingsTab">
-                                    <a href="../accounts/password/change" onclick="showAccountSettings()"><i class="glyphicon glyphicon-user"></i>Account Settings</a>
                                 </li>
                             </ul>
                         </div>
@@ -762,8 +779,7 @@
                             {% if incoming_requests %}
                                 <tr>
                                     <td class="requestsHeaderCell">User</td>
-                                    <td class="requestsHeaderCell">Requested Spot</td>
-                                    <td class="requestsHeaderCell">Requested Date</td>
+                                    <td class="requestsHeaderCell">Requested Stay</td>
                                     <td class="requestsHeaderCell">Approve/Deny</td>
                                 </tr>
 
@@ -771,20 +787,25 @@
                                     {%csrf_token%}
                                     {% for res in incoming_requests %}
                                         <tr>
-                                            <td class="userCell">{{res.message.sender}}</td>
-                                            <td class="spotCell">{{res.parkingspot.street_address}}</td>
-                                            <td class="dateCell"><i>{{res.res_date}}</i></td>
-                                            <td class="">
+                                            <td class="userCell">
+                                                <span>{{res.message.sender}}</span>
+                                            </td>
+
+                                            <td class="requestStayCell">
+                                                <i>{{res.res_date}}</i>
+                                                <br />
+                                                {{res.parkingspot.street_address}}
+                                            </td>
+
+                                            <td class="confirmDenyCell">
                                                 <button name="confirm" 
                                                         type="submit" 
                                                         id="confirm" 
-                                                        value="{{res.id}}" 
-                                                        class="btn btn-primary btn-large">Approve</button>
+                                                        value="{{res.id}}">Approve</button>
                                                 <button name="deny" 
                                                         type="submit" 
                                                         id="deny" 
-                                                        value="{{res.id}}" 
-                                                        class="btn btn-primary btn-large">Decline</button>
+                                                        value="{{res.id}}">Decline</button>
                                             </td>
                                         </tr>
                                     {% endfor %}
@@ -820,7 +841,7 @@
                                             <span class="stars">{{x.get_avg_rating}}</span></b>
                                         </p>
 
-                                        <form method="get"  onsubmit="" action='../editspot/' enctype="multipart/form-data">
+                                        <form method="get"  onsubmit="" action='../edit_spot/' enctype="multipart/form-data">
                                             <div class="editButtonContainer">
                                                 <button name="edit" 
                                                         type="submit" 
@@ -869,8 +890,7 @@
                                 
                                     <tr>
                                         <td class="resHistoryHeaderCell">Seller</td>
-                                        <td class="resHistoryHeaderCell">Requested Spot</td>
-                                        <td class="resHistoryHeaderCell">Requested Date</td>
+                                        <td class="resHistoryHeaderCell">Stay</td>
                                         <td class="resHistoryHeaderCell">Review</td>
                                     </tr>
 
@@ -905,10 +925,6 @@
                     </table>
                 </div>
                 <!-- END RESERVATION HISTORY TAB -->
-
-                <!-- BEGIN ACCOUNT SETTINGS TAB -->
-
-                <!-- END ACCOUNT SETTINGS TAB -->
             </div>
         </div>
 
@@ -945,7 +961,6 @@
                 document.getElementById('pendingReqTab').className = '';
                 document.getElementById('parkingSpotsTab').className = '';
                 document.getElementById('resHistoryTab').className = '';
-                document.getElementById('accountSettingsTab').className = '';
             }
 
             function showPendingReservations() {
@@ -962,7 +977,6 @@
                 document.getElementById('pendingReqTab').className = '';
                 document.getElementById('parkingSpotsTab').className = '';
                 document.getElementById('resHistoryTab').className = '';
-                document.getElementById('accountSettingsTab').className = '';
             }
 
             function showPendingRequests() {
@@ -979,7 +993,6 @@
                 document.getElementById('pendingReqTab').className = 'active';
                 document.getElementById('parkingSpotsTab').className = '';
                 document.getElementById('resHistoryTab').className = '';
-                document.getElementById('accountSettingsTab').className = '';
             }
 
             function showParkingSpots() {
@@ -996,7 +1009,6 @@
                 document.getElementById('pendingReqTab').className = '';
                 document.getElementById('parkingSpotsTab').className = 'active';
                 document.getElementById('resHistoryTab').className = '';
-                document.getElementById('accountSettingsTab').className = '';
             }
 
             function showReservationHistory() {
@@ -1013,24 +1025,6 @@
                 document.getElementById('pendingReqTab').className = '';
                 document.getElementById('parkingSpotsTab').className = '';
                 document.getElementById('resHistoryTab').className = 'active';
-                document.getElementById('accountSettingsTab').className = '';
-            }
-
-            function showAccountSettings() {
-                // Change Active Displays
-                document.getElementById('messagesContainer').style.display = 'none';
-                document.getElementById('reservationsContainer').style.display = 'none';
-                document.getElementById('requestsContainer').style.display = 'none';
-                document.getElementById('parkingSpotsContainer').style.display = 'none';
-                document.getElementById('reservationHistoryContainer').style.display = 'none';
-
-                // Change Active Tabs
-                document.getElementById('messagesTab').className = '';
-                document.getElementById('pendingResTab').className = '';
-                document.getElementById('pendingReqTab').className = '';
-                document.getElementById('parkingSpotsTab').className = '';
-                document.getElementById('resHistoryTab').className = '';
-                document.getElementById('accountSettingsTab').className = 'active';
             }
         </script>
 
