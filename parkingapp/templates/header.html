@@ -6,19 +6,19 @@
     
         <div class="collapse navbar-collapse" id="exampleNavbarCollapse">
             <ul class="nav navbar-nav">
-                <li class="active"><a href="/home">Home</a></li>
+                <li class="#"><a href="/home"><i class="glyphicon glyphicon-home"></i> Home</a></li>
                 <li class="#"><a href="/about">About Us</a></li>
                 <li class="#"><a href="/contact">Contact Us</a></li>
             </ul>
 
             <ul class="nav navbar-nav navbar-right">
                 {% if user.is_authenticated %}
-                <li><a href="/profile/">{{user.username}}</a></li>
+                <li><a href="/profile/"><i class="glyphicon glyphicon-user"></i> {{user.username}}</a></li>
                  <li><a href="/reservations/">My Reservations</a></li>
                 <li><a href="/accounts/logout">Logout</a></li>
 
                 {% else %}
-                <li><a href="/accounts/login">Login</a></li>
+                <li><a href="/accounts/login"><i class="glyphicon glyphicon-share"></i> Login</a></li>
                 {% endif %}
             </ul>
         </div>

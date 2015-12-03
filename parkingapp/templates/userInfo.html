@@ -288,17 +288,6 @@
                 margin-top:10px;
             }
 
-            td.cancelCell button {
-                display:inline-block;
-                width:120px;
-                height:40px;
-                margin-top:1px;
-                border-style:solid;
-                border-width:1px;
-                border-color:lightgrey;
-                border-radius:5px;
-            }
-
             .reservationsHeaderCell {
                 text-align:center;
                 font-weight:bold;
@@ -319,6 +308,17 @@
 
             .cancelCell {
                 text-align:center;
+            }
+
+            td.cancelCell button {
+                display:inline-block;
+                width:120px;
+                height:40px;
+                margin-top:1px;
+                border-style:solid;
+                border-width:1px;
+                border-color:lightgrey;
+                border-radius:5px;
             }
 
             /* END RESERVATIONS CONTAINER */
@@ -437,6 +437,43 @@
             }
 
             /* END PARKING SPOTS CONTAINER */
+
+            /* BEGIN RESERVATION HISTORY CONTAINER */
+
+            .reservationHistoryContainer {
+                display:none;
+            }
+
+            .resHistoryHeaderCell {
+                text-align:center;
+                font-weight:bold;
+            }
+
+            .historyOwnerCell {
+                text-align:center;
+                color:#4da5ff;
+            }
+
+            .historyStayCell {
+                text-align:center;
+            }
+
+            .reviewCell {
+                text-align:center;
+            }
+
+            td.reviewCell button {
+                display:inline-block;
+                width:120px;
+                height:40px;
+                margin-top:1px;
+                border-style:solid;
+                border-width:1px;
+                border-color:lightgrey;
+                border-radius:5px;
+            }
+
+            /* END RESERVATION HISTORY CONTAINER */
         </style>
     </head>
 
@@ -489,11 +526,11 @@
                         <div class="profile-usermenu">
                             <ul class="nav">
                                 <li class="active" id="messagesTab" >
-                                    <a href="#" onclick="showMessages()"><i class="glyphicon glyphicon-home"></i>Messages </a>
+                                    <a href="#" onclick="showMessages()"><i class="glyphicon glyphicon-envelope"></i>Messages </a>
                                 </li>
 
                                 <li class="" id="pendingResTab">
-                                    <a href="#" onclick="showPendingReservations()"><i class="glyphicon glyphicon-ok"></i>Pending Reservations </a>
+                                    <a href="#" onclick="showPendingReservations()"><i class="glyphicon glyphicon-list-alt"></i>Pending Reservations </a>
                                 </li>
 
                                 {% if user.extendeduser.adminuser.registered %}
@@ -511,12 +548,16 @@
                                     <li class="" id="parkingSpotsTab">
                                         <!-- normal users or admin-->
                                         {% if user.extendeduser.adminuser.registered%}
-                                             <a href="#" onclick="showParkingSpots()"><i class="glyphicon glyphicon-flag"></i>Parking Spots </a>
+                                             <a href="#" onclick="showParkingSpots()"><i class="glyphicon glyphicon-th-large"></i>Parking Spots </a>
                                         {% else %}
                                             
                                         {% endif %}
                                     </li>
                                 {% endif %}
+
+                                <li class="" id="resHistoryTab">
+                                    <a href="#" onclick="showReservationHistory()"><i class="glyphicon glyphicon-book"></i>Reservation History </a>
+                                </li>
 
                                 <li class="" id="accountSettingsTab">
                                     <a href="../accounts/password/change" onclick="showAccountSettings()"><i class="glyphicon glyphicon-user"></i>Account Settings</a>
@@ -619,7 +660,7 @@
                 <!-- BEGIN RESERVATIONS TAB -->
                 <div class="col-md-9" id="reservationsContainer">
                     <ul class="nav nav-tabs" id="myTab" style="margin-bottom:-1px;">
-                        <li class="active"><a href="#message" data-toggle="tab"><b>Your Pending Reservations</b></a></li>
+                        <li class="active"><a href="#" data-toggle="tab"><b>Your Pending Reservations</b></a></li>
                     </ul>
 
                     <table class="table">
@@ -646,7 +687,7 @@
                                                 {{res.parkingspot.street_address}}
                                             </td>
 
-                                            <td class="statusCell" bgcolor = "#cd2626">
+                                            <td class="statusCell" bgcolor = "#f3bebe">
                                                 <span>Denied</span>
                                             </td>
                                     {% elif res.has_responded and res.is_approved%}
@@ -661,7 +702,7 @@
                                                 {{res.parkingspot.street_address}}
                                             </td>
 
-                                            <td class="statusCell" bgcolor = "#58FA58">
+                                            <td class="statusCell" bgcolor = "#b4fdb4">
                                                 <span>Approved</span>
                                             </td>
                                     {% else %}
@@ -676,14 +717,17 @@
                                                 {{res.parkingspot.street_address}}
                                             </td>
 
-                                            <td class="statusCell" bgcolor ="#F3F781">
+                                            <td class="statusCell" bgcolor ="#ffecb3">
                                                 <span>Pending</span>
                                             </td>
                                     {% endif %}
 
                                     {% if not res.has_responded %}
                                         <td class="cancelCell">
-                                            <button name="cancel" type="submit" id="cancel" value="{{res.id}}">Cancel</button>
+                                            <button name="cancel" 
+                                                    type="submit" 
+                                                    id="cancel" 
+                                                    value="{{res.id}}">Cancel</button>
                                         </td>
                                     {%else%}
                                         <td class="cancelCell">
@@ -774,7 +818,10 @@
 
                                         <form method="get"  onsubmit="" action='../editspot/' enctype="multipart/form-data">
                                             <div class="editButtonContainer">
-                                                <button name="edit" type="submit" class="editButton" value="{{ x.id }}">Edit</button>
+                                                <button name="edit" 
+                                                        type="submit" 
+                                                        class="editButton" 
+                                                        value="{{ x.id }}">Edit</button>
                                             </div>
                                             {% csrf_token %}
                                         </form>
@@ -804,6 +851,60 @@
                     </div>
                 {% endif %}
                 <!-- END PARKING SPOTS TAB -->
+
+                <!-- BEGIN RESERVATION HISTORY TAB -->
+                <div class="col-md-9" id="reservationHistoryContainer">
+                    <ul class="nav nav-tabs" id="myTab" style="margin-bottom:-1px;">
+                        <li class="active"><a href="#" data-toggle="tab"><b>Your Reservation History</b></a></li>
+                    </ul>
+
+                    <table class="table">
+                        {%if history%}
+                                <form method="post" action='../review/' enctype="multipart/form-data" >
+                                    {%csrf_token%}
+                                
+                                    <tr>
+                                        <td class="resHistoryHeaderCell">Seller</td>
+                                        <td class="resHistoryHeaderCell">Requested Spot</td>
+                                        <td class="resHistoryHeaderCell">Requested Date</td>
+                                        <td class="resHistoryHeaderCell">Review</td>
+                                    </tr>
+
+                                    {% for res in history%}
+                                        <tr>
+                                            <td class="historyOwnerCell">{{res.message.receiver}}</td>
+
+                                            <td class="historyStayCell">
+                                                <i>{{res.res_date}}</i>
+                                                <br />
+                                                {{res.parkingspot.street_address}}
+                                            </td>
+
+                                            {% if not res.reviewed%}
+                                                <td class="reviewCell">
+                                                    <button name="review" 
+                                                            type="submit" 
+                                                            id="review" 
+                                                            value="{{res.id}}">Write Review</button>
+                                                </td>
+                                            {% else%}
+                                                <td class="reviewCell">Already Reviewed</td>
+                                            {% endif %}
+                                        </tr>
+                                    {% endfor %}
+                                </form>
+                            {%else%}
+                                <tr>
+                                    <td><center>No Reservation History</center></td>
+                                </tr>
+                            {%endif%}
+                    </table>
+                </div>
+                <!-- END RESERVATION HISTORY TAB -->
+
+                <!-- BEGIN ACCOUNT SETTINGS TAB -->
+
+                <!-- END ACCOUNT SETTINGS TAB -->
             </div>
         </div>
 
@@ -832,12 +933,14 @@
                 document.getElementById('reservationsContainer').style.display = 'none';
                 document.getElementById('requestsContainer').style.display = 'none';
                 document.getElementById('parkingSpotsContainer').style.display = 'none';
+                document.getElementById('reservationHistoryContainer').style.display = 'none';
 
                 // Change Active Tabs
                 document.getElementById('messagesTab').className = 'active';
                 document.getElementById('pendingResTab').className = '';
                 document.getElementById('pendingReqTab').className = '';
                 document.getElementById('parkingSpotsTab').className = '';
+                document.getElementById('resHistoryTab').className = '';
                 document.getElementById('accountSettingsTab').className = '';
             }
 
@@ -847,12 +950,14 @@
                 document.getElementById('reservationsContainer').style.display = 'block';
                 document.getElementById('requestsContainer').style.display = 'none';
                 document.getElementById('parkingSpotsContainer').style.display = 'none';
+                document.getElementById('reservationHistoryContainer').style.display = 'none';
 
                 // Change Active Tabs
                 document.getElementById('messagesTab').className = '';
                 document.getElementById('pendingResTab').className = 'active';
                 document.getElementById('pendingReqTab').className = '';
                 document.getElementById('parkingSpotsTab').className = '';
+                document.getElementById('resHistoryTab').className = '';
                 document.getElementById('accountSettingsTab').className = '';
             }
 
@@ -862,12 +967,14 @@
                 document.getElementById('reservationsContainer').style.display = 'none';
                 document.getElementById('requestsContainer').style.display = 'block';
                 document.getElementById('parkingSpotsContainer').style.display = 'none';
+                document.getElementById('reservationHistoryContainer').style.display = 'none';
 
                 // Change Active Tabs
                 document.getElementById('messagesTab').className = '';
                 document.getElementById('pendingResTab').className = '';
                 document.getElementById('pendingReqTab').className = 'active';
                 document.getElementById('parkingSpotsTab').className = '';
+                document.getElementById('resHistoryTab').className = '';
                 document.getElementById('accountSettingsTab').className = '';
             }
 
@@ -877,12 +984,31 @@
                 document.getElementById('reservationsContainer').style.display = 'none';
                 document.getElementById('requestsContainer').style.display = 'none';
                 document.getElementById('parkingSpotsContainer').style.display = 'block';
+                document.getElementById('reservationHistoryContainer').style.display = 'none';
 
                 // Change Active Tabs
                 document.getElementById('messagesTab').className = '';
                 document.getElementById('pendingResTab').className = '';
                 document.getElementById('pendingReqTab').className = '';
                 document.getElementById('parkingSpotsTab').className = 'active';
+                document.getElementById('resHistoryTab').className = '';
+                document.getElementById('accountSettingsTab').className = '';
+            }
+
+            function showReservationHistory() {
+                // Change Active Displays
+                document.getElementById('messagesContainer').style.display = 'none';
+                document.getElementById('reservationsContainer').style.display = 'none';
+                document.getElementById('requestsContainer').style.display = 'none';
+                document.getElementById('parkingSpotsContainer').style.display = 'none';
+                document.getElementById('reservationHistoryContainer').style.display = 'block';
+
+                // Change Active Tabs
+                document.getElementById('messagesTab').className = '';
+                document.getElementById('pendingResTab').className = '';
+                document.getElementById('pendingReqTab').className = '';
+                document.getElementById('parkingSpotsTab').className = '';
+                document.getElementById('resHistoryTab').className = 'active';
                 document.getElementById('accountSettingsTab').className = '';
             }
 
@@ -892,12 +1018,14 @@
                 document.getElementById('reservationsContainer').style.display = 'none';
                 document.getElementById('requestsContainer').style.display = 'none';
                 document.getElementById('parkingSpotsContainer').style.display = 'none';
+                document.getElementById('reservationHistoryContainer').style.display = 'none';
 
                 // Change Active Tabs
                 document.getElementById('messagesTab').className = '';
                 document.getElementById('pendingResTab').className = '';
                 document.getElementById('pendingReqTab').className = '';
                 document.getElementById('parkingSpotsTab').className = '';
+                document.getElementById('resHistoryTab').className = '';
                 document.getElementById('accountSettingsTab').className = 'active';
             }
         </script>
