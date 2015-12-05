@@ -45,6 +45,18 @@
                 margin-bottom:20px;
             }
 
+            #imageContainer {
+                display:inline-block;
+                width:100%;
+                margin-top:20px;
+            }
+
+            #parkingThumbnail {
+                width:300px;
+                height:150px;
+                margin-bottom:20px;
+            }
+
             #descriptionFieldContainers textarea {
                 vertical-align:top;
             }
@@ -109,19 +121,19 @@
 
     <body>
         <div id="editSpotContainer" class="panel panel-default">
-            <div id="editHeading" class="panel-heading" align='center'>Edit Parking Spot</div>
+            <div id="editHeading" class="panel-heading" align='center'>Parking Spot</div>
 
             <div id="infoContainer">
                 <form id="editSpotForm" action="." method="post" enctype="multipart/form-data">
-                    <div>
+                    <div id="imageContainer">
                         <img src="{{instance.photos.url}}" alt="Parking Spot Thumbnail" id="parkingThumbnail">
 
                         <input  type="file"
-                                id="photos"
+                                id="photoButton"
                                 name="photos">
-
-                        <hr>
                     </div>
+
+                    <hr>
 
                     <div class="fieldContainers">
                         <label  class="editLabels"
@@ -251,6 +263,5 @@
                 </form>
             </div>
         </div>
-        {% include "footer.html" %}
     </body>
 </html>
