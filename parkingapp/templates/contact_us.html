@@ -2,6 +2,46 @@
 {% load staticfiles %}
 
 <html lang="en">
+<style>
+ 	img.background {
+    	/* Set rules to fill background */
+    	min-height: 100%;
+    	min-width: 1024px;
+                
+    	/* Set up proportionate scaling */
+    	width: 100%;
+    	height: auto;
+                
+     	/* Set up positioning */
+     	position: fixed;
+     	top: 0;
+     	left: 0;
+
+     	z-index:-1;
+    }
+
+	ul {
+		color:white;
+    	display: block;
+    	list-style-type: square;
+    	margin-top: 1em;
+    	margin-bottom: 1em;
+    	margin-left: 3%;
+    	margin-right: 90%;
+    	padding-left: 40px;
+	}
+
+	ul li {
+		padding: 3px;
+		font-size:18px;
+	}
+
+	h2 {
+		padding-top: 2%;
+		margin-left: 3%;
+	}
+</style>
+
 	<head> 
 		{% include "header.html" %}
 
@@ -29,14 +69,15 @@
 	<body>
 	 	{% block nav_bar %}{% endblock %}
 
+	 	<img class="background" src="{% static 'media/field.jpg' %}" alt="background">
 	 	<div class="Introduction">
-	 		<h2>Computer Science 506 Game Day Parking and Amenities Finder Team</h2>
+	 		<h2 style="color:white;">Game Day Parking and Amenities Finder Team</h2>
 	 		<ul>
+	 			<li>Ryan Schaefer</li>
+	 			<li>Matt Dallman</li>
+	 			<li>Marco Prouve</li>
 	 			<li>Fang Wang</li>
 	 			<li>Zihan Zhang</li>
-	 			<li>Marco Prouve</li>
-	 			<li>Matt Dallman</li>
-	 			<li>Ryan Schaefer</li>
 	 			<li>Yipeng Zhang</li>
 	 			<li>Zhefeng Li</li>
 	 		</ul>
