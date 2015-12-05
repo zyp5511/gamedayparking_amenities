@@ -10,9 +10,9 @@
             </ul>
 
             <form id="searchBarForm" action="../search/" method="get" name="search_bar">
-                <input id="searchBar" type="text" name="location" value={{ prev_search }}>
+                <input id="searchBar" type="text" name="location" value='{{ prev_search }}'>
                 <input id="parkingday" type="text" name="parkingdate">
-                <input id="searchButton" type="submit" data-inline="true" value="Submit"/>
+                <input id="searchButton" type="submit" data-inline="true" value="Search"/>
                 {% csrf_token %}
             </form>
 

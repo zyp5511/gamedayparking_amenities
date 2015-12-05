@@ -593,7 +593,7 @@
                         <div class="tab-pane fade in active" id="message">
                             {% if messages %}
                                 {% for x in messages %}
-                                <div class="list-group" onClick="pop('popDiv{{x.id}}')">
+                                    <div class="list-group" onClick="pop('popDiv{{x.id}}')">
                                         <a href="#" class="list-group-item">
                                             <span class="name" style="min-width:120px; display:inline-block;">
                                                 <b style="color:#4da5ff;">{{x.sender}}</b>
@@ -655,9 +655,8 @@
                                                             type="button"
                                                             onClick="hide('popDiv{{x.id}}')">Cancel</button>
 
-                                                    <input  id="replyButton" 
-                                                            type="submit"
-                                                            value="Send Reply">
+                                                    <button id="replyButton" 
+                                                            type="submit">Send Reply</button>
                                                     {% csrf_token%}
                                                 </form>
                                             </div>
