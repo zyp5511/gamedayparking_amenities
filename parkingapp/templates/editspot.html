@@ -114,11 +114,11 @@
             <div id="infoContainer">
                 <form id="editSpotForm" action="." method="post" enctype="multipart/form-data">
                     <div>
-                        <img src="" alt="Parking Spot Thumbnail" id="parkingThumbnail">
+                        <img src="{{instance.photos.url}}" alt="Parking Spot Thumbnail" id="parkingThumbnail">
 
                         <input  type="file"
-                                id="parkingPhoto"
-                                name="parkingPhoto">
+                                id="photos"
+                                name="photos">
 
                         <hr>
                     </div>
@@ -243,10 +243,10 @@
                             id="cancelButton"
                             onClick="history.go(-1);">Cancel</button>
 
-                    <button name="submit"
-                            type="submit"
+                    <button name="send"
+                            type="send"
                             id="updateButton"
-                            value="{{form.id.value}}">UpdateSpot</button>
+                            value="{{pid}}">UpdateSpot</button>
                     {% csrf_token %}
                 </form>
             </div>

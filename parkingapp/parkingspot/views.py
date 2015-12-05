@@ -13,6 +13,7 @@ from message.models import Message, ResMessage
 from userprof.models import ExtendedUser, AdminUser
 from django.contrib.auth.models import User
 from parkingspot.forms import ParkingSpotEdit, ParkingSpotAdd
+import os
 
 
 from django.contrib.auth.decorators import login_required
@@ -128,23 +129,23 @@ def spotmodify(request):
     if a_user.registered is not True:
         return redirect('/home')
     if request.method == 'POST':
-        pid = int(request.POST['submit'])
+        pid = int(request.POST['send'])
         instance = get_object_or_404(ParkingSpot, id=pid) #TODO, switch to ID
         print "GOT HERE"
         form = ParkingSpotEdit(request.POST, request.FILES, instance=instance)
         form.owner = a_user
         print form
         if form.is_valid():
-            print "GOT EM!"
+            form.photos = form.cleaned_data['photos']
             form.save()
-            return render(request, "editspot.html", {'form': form})
+            return render(request, "editspot.html", {'form': form, 'pid': pid, 'instance': instance})
     elif request.method == 'GET':
         pid=int(request.GET['edit'])
         instance = get_object_or_404(ParkingSpot, id=pid) #TODO, switch to ID
         print instance.id
         form = ParkingSpotEdit(instance=instance)
         print form
-    return render(request, "editspot.html", {'form': form})
+    return render(request, "editspot.html", {'form': form, 'pid': pid, 'instance': instance})
 
 
 def newspot(request):

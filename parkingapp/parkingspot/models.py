@@ -9,8 +9,11 @@ from userprof.models import AdminUser
 from geopy.geocoders import GoogleV3
 from django.conf import settings
 from jsonfield import JSONField
-
+import os
 # Create your models here.
+
+def get_image_path(instance, filename):
+    return os.path.join('photos', str(instance.id), filename)
 
 class ParkingSpot(models.Model):
     street_address = models.CharField(max_length=70, blank=True)
@@ -22,7 +25,7 @@ class ParkingSpot(models.Model):
     description = models.CharField(max_length=256)
     amenities = JSONField(default='{"bathroom":false,"yard":false,"grill":false,"table":false,"electricity":false}')
     cost = models.IntegerField(blank=True, null=True, default=5)
-    photos = models.ImageField(default='%s/default.png' % settings.MEDIA_URL, upload_to='parkingspots/')
+    photos = models.ImageField(default='%s/default.png' % settings.MEDIA_URL, upload_to=get_image_path)
     default_num_spots = models.IntegerField(default=0)
     parking_spot_avail = JSONField(default='{"dates":{}}')
     objects = models.GeoManager()
