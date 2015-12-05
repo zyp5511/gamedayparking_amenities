@@ -33,21 +33,15 @@
             }
 
             #filterContainer {
+                display:inline-block;
                 background-color:#EAEAEA;
                 width:100%;
-                height:90px;
-                border-style:inset;
-                border-width:1px;
-                border-right-width:0px;
-                border-left-width:0px;
-                border-color:lightgrey;
             }
 
             #searchBarForm {
                 display:inline-block;
-                float:left;
-                margin-left:20px;
-                margin-right:25px;
+                margin-left:2%;
+                margin-right:2%;
                 width:250px;
                 height:100%;
             }
@@ -56,7 +50,7 @@
                 float:left;
                 width:100%;
                 height:35px;
-                margin-top:7px;
+                margin-top:20px;
                 padding-left:10px;
                 border-style:solid;
                 border-width:1px;
@@ -76,6 +70,8 @@
             }
 
             #searchButton {
+                background-color:#4da5ff;
+                color:white;
                 width:38%;
                 height:35px;
                 border-style:solid;
@@ -84,36 +80,73 @@
                 border-radius:5px;
             }
 
-            input:focus {outline: none;}
-
-            .filterCouple {
+            #lowSortContainer {
                 display:inline-block;
+                width:70%;
+                margin-left:2.5%;
+            }
+
+            #highSortContainer {
+                display:inline-block;
+                width:70%;
+                margin-left:2.5%;
+            }
+
+            .sortButtonLeft, .sortButtonMiddle, .sortButtonRight {
+                background-color:white;
+                display:inline-block;
+                width:33%;
+                height:30px;
+                margin:0;
+                border-style:solid;
+                border-color:lightgrey;
+            }
+
+            .sortButtonLeft {
+                border-width:1px;
+                border-right-width:1px;
+                border-top-left-radius: 4px;
+                border-bottom-left-radius: 4px;
+                float:left; 
+            }
+
+            .sortButtonMiddle {
+                border-width:1px;
+                border-left-width:0px;
+                border-right-width:0px;
                 float:left;
-                text-align:center;
-                width:155px;
-                height:100%;
-                padding-top:13px;
-                margin-right:20px;
             }
 
-            #cost_low, 
-            #dist_low,
-            #rat_low {
-                width:170px;
-                margin-bottom:10px;
+            .sortButtonRight {
+                border-width:1px;
+                border-left-width:1px;
+                border-top-right-radius: 4px;
+                border-bottom-right-radius: 4px;
+                float:left;
             }
 
-            #cost_high,
-            #dist_high,
-            #rat_high {
-                width:170px;
-            } 
+            #lowSortContainer button:hover, #highSortContainer button:hover {
+                background-color:#4da5ff;
+                text-decoration:none;
+                color:black;
+            }
+
+            hr {
+                display: block;
+                height: 1px;
+                border: 0;
+                border-top: 1px solid lightgrey;
+                padding: 0;
+            }
+
+            input:focus {outline: none;}
 
             #checkboxForm {
                 float:left;
                 height:100%;
-                width:250px;
-                padding-top:21px;
+                width:420px;
+                margin-left:-20px;
+                margin-bottom:15px;
             }
 
             .checkboxGrid {
@@ -136,9 +169,9 @@
 
             #parkingSpotsContainer {
                 position:absolute;
-                top:140px;
+                top:51px;
                 bottom:0px;
-                width:53%;  
+                width:58%;  
                 float:left; 
                 overflow-y:scroll;
             }
@@ -155,12 +188,15 @@
                 margin-bottom:30px;
                 margin-right:15px;
                 margin-left:15px;
+                /*
                 border-style:solid;
                 border-color:grey;
                 border-width:1px;
+                border-radius:2px;
                 -webkit-box-shadow: 0 8px 6px -7px grey;
                 -moz-box-shadow: 0 8px 6px -7px grey;
                 box-shadow: 0 8px 6px -7px grey;
+                */
             }
 
             .parkingImageContainer, .parkingImage {
@@ -168,10 +204,12 @@
                 width:100%; 
                 height:175px; 
                 float:left;
+                /*
                 border-style:solid;
                 border-color:lightgrey;
                 border-width:0px;
                 border-bottom-width:1px;
+                */
             }
 
             .streetAddress {
@@ -192,21 +230,6 @@
                 padding-left:10px;
             }
 
-            /*
-            .descriptionContainer {
-                display:inline-block;
-                width:100%;
-                height:22px;
-                text-align:left;
-                float:left;
-                clear:left;
-                padding-left:10px;
-                padding-right:10px;
-                font-style:italic;
-                overflow-y:hidden;
-            }
-            */
-
             .reserveButtonContainer {
                 float:left;
                 clear:left;
@@ -215,13 +238,24 @@
                 padding-bottom:10px;
             }
 
+            #reserve {
+                background-color:#4da5ff;
+                color:white;
+                width:100px;
+                height:40px;
+                border-style:solid;
+                border-width:1px;
+                border-color:#4da5ff;
+                border-radius:5px;
+            }
+
             #mapContainer {
                 display:inline-block;
                 position:absolute;
-                top:140px;
+                top:51px;
                 bottom:0px;
                 right:0px;
-                width:47%; 
+                width:42%; 
                 margin-top:0px; 
                 float:right;
             }
@@ -280,85 +314,105 @@
     </head>
     
     <body>
-        <div id="filterContainer">
-            <form id="searchBarForm" action="../search/" method="get" name="search_bar">
-                <input id="searchBar" type="text" name="location" value={{ prev_search }}>
-                <input id="parkingday" type="text" name="parkingdate"/>
-                <input id="searchButton" type="submit" data-inline="true" value="Submit"/>
-                {% csrf_token %}
-            </form>
-
-            <div class="filterCouple">
-                <button id="cost_low" onclick="sort_cost_low()">Cost Low to High</button>
-                <button id="cost_high" onclick="sort_cost_high()">Cost High To Low</button>
-            </div>
-            <div class="filterCouple">
-                <button id="dist_low" onclick="sort_dist_low()">Distance Low to High</button>
-                <button id="dist_high" onclick="sort_dist_high()">Distance High to Low</button>
-            </div>
-            <div class="filterCouple">
-                <button id="rat_low" onclick="sort_rating_low()">Rating Low to High</button>
-                <button id="rat_high" onclick="sort_rating_high()">Rating High to Low</button>
-            </div>
-
-            <form id="checkboxForm" NAME="amenities">
-                <ul class="checkboxGrid">
-                    <li>
-                        <input  class="filterCheckBox" 
-                                TYPE="checkbox" 
-                                id="filter_grill" 
-                                name="grill" 
-                                onClick="filter_grill_func()" /> 
-                        <label  class="filterCheckBoxLabel" 
-                                for="grill">Grill</label>
-                    </li>
-
-                    <li>
-                        <input  class="filterCheckBox" 
-                                TYPE="checkbox" 
-                                id="filter_bathroom" 
-                                name="bathroom" 
-                                onClick="filter_bathroom_func()" />
-                        <label  class="filterCheckBoxLabel" 
-                                for="bathroom">Bathroom</label>
-                    </li>
-
-                    <li>
-                        <input  class="filterCheckBox" 
-                                TYPE="checkbox" 
-                                id="filter_yard" 
-                                name="yard" 
-                                onClick="filter_yard_func()" />
-                        <label  class="filterCheckBoxLabel" 
-                                for="yard">Yard</label>
-                    </li>
-                </ul>
-                <ul class="checkboxGrid">
-                    <li>
-                        <input  class="filterCheckBox" 
-                                TYPE="checkbox" 
-                                id="filter_table" 
-                                name="table" 
-                                onClick="filter_table_func()" />
-                        <label  class="filterCheckBoxLabel" 
-                                for="table">Table</label>
-                    </li>
-
-                    <li>
-                        <input  class="filterCheckBox" 
-                                TYPE="checkbox" 
-                                id="filter_electricity" 
-                                name="electricity" 
-                                onClick="filter_electricity_func()" /> 
-                        <label  class="filterCheckBoxLabel" 
-                                for="electricity">Electricity</label>
-                    </li>
-                </ul>
-                {% csrf_token %}
-            </form>
-        </div>
-
         <div id="parkingSpotsContainer">
+            <div id="filterContainer">
+                <form id="searchBarForm" action="../search/" method="get" name="search_bar">
+                    <input id="searchBar" type="text" name="location" value={{ prev_search }}>
+                    <input id="parkingday" type="text" name="parkingdate"/>
+                    <input id="searchButton" type="submit" data-inline="true" value="Submit"/>
+                    {% csrf_token %}
+                </form>
+
+                <hr>
+
+                <div id="lowSortContainer">
+                    <button class="sortButtonLeft"
+                            id="lowCostButton" 
+                            type="button"
+                            onclick="sort_cost_low(); lowCostChangeColor()">Low Cost</button>
+                    <button class="sortButtonMiddle"
+                            id="lowDistanceButton" 
+                            type="button"
+                            onclick="sort_dist_low(); lowDistanceChangeColor()">Low Distance</button>
+                    <button class="sortButtonRight"
+                            id="lowRatingButton" 
+                            type="button"
+                            onclick="sort_rating_low(); lowRatingChangeColor()">Low Rating</button>
+                </div>
+
+                <div id="highSortContainer">
+                    <button class="sortButtonLeft"
+                            id="highCostButton" 
+                            type="button"
+                            onclick="sort_cost_high(); highCostChangeColor()">High Cost</button>
+                    <button class="sortButtonMiddle"
+                            id="highDistanceButton" 
+                            type="button"
+                            onclick="sort_dist_high(); highDistanceChangeColor()">High Distance</button>
+                    <button class="sortButtonRight"
+                            id="highRatingButton" 
+                            type="button"
+                            onclick="sort_rating_high(); highRatingChangeColor()">High Rating</button>
+                </div>
+
+                <hr>
+
+                <form id="checkboxForm" NAME="amenities">
+                    <ul class="checkboxGrid">
+                        <li>
+                            <input  class="filterCheckBox" 
+                                    TYPE="checkbox" 
+                                    id="filter_grill" 
+                                    name="grill" 
+                                    onClick="filter_grill_func()" /> 
+                            <label  class="filterCheckBoxLabel" 
+                                    for="grill">Grill</label>
+                        </li>
+
+                        <li>
+                            <input  class="filterCheckBox" 
+                                    TYPE="checkbox" 
+                                    id="filter_bathroom" 
+                                    name="bathroom" 
+                                    onClick="filter_bathroom_func()" />
+                            <label  class="filterCheckBoxLabel" 
+                                    for="bathroom">Bathroom</label>
+                        </li>
+
+                        <li>
+                            <input  class="filterCheckBox" 
+                                    TYPE="checkbox" 
+                                    id="filter_yard" 
+                                    name="yard" 
+                                    onClick="filter_yard_func()" />
+                            <label  class="filterCheckBoxLabel" 
+                                    for="yard">Yard</label>
+                        </li>
+
+                        <li>
+                            <input  class="filterCheckBox" 
+                                    TYPE="checkbox" 
+                                    id="filter_table" 
+                                    name="table" 
+                                    onClick="filter_table_func()" />
+                            <label  class="filterCheckBoxLabel" 
+                                    for="table">Table</label>
+                        </li>
+
+                        <li>
+                            <input  class="filterCheckBox" 
+                                    TYPE="checkbox" 
+                                    id="filter_electricity" 
+                                    name="electricity" 
+                                    onClick="filter_electricity_func()" /> 
+                            <label  class="filterCheckBoxLabel" 
+                                    for="electricity">Electricity</label>
+                        </li>
+                    </ul>
+                    {% csrf_token %}
+                </form>
+            </div>
+
             <div id="parkingContainer">
                 {% for x in parkingspots %}
                     <div class="parkingSpots">
@@ -372,13 +426,9 @@
                             <span class="stars">{{x.get_avg_rating}}</span></b>
                         </p>
 
-                        <!--
-                        <p class="descriptionContainer">{{ x.description }}</p>
-                        -->
-
                         <form method="get"  onsubmit="" action='../reserve/' enctype="multipart/form-data" >
                             <div class="reserveButtonContainer">
-                                <button name="reserve" type="submit" id="reserve" value="{{ x.id }}" class="btn btn-primary btn-large">Reserve</button>
+                                <button name="reserve" type="submit" id="reserve" value="{{ x.id }}">Reserve</button>
                                 {% with ""|add:date.0|add:"/"|add:date.1|add:"/"|add:date.2 as searched_date %}
                                 <input type="hidden" name="date" value={{searched_date}}>
                                 {% endwith %}
@@ -684,6 +734,62 @@
                 for(i = 0; i < curr_list.length; i++) {
                     createMarker(curr_list[i]);
                 }
+            }
+        </script>
+
+        <script type="text/javascript">
+            function lowCostChangeColor() {
+                document.getElementById('lowCostButton').style.backgroundColor = '#4da5ff';
+                document.getElementById('highCostButton').style.backgroundColor = 'white';
+                document.getElementById('lowDistanceButton').style.backgroundColor = 'white';
+                document.getElementById('highDistanceButton').style.backgroundColor = 'white';
+                document.getElementById('lowRatingButton').style.backgroundColor = 'white';
+                document.getElementById('highRatingButton').style.backgroundColor = 'white';
+            }
+
+            function highCostChangeColor(button) {
+                document.getElementById('lowCostButton').style.backgroundColor = 'white';
+                document.getElementById('highCostButton').style.backgroundColor = '#4da5ff';
+                document.getElementById('lowDistanceButton').style.backgroundColor = 'white';
+                document.getElementById('highDistanceButton').style.backgroundColor = 'white';
+                document.getElementById('lowRatingButton').style.backgroundColor = 'white';
+                document.getElementById('highRatingButton').style.backgroundColor = 'white';
+            }
+
+            function lowDistanceChangeColor(button) {
+                document.getElementById('lowCostButton').style.backgroundColor = 'white';
+                document.getElementById('highCostButton').style.backgroundColor = 'white';
+                document.getElementById('lowDistanceButton').style.backgroundColor = '#4da5ff';
+                document.getElementById('highDistanceButton').style.backgroundColor = 'white';
+                document.getElementById('lowRatingButton').style.backgroundColor = 'white';
+                document.getElementById('highRatingButton').style.backgroundColor = 'white';
+            }
+
+            function highDistanceChangeColor(button) {
+                document.getElementById('lowCostButton').style.backgroundColor = 'white';
+                document.getElementById('highCostButton').style.backgroundColor = 'white';
+                document.getElementById('lowDistanceButton').style.backgroundColor = 'white';
+                document.getElementById('highDistanceButton').style.backgroundColor = '#4da5ff';
+                document.getElementById('lowRatingButton').style.backgroundColor = 'white';
+                document.getElementById('highRatingButton').style.backgroundColor = 'white';
+            }
+
+            function lowRatingChangeColor(button) {
+                document.getElementById('lowCostButton').style.backgroundColor = 'white';
+                document.getElementById('highCostButton').style.backgroundColor = 'white';
+                document.getElementById('lowDistanceButton').style.backgroundColor = 'white';
+                document.getElementById('highDistanceButton').style.backgroundColor = 'white';
+                document.getElementById('lowRatingButton').style.backgroundColor = '#4da5ff';
+                document.getElementById('highRatingButton').style.backgroundColor = 'white';
+            }
+
+            function highRatingChangeColor(button) {
+                document.getElementById('lowCostButton').style.backgroundColor = 'white';
+                document.getElementById('highCostButton').style.backgroundColor = 'white';
+                document.getElementById('lowDistanceButton').style.backgroundColor = 'white';
+                document.getElementById('highDistanceButton').style.backgroundColor = 'white';
+                document.getElementById('lowRatingButton').style.backgroundColor = 'white';
+                document.getElementById('highRatingButton').style.backgroundColor = '#4da5ff';
             }
         </script>
 
