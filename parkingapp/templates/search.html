@@ -80,15 +80,38 @@
 
             #filterContainer {
                 padding-left:2.5%;
-                padding-right:2.5%;
                 padding-top:25px;
                 padding-bottom:20px;
             }
 
+            #filterListContainer {
+                width:10%;
+                float:left;
+                margin-right:5px;
+            }
+
+            #filterButton {
+                height:75px;
+                background-color:white;
+                width:100%;
+                border-style:solid;
+                border-width:1px;
+                border-color:lightgrey;
+                border-radius:5px;
+            }
+
+            .dropdownFilter {
+                margin-left:15px;
+            }
+
+            .filterCheckBoxLabel {
+                display:inline-block;
+                vertical-align: middle;
+            }
+
             #sortContainer {
                 display:inline-block;
-                float:left;
-                width:90%;
+                width:88%;
             }
 
             #lowSortContainer {
@@ -141,29 +164,6 @@
             }
 
             input:focus {outline: none;}
-
-            #filterListContainer {
-                width:10%;
-            }
-
-            #filterButton {
-                height:75px;
-                background-color:white;
-                width:100%;
-                border-style:solid;
-                border-width:1px;
-                border-color:lightgrey;
-                border-radius:5px;
-            }
-
-            .dropdownFilter {
-                margin-left:15px;
-            }
-
-            .filterCheckBoxLabel {
-                display:inline-block;
-                vertical-align: middle;
-            }
 
             #parkingSpotsContainer {
                 position:absolute;
@@ -299,39 +299,6 @@
     <body id="searchPage" onload="showSearch()">
         <div id="parkingSpotsContainer">
             <div id="filterContainer">
-                <div id="sortContainer">
-                    <div id="lowSortContainer">
-                        <button class="sortButtonLeft"
-                                id="lowCostButton" 
-                                type="button"
-                                onclick="sort_cost_low(); lowCostChangeColor()">Low Cost</button>
-                        <button class="sortButtonMiddle"
-                                id="lowDistanceButton" 
-                                type="button"
-                                onclick="sort_dist_low(); lowDistanceChangeColor()">Low Distance</button>
-                        <button class="sortButtonRight"
-                                id="lowRatingButton" 
-                                type="button"
-                                onclick="sort_rating_low(); lowRatingChangeColor()">Low Rating</button>
-                    </div>
-
-                    <div id="highSortContainer">
-                        <button class="sortButtonLeft"
-                                id="highCostButton" 
-                                type="button"
-                                onclick="sort_cost_high(); highCostChangeColor()">High Cost</button>
-                        <button class="sortButtonMiddle"
-                                id="highDistanceButton" 
-                                type="button"
-                                onclick="sort_dist_high(); highDistanceChangeColor()">High Distance</button>
-                        <button class="sortButtonRight"
-                                id="highRatingButton" 
-                                type="button"
-                                onclick="sort_rating_high(); highRatingChangeColor()">High Rating</button>
-                    </div>
-                </div>
-
-
                 <div id="filterListContainer" class="btn-group">
                     <button     id="filterButton" 
                                 data-toggle="dropdown" 
@@ -382,6 +349,38 @@
                             <label  class="filterCheckBoxLabel" 
                                     for="electricity">Electricity</label></li>
                     </ul>
+                </div>
+
+                <div id="sortContainer">
+                    <div id="lowSortContainer">
+                        <button class="sortButtonLeft"
+                                id="lowCostButton" 
+                                type="button"
+                                onclick="sort_cost_low(); lowCostChangeColor()">Low Cost</button>
+                        <button class="sortButtonMiddle"
+                                id="lowDistanceButton" 
+                                type="button"
+                                onclick="sort_dist_low(); lowDistanceChangeColor()">Low Distance</button>
+                        <button class="sortButtonRight"
+                                id="lowRatingButton" 
+                                type="button"
+                                onclick="sort_rating_low(); lowRatingChangeColor()">Low Rating</button>
+                    </div>
+
+                    <div id="highSortContainer">
+                        <button class="sortButtonLeft"
+                                id="highCostButton" 
+                                type="button"
+                                onclick="sort_cost_high(); highCostChangeColor()">High Cost</button>
+                        <button class="sortButtonMiddle"
+                                id="highDistanceButton" 
+                                type="button"
+                                onclick="sort_dist_high(); highDistanceChangeColor()">High Distance</button>
+                        <button class="sortButtonRight"
+                                id="highRatingButton" 
+                                type="button"
+                                onclick="sort_rating_high(); highRatingChangeColor()">High Rating</button>
+                    </div>
                 </div>
             </div>
 
