@@ -3,7 +3,7 @@
 
 <html lang="en">
     <head>
-        {% include "header.html" %}
+        {% include "searchHeader.html" %}
 
         <title>Search Results</title>
 
@@ -40,17 +40,14 @@
 
             #searchBarForm {
                 display:inline-block;
-                margin-left:2%;
-                margin-right:2%;
-                width:250px;
-                height:100%;
             }
 
             #searchBar {
                 float:left;
-                width:100%;
-                height:35px;
-                margin-top:20px;
+                height:36px;
+                margin-top:7px;
+                margin-left:15px;
+                margin-right:5px;
                 padding-left:10px;
                 border-style:solid;
                 border-width:1px;
@@ -59,9 +56,9 @@
             }
 
             #parkingday {
-                width:60%;
-                height:35px;
-                margin-top:5px;
+                height:36px;
+                margin-top:7px;
+                margin-right:1px;
                 padding-left:10px;
                 border-style:solid;
                 border-width:1px;
@@ -72,31 +69,43 @@
             #searchButton {
                 background-color:#4da5ff;
                 color:white;
-                width:38%;
-                height:35px;
+                height:36px;
+                width:75px;
+                margin-top:7px;
                 border-style:solid;
                 border-width:1px;
                 border-color:lightgrey;
                 border-radius:5px;
             }
 
+            #filterContainer {
+                padding-left:2.5%;
+                padding-right:2.5%;
+                padding-top:25px;
+                padding-bottom:20px;
+            }
+
+            #sortContainer {
+                display:inline-block;
+                float:left;
+                width:90%;
+            }
+
             #lowSortContainer {
                 display:inline-block;
-                width:70%;
-                margin-left:2.5%;
+                width:100%;
             }
 
             #highSortContainer {
                 display:inline-block;
-                width:70%;
-                margin-left:2.5%;
+                width:100%;
             }
 
             .sortButtonLeft, .sortButtonMiddle, .sortButtonRight {
                 background-color:white;
                 display:inline-block;
                 width:33%;
-                height:30px;
+                height:35px;
                 margin:0;
                 border-style:solid;
                 border-color:lightgrey;
@@ -131,40 +140,29 @@
                 color:black;
             }
 
-            hr {
-                display: block;
-                height: 1px;
-                border: 0;
-                border-top: 1px solid lightgrey;
-                padding: 0;
-            }
-
             input:focus {outline: none;}
 
-            #checkboxForm {
-                float:left;
-                height:100%;
-                width:420px;
-                margin-left:-20px;
-                margin-bottom:15px;
+            #filterListContainer {
+                width:10%;
             }
 
-            .checkboxGrid {
-                height:25%;
+            #filterButton {
+                height:75px;
+                background-color:white;
                 width:100%;
+                border-style:solid;
+                border-width:1px;
+                border-color:lightgrey;
+                border-radius:5px;
             }
 
-            .checkboxGrid li {
-                display:inline-block;
-                float:left;
-                width:auto;
+            .dropdownFilter {
+                margin-left:15px;
             }
 
             .filterCheckBoxLabel {
-                position:relative;
-                vertical-align:center;
-                bottom:1;
-                margin-right:10px;
+                display:inline-block;
+                vertical-align: middle;
             }
 
             #parkingSpotsContainer {
@@ -188,15 +186,6 @@
                 margin-bottom:30px;
                 margin-right:15px;
                 margin-left:15px;
-                /*
-                border-style:solid;
-                border-color:grey;
-                border-width:1px;
-                border-radius:2px;
-                -webkit-box-shadow: 0 8px 6px -7px grey;
-                -moz-box-shadow: 0 8px 6px -7px grey;
-                box-shadow: 0 8px 6px -7px grey;
-                */
             }
 
             .parkingImageContainer, .parkingImage {
@@ -204,12 +193,6 @@
                 width:100%; 
                 height:175px; 
                 float:left;
-                /*
-                border-style:solid;
-                border-color:lightgrey;
-                border-width:0px;
-                border-bottom-width:1px;
-                */
             }
 
             .streetAddress {
@@ -313,104 +296,93 @@
         </style>
     </head>
     
-    <body>
+    <body id="searchPage" onload="showSearch()">
         <div id="parkingSpotsContainer">
             <div id="filterContainer">
-                <form id="searchBarForm" action="../search/" method="get" name="search_bar">
-                    <input id="searchBar" type="text" name="location" value={{ prev_search }}>
-                    <input id="parkingday" type="text" name="parkingdate"/>
-                    <input id="searchButton" type="submit" data-inline="true" value="Submit"/>
-                    {% csrf_token %}
-                </form>
+                <div id="sortContainer">
+                    <div id="lowSortContainer">
+                        <button class="sortButtonLeft"
+                                id="lowCostButton" 
+                                type="button"
+                                onclick="sort_cost_low(); lowCostChangeColor()">Low Cost</button>
+                        <button class="sortButtonMiddle"
+                                id="lowDistanceButton" 
+                                type="button"
+                                onclick="sort_dist_low(); lowDistanceChangeColor()">Low Distance</button>
+                        <button class="sortButtonRight"
+                                id="lowRatingButton" 
+                                type="button"
+                                onclick="sort_rating_low(); lowRatingChangeColor()">Low Rating</button>
+                    </div>
 
-                <hr>
-
-                <div id="lowSortContainer">
-                    <button class="sortButtonLeft"
-                            id="lowCostButton" 
-                            type="button"
-                            onclick="sort_cost_low(); lowCostChangeColor()">Low Cost</button>
-                    <button class="sortButtonMiddle"
-                            id="lowDistanceButton" 
-                            type="button"
-                            onclick="sort_dist_low(); lowDistanceChangeColor()">Low Distance</button>
-                    <button class="sortButtonRight"
-                            id="lowRatingButton" 
-                            type="button"
-                            onclick="sort_rating_low(); lowRatingChangeColor()">Low Rating</button>
+                    <div id="highSortContainer">
+                        <button class="sortButtonLeft"
+                                id="highCostButton" 
+                                type="button"
+                                onclick="sort_cost_high(); highCostChangeColor()">High Cost</button>
+                        <button class="sortButtonMiddle"
+                                id="highDistanceButton" 
+                                type="button"
+                                onclick="sort_dist_high(); highDistanceChangeColor()">High Distance</button>
+                        <button class="sortButtonRight"
+                                id="highRatingButton" 
+                                type="button"
+                                onclick="sort_rating_high(); highRatingChangeColor()">High Rating</button>
+                    </div>
                 </div>
 
-                <div id="highSortContainer">
-                    <button class="sortButtonLeft"
-                            id="highCostButton" 
-                            type="button"
-                            onclick="sort_cost_high(); highCostChangeColor()">High Cost</button>
-                    <button class="sortButtonMiddle"
-                            id="highDistanceButton" 
-                            type="button"
-                            onclick="sort_dist_high(); highDistanceChangeColor()">High Distance</button>
-                    <button class="sortButtonRight"
-                            id="highRatingButton" 
-                            type="button"
-                            onclick="sort_rating_high(); highRatingChangeColor()">High Rating</button>
-                </div>
 
-                <hr>
-
-                <form id="checkboxForm" NAME="amenities">
-                    <ul class="checkboxGrid">
-                        <li>
+                <div id="filterListContainer" class="btn-group">
+                    <button     id="filterButton" 
+                                data-toggle="dropdown" 
+                                class="dropdown-toggle"><i class="glyphicon glyphicon-filter"></i>&nbsp;<span class="caret"></span></button>
+                    <ul class="dropdown-menu">
+                        <li class="dropdownFilter">
                             <input  class="filterCheckBox" 
                                     TYPE="checkbox" 
                                     id="filter_grill" 
                                     name="grill" 
-                                    onClick="filter_grill_func()" /> 
+                                    onClick="filter_grill_func()" />
                             <label  class="filterCheckBoxLabel" 
-                                    for="grill">Grill</label>
-                        </li>
+                                    for="grill">Grill</label></li>
 
-                        <li>
+                        <li class="dropdownFilter">
                             <input  class="filterCheckBox" 
                                     TYPE="checkbox" 
                                     id="filter_bathroom" 
                                     name="bathroom" 
                                     onClick="filter_bathroom_func()" />
                             <label  class="filterCheckBoxLabel" 
-                                    for="bathroom">Bathroom</label>
-                        </li>
-
-                        <li>
+                                    for="bathroom">Bathroom</label></li>
+                            
+                        <li class="dropdownFilter">
                             <input  class="filterCheckBox" 
                                     TYPE="checkbox" 
                                     id="filter_yard" 
                                     name="yard" 
                                     onClick="filter_yard_func()" />
                             <label  class="filterCheckBoxLabel" 
-                                    for="yard">Yard</label>
-                        </li>
+                                    for="yard">Yard</label></li>
 
-                        <li>
+                        <li class="dropdownFilter">
                             <input  class="filterCheckBox" 
                                     TYPE="checkbox" 
                                     id="filter_table" 
                                     name="table" 
                                     onClick="filter_table_func()" />
                             <label  class="filterCheckBoxLabel" 
-                                    for="table">Table</label>
-                        </li>
+                                    for="table">Table</label></li>
 
-                        <li>
+                        <li class="dropdownFilter">
                             <input  class="filterCheckBox" 
                                     TYPE="checkbox" 
                                     id="filter_electricity" 
                                     name="electricity" 
                                     onClick="filter_electricity_func()" /> 
                             <label  class="filterCheckBoxLabel" 
-                                    for="electricity">Electricity</label>
-                        </li>
+                                    for="electricity">Electricity</label></li>
                     </ul>
-                    {% csrf_token %}
-                </form>
+                </div>
             </div>
 
             <div id="parkingContainer">
@@ -790,6 +762,12 @@
                 document.getElementById('highDistanceButton').style.backgroundColor = 'white';
                 document.getElementById('lowRatingButton').style.backgroundColor = 'white';
                 document.getElementById('highRatingButton').style.backgroundColor = '#4da5ff';
+            }
+        </script>
+
+        <script type="text/javascript">
+            function showSearch() {
+                document.getElementById('searchBarForm').style.display = 'block;';
             }
         </script>
 
