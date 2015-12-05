@@ -15,36 +15,98 @@
   		<meta charset=utf-8 />
 
   		<style>
-  			html, body {
+  			body {
   				width:100%;
   				min-height:100%;
   			}
+            
+            img.background {
+            	/* Set rules to fill background */
+                min-height: 100%;
+                min-width: 1024px;
+                
+                /* Set up proportionate scaling */
+                width: 100%;
+                height: auto;
+                
+                /* Set up positioning */
+                position: fixed;
+                top: 0;
+                left: 0;
 
+                z-index:-1;
+            } 
+  			
   			body {
   				padding-top:52px;
   			}
+
+  			#Introduction{
+  				position:absolute;
+  				top:50px;
+  				bottom:0;
+  				left:3%;
+  				right:3%;
+  				padding:15px;
+                color:white;
+                font-size:20px;
+                font-style:oblique;
+                font-family: "Times New Roman", Georgia, Serif;
+  			}
+
+  			#Progress{
+  				position:absolute;
+  				top:200px;
+  				bottom:0;
+  				left:3%;
+  				right:3%;
+  				padding:15px;
+                color:white;
+                font-size:20px;
+                font-style:oblique;
+                font-family: "Times New Roman", Georgia, Serif;
+  			}
+
+  			#Future{
+  				position:absolute;
+  				top:400px;
+  				bottom:0;
+  				left:3%;
+  				right:3%;
+  				padding:15px;
+                color:white;
+                font-size:20px;
+                font-style:oblique;
+                font-family: "Times New Roman", Georgia, Serif;
+  			}
+
+
+
   		</style>
 	</head>
 
 	<body>
-	 	{% block nav_bar %}{% endblock %}
-
-	 	<div class="Introduction">
+	 	<img class="background" src="{% static 'media/field.jpg' %}" alt="background">
+        
+	 	<div id="Introduction">
 	 		<h2>What does Gameday Parking do?</h2>
 	 		<p>Gameday Parking is a robust web-app meant to connect people looking for parking with people looking to lease.</p>
 	 		<p>Specifically, users will be able to navigate many parking availabilities and request/reserve parking spots through the app. Admins will be able to post available parking spots with details (amenities, size of space, grill availability, etc)</p>
 
 	 	</div>
 
-	 	<div class="Progress">
+	 	<div id="Progress">
 	 		<h2>What we have done so far?</h2>
-	 		<p>In the first iteration, we created necessary database models and create a basic web interface to populate thsoe modes.</p>
+	 		<p>In the first iteration, we created necessary database models and create a basic web interface to populate thsoe models.</p>
+	 		<p>After the second iteration, parking spot owners are allowed to list their parking spots on the website.</p>
+	 		<p>During the third iteration, we implemented in-application payment system Stripe, add features to the profile page, and allow users to upload pictures and get Email notifications.</P>
 	 	</div>
 
-	 	<div class="Future">
+	 	<div id="Future">
 	 		<h2>What we will do in the near future?</h2>
-	 		<p>In the second iteration, we will add additional features to the web interface and refine it, and reate web interfaces to edit database models.</p>
-	 		<p>In the thrid iteration, we will complete full test suite, and add reach goals that have no dependencies on them (e-commerce, mobile app, etc).</p>
+	 		<p>Fixing Bugs;</p>
+	 		<p>Maintenace;</p>
+	 		<p>More Features Expected!</p>
 	 	</div>  
 	 	{% include "footer.html" %}
 	</body>
