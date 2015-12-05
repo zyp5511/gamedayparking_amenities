@@ -165,6 +165,7 @@ def newspot(request):
         print form
         form.owner = a_user
         if form.is_valid():
+            form.photos = form.cleaned_data['photos']
             form.save()
             message_type = True
             message = "Parking spot created successfully."

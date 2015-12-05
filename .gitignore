@@ -5,6 +5,7 @@ __pycache__/
 
 #Django Stuff
 migrations/
+media/photos/
 *.log
 
 
