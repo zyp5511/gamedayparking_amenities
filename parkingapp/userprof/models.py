@@ -28,9 +28,17 @@ class AdminUser(models.Model):
 @receiver(user_signed_up)
 def do_stuff_after_sign_up(sender, **kwargs):
   try:
+    kwargs['sociallogin']
+    request = kwargs['request']
     user = kwargs['user']
     new_user = ExtendedUser.objects.create(main_user=user)
     new_user.save()
     user.save()
   except KeyError:
-    pass 
+    try:
+      user = kwargs['user']
+      new_user = ExtendedUser.objects.create(main_user=user)
+      new_user.save()
+      user.save()
+    except KeyError:
+      pass 
