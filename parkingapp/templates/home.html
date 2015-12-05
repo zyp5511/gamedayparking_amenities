@@ -20,6 +20,7 @@
             body {
                 min-height:100%;
                 width:100%;
+                padding-top:50px;
             }
 
             img.background {
@@ -48,6 +49,7 @@
                 line-height:1;
                 color:white;
             }
+            
             #homeBody {
                 margin-bottom:0px; 
                 padding-top:0px !important; 
@@ -56,7 +58,11 @@
                 line-height:1;
                 color:white;
             }
+            #error1{
+                width: 50%;
+                display:inline-block;
 
+            }
             #inputForm {
                 display:inline-block;
                 width:70%;
@@ -118,7 +124,10 @@
 
     <body>
         <img class="background" src="{% static 'media/field.jpg' %}" alt="background">
-
+        {% if message %}
+            <div id="error1" style= "text-allign: center"class="alert alert-danger" role="alert">{{ message }}</div>
+        
+        {% endif %}
         <h1 align="center">
             <p id="homeTitle">
                 <b>Gameday Parking Finder</b>

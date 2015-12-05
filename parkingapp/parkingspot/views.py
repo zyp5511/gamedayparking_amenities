@@ -22,6 +22,8 @@ from django.utils.six.moves.urllib.parse import urlparse
 # Create your views here.
 def home(request):
     # get Point from request IP address
+    message = request.session.pop('message', None)
+    print message
     g = GeoIP()
     ip = request.META.get('REMOTE_ADDR', None)
     if ip:
@@ -49,6 +51,7 @@ def home(request):
 
     context = {
         'location' : "{}, {}".format(city, state),
+        "message": message
     }
     return render(request, 'home.html', context)
 
@@ -71,6 +74,11 @@ def search(request):
 
     g = GoogleV3()
     p = g.geocode(location)
+    message = None
+    if p is None:
+        message = "Unable to process search.  Try another query."
+        request.session['message'] = message
+        return redirect('/home')
     point = Point(p.longitude, p.latitude)
     # get point based on IP if location GET not valid
     if not point:

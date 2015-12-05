@@ -13,7 +13,7 @@
 
         <meta charset=utf-8 />
 
-        <style type="text/css">
+    <style type="text/css">
             html, body {
                 width:100%;
                 height:100%;
@@ -21,6 +21,14 @@
 
             body {
                 padding-top:52px;
+            }
+
+            select {
+                -webkit-appearance: none;
+                -moz-appearance: none;
+                appearance: none;
+                font-size: 13px;
+                padding: 2px 10px;
             }
 
             .container {
@@ -116,6 +124,10 @@
                 height:100%;
             }
 
+            #dropdownContainer {
+                padding-left: 15px;
+            }
+
             #messagesDiv {
                 display:block;
                 height:100%;
@@ -166,6 +178,19 @@
                 top:50%;
                 left:45%;
                 margin-top:-200px;
+                margin-left:-250px;
+            }
+
+             .popupReview {
+                width:600px;
+                height:550px;
+                position:absolute;
+                color:#000000;
+                background-color:#F5F5F5;
+                /* To align popup window at the center of screen*/
+                top:50%;
+                left:45%;
+                margin-top:-250px;
                 margin-left:-250px;
             }
 
@@ -402,7 +427,7 @@
 
             #parkingContainer {
                 text-align:center;
-                margin-top:10px;
+                margin-top:30px;
                 width:100%;
             }
 
@@ -896,7 +921,7 @@
                 {% endif %}
                 <!-- END PARKING SPOTS TAB -->
 
-                <!-- BEGIN RESERVATION HISTORY TAB -->
+               <!-- BEGIN RESERVATION HISTORY TAB -->
                 <div class="col-md-9" id="reservationHistoryContainer">
                     <ul class="nav nav-tabs" id="myTab" style="margin-bottom:-1px;">
                         <li class="active"><a href="#" data-toggle="tab"><b>Your Reservation History</b></a></li>
@@ -930,10 +955,48 @@
                                                             id="review" 
                                                             value="{{res.id}}">Write Review</button>
                                                 </td>
+                                                <td><a class="popUpLink" href="#" onClick="pop('{{res.id}}')">
+                                                    <p class="streetAddress">write review</p>
+                                                </a>
+                                            </td>
                                             {% else%}
                                                 <td class="reviewCell">Already Reviewed</td>
                                             {% endif %}
                                         </tr>
+                                        <div id="{{res.id}}" class="ontop">
+                                            <div class="popupReview">
+                                                <!--<img class="parkingImage" src="{{res.parkingspot.photos.url}}" alt="Parking Image">-->
+                                                <img class="parkingImage" src="{{res.parkingspot.photos.url}}" alt="Parking Image">
+                                                <p><b>&nbsp;&nbsp;&nbsp;&nbsp;Address:</b></p>
+                                                <p>&nbsp;&nbsp;&nbsp;&nbsp;{{res.parkingspot.street_address}}</p>
+                                                <p><b>&nbsp;&nbsp;&nbsp;&nbsp;Description:</b></p>
+                                                <p>&nbsp;&nbsp;&nbsp;&nbsp;{{res.parkingspot.description}}</p>
+                                                <!--<p>&nbsp;&nbsp;&nbsp;&nbsp;{{res.parkingspot.description}}</p>-->
+                                                <div class="reviewInput">
+                                                    <div id="dropdownContainer">
+                                                        <p><b>Rating</b></p>
+                                                        <form id="submit_form" action="../profile/" method="post" name="submit_form">
+                                                            <select name="rating" id="rating">
+                                                                <option value="1">1 star</option>
+                                                                <option value="2">2 stars</option>
+                                                                <option value="3">3 stars</option>
+                                                                <option value="4">4 stars</option>
+                                                                <option value="5">5 stars</option>
+                                                            </select>
+                                                        {% csrf_token %}
+                                                        </form>
+                                                    <div>
+                                                </div>
+                                                </div>
+                                                </br>
+                                                <p><b>&nbsp;&nbsp;&nbsp;&nbsp;title</b></p>
+                                                &nbsp;&nbsp;&nbsp;&nbsp;<input type="text" name="titleReview"></br>
+                                                 <!--<input type="text" name="email" style="width:500px; height: 60px;"><br>-->
+                                                 <p><b>&nbsp;&nbsp;&nbsp;&nbsp;Your Review</b></p>
+                                                &nbsp;&nbsp;&nbsp;&nbsp;<textarea name="message" rows="3" cols="60" >Describe your parking experience</textarea>
+                                            </div>
+                                                     <p><a href="#" onClick="hide('popWindow')">Close</a></p>
+                                        </div>
                                     {% endfor %}
                                 </form>
                             {%else%}
