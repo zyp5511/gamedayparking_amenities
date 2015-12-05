@@ -384,6 +384,22 @@
                 display:none;
             }
 
+            #addSpotForm {
+                text-align:right;
+            }
+
+            #addSpotButton {
+                background-color:white;
+                margin-top:5px;
+                width:70px;
+                height:30px;
+                border-width:0;
+            }
+
+            #addSpotButton:hover {
+                color:#4da5ff;
+            }
+
             #parkingContainer {
                 text-align:center;
                 margin-top:30px;
@@ -819,6 +835,15 @@
                         <ul class="nav nav-tabs" id="myTab">
                             <li class="active"><a href="#" data-toggle="tab"><b>Your Parking Spots</b></a></li>
                         </ul>
+
+                        <div id="addSpotContainer">
+                            <form method="link" action="/add_spot" id="addSpotForm">
+                                <button name="addSpot"
+                                        type="text"
+                                        id="addSpotButton"
+                                        onClick="form.submit();"><i class="glyphicon glyphicon-plus"></i> Add</button>
+                            </form>
+                        </div>
 
                         <div id="parkingContainer">
                             {% if parkingspots %}
