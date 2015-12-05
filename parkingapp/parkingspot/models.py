@@ -99,7 +99,7 @@ class ParkingSpot(models.Model):
         if ratings:
             return sum(ratings)/float(len(ratings))
         else:
-            return None
+            return 0
 
 
     # override save method to interpret location field base on address
