@@ -157,7 +157,7 @@
             /* BEGIN MESSAGES TAB */
 
             .ontop {
-                z-index:999;
+                z-index:1;
                 width:100%;
                 height:100%;
                 top:0;
@@ -168,7 +168,7 @@
                 color:#000000;
             }
 
-            .popup {
+            .messagePopup {
                 width:600px;
                 height:350px;
                 position:absolute;
@@ -181,25 +181,12 @@
                 margin-left:-250px;
             }
 
-             .popupReview {
-                width:600px;
-                height:550px;
-                position:absolute;
-                color:#000000;
-                background-color:#F5F5F5;
-                /* To align popup window at the center of screen*/
-                top:50%;
-                left:45%;
-                margin-top:-250px;
-                margin-left:-250px;
-            }
-
-            #popUpHeader {
+            #messagePopUpHeader {
                 text-align:left;
                 padding-left:15px;
             }
 
-            #popUpHeader span {
+            #messagePopUpHeader span {
                 display:inline-block;
                 color:white;
                 width:100%;
@@ -208,7 +195,7 @@
                 margin-top:8px;
             }
 
-            #popUpMainContainer {
+            #messagePopUpMainContainer {
                 position:absolute;
                 top:40px;
                 bottom:0;
@@ -217,7 +204,7 @@
                 background-color:white;
             }
 
-            #replyForm {
+            .replyForm {
                 position:absolute;
                 display:inline-block;
                 text-align:right;
@@ -523,16 +510,117 @@
             }
 
             td.reviewCell button {
+                background-color:#4da5ff;
+                color:white;
                 display:inline-block;
                 width:120px;
                 height:40px;
                 margin-top:1px;
                 border-style:solid;
                 border-width:1px;
+                border-color:#4da5ff;
+                border-radius:5px;
+            }
+
+            .reviewPopup {
+                width:600px;
+                height:375px;
+                position:absolute;
+                color:#000000;
+                background-color:#4da5ff;
+                /* To align popup window at the center of screen*/
+                top:50%;
+                left:45%;
+                margin-top:-200px;
+                margin-left:-250px;
+            }
+
+            #reviewPopUpHeader {
+                text-align:left;
+                padding-left:15px;
+            }
+
+            #reviewPopUpHeader span {
+                display:inline-block;
+                color:white;
+                width:100%;
+                font-size:20px;
+                font-weight:bold;
+                margin-top:8px;
+            }
+
+            #reviewPopUpMainContainer {
+                position:absolute;
+                top:40px;
+                bottom:0;
+                left:0px;
+                right:0px;
+                text-align:right;
+                background-color:white;
+                padding-top:15px;
+                padding-right:25px;
+                padding-left:25px;
+            }
+
+            #ratingSelector {
+                display:inline-block;
+                width:100px;
+                height:35px;
+                margin-left:10px;
+                border-style:solid;
+                border-width:1px;
+                border-color:lightblue;
+                border-radius:3px;
+                margin-right:350px;
+            }
+
+            #reviewTitle {
+                display:inline-block;
+                width:450px;
+                height:35px;
+                float:right;
+                margin-left:10px;
+                padding-left:10px;
+                border-style:solid;
+                border-width:1px;
+                border-color:lightblue;
+                border-radius:3px;
+            }
+
+            #reviewMessage {
+                display:inline-block;
+                width:450px;
+                height:120px;
+                float:right;
+                margin-left:10px;
+                padding-left:10px;
+                padding-top:5px;
+                border-style:solid;
+                border-width:1px;
+                border-color:lightblue;
+            }
+
+            #reviewCancel {
+                width:120px;
+                height:40px;
+                margin-right:8px;
+                border-style:solid;
+                border-width:1px;
                 border-color:lightgrey;
                 border-radius:5px;
             }
 
+            #reviewButton {
+                background-color:#4da5ff;
+                color:white;
+                width:120px;
+                height:40px;
+                margin-left:8px;
+                border-style:solid;
+                border-width:1px;
+                border-color:#4da5ff;
+                border-radius:5px;
+            }
             /* END RESERVATION HISTORY CONTAINER */
         </style>
     </head>
@@ -657,13 +745,13 @@
                                     </div>
 
                                     <div id="popDiv{{x.id}}" class="ontop">
-                                        <div class="popup">
-                                            <div id="popUpHeader">
+                                        <div class="messagePopup">
+                                            <div id="messagePopUpHeader">
                                                 <span>Reply Owner</span>
                                             </div>
 
-                                            <div id="popUpMainContainer">
-                                                <form id="replyForm" action="../reply/" method="post">
+                                            <div id="messagePopUpMainContainer">
+                                                <form class="replyForm" action="../reply/" method="post">
                                                     <input type="hidden" name="pid" value={{x.sender.id}}>
                                                     <div class="fieldContainers">
                                                         <label  class="inputLabels"
@@ -951,51 +1039,71 @@
                                             {% if not res.reviewed%}
                                                 <td class="reviewCell">
                                                     <button name="review" 
-                                                            type="submit" 
+                                                            type="button" 
                                                             id="review" 
-                                                            value="{{res.id}}">Write Review</button>
+                                                            value="{{res.id}}"
+                                                            onClick="pop('{{res.id}}')">Write Review</button>
                                                 </td>
-                                                <td><a class="popUpLink" href="#" onClick="pop('{{res.id}}')">
-                                                    <p class="streetAddress">write review</p>
-                                                </a>
-                                            </td>
                                             {% else%}
                                                 <td class="reviewCell">Already Reviewed</td>
                                             {% endif %}
                                         </tr>
+
                                         <div id="{{res.id}}" class="ontop">
-                                            <div class="popupReview">
-                                                <!--<img class="parkingImage" src="{{res.parkingspot.photos.url}}" alt="Parking Image">-->
-                                                <img class="parkingImage" src="{{res.parkingspot.photos.url}}" alt="Parking Image">
-                                                <p><b>&nbsp;&nbsp;&nbsp;&nbsp;Address:</b></p>
-                                                <p>&nbsp;&nbsp;&nbsp;&nbsp;{{res.parkingspot.street_address}}</p>
-                                                <p><b>&nbsp;&nbsp;&nbsp;&nbsp;Description:</b></p>
-                                                <p>&nbsp;&nbsp;&nbsp;&nbsp;{{res.parkingspot.description}}</p>
-                                                <!--<p>&nbsp;&nbsp;&nbsp;&nbsp;{{res.parkingspot.description}}</p>-->
-                                                <div class="reviewInput">
-                                                    <div id="dropdownContainer">
-                                                        <p><b>Rating</b></p>
-                                                        <form id="submit_form" action="../profile/" method="post" name="submit_form">
-                                                            <select name="rating" id="rating">
-                                                                <option value="1">1 star</option>
-                                                                <option value="2">2 stars</option>
-                                                                <option value="3">3 stars</option>
-                                                                <option value="4">4 stars</option>
-                                                                <option value="5">5 stars</option>
-                                                            </select>
-                                                        {% csrf_token %}
-                                                        </form>
-                                                    <div>
-                                                </div>
-                                                </div>
-                                                </br>
-                                                <p><b>&nbsp;&nbsp;&nbsp;&nbsp;title</b></p>
-                                                &nbsp;&nbsp;&nbsp;&nbsp;<input type="text" name="titleReview"></br>
-                                                 <!--<input type="text" name="email" style="width:500px; height: 60px;"><br>-->
-                                                 <p><b>&nbsp;&nbsp;&nbsp;&nbsp;Your Review</b></p>
-                                                &nbsp;&nbsp;&nbsp;&nbsp;<textarea name="message" rows="3" cols="60" >Describe your parking experience</textarea>
+                                            <div class="reviewPopup">
+                                                <div id="reviewPopUpHeader">
+                                                <span><u>Write Review for: {{res.parkingspot.street_address}}</u></span>
                                             </div>
-                                                     <p><a href="#" onClick="hide('popWindow')">Close</a></p>
+
+                                            <div id="reviewPopUpMainContainer">
+                                                <form class="reviewForm" action="../review/" method="post">
+                                                    <div class="fieldContainers">
+                                                        <label  class="inputLabels"
+                                                                for="ratingSelector">Rating: </label>
+                                                        <select id="ratingSelector" 
+                                                                name="ratingSelector" 
+                                                                class="form-control">
+                                                            <option value="1">1 Star</option>
+                                                            <option value="2">2 Stars</option>
+                                                            <option value="3">3 Stars</option>
+                                                            <option value="4">4 Stars</option>
+                                                            <option value="5">5 Stars</option>
+                                                        </select>
+                                                    </div>
+
+                                                    <div class="fieldContainers">
+                                                        <label  class="inputLabels"
+                                                                for="reviewTitle">Review Title: </label>
+                                                        <input  type="text" 
+                                                                name="reviewTitle"
+                                                                id="reviewTitle"
+                                                                class="reviewTitle"
+                                                                placeholder="Title Here">
+                                                    </div>
+
+                                                    <br/>
+
+                                                    <div class="fieldContainers">
+                                                        <label  class="inputLabels"
+                                                                for="reviewMessage">Review: </label>
+                                                        <textarea   id="reviewMessage"
+                                                                    name="reviewmessage"
+                                                                    maxlength="3000"
+                                                                    placeholder="Write a review..."></textarea>
+                                                    </div>
+
+                                                    <hr>
+                                                    
+                                                    <button id="reviewCancel" 
+                                                            type="button"
+                                                            onClick="hide('{{res.id}}')">Cancel</button>
+
+                                                    <button id="reviewButton" 
+                                                            type="submit">Confirm Review</button>
+                                                    {% csrf_token%}
+                                                </form>
+                                            </div>
+                                            </div>
                                         </div>
                                     {% endfor %}
                                 </form>
