@@ -8,8 +8,17 @@
         
         <link   rel="stylesheet" 
                 href="{% static "bower_components/bootstrap/dist/css/bootstrap.min.css" %}">
+
+        <link rel="stylesheet" href="//code.jquery.com/ui/1.11.4/themes/smoothness/jquery-ui.css">
+     
         <script src="{% static "bower_components/jquery/dist/jquery.min.js" %}"></script>
         <script src="{% static "bower_components/bootstrap/dist/js/bootstrap.min.js" %}"></script>
+
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.4/jquery.min.js"></script>
+        <script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.11.4/jquery-ui.min.js"></script>
+        <script src="{% static "js/jquery-ui.multidatespicker.js" %}"></script>
+    
+
 
         <meta charset=utf-8 />
           
@@ -224,6 +233,17 @@
                             <option value="WY">Wyoming</option></select>
                     </div>
 
+
+                    <div class="fieldContainers">
+                        <label  class="editLabels"
+                                for="datepicker">Dates: </label>
+                        <input  id="datepicker"
+                                type="text"
+                                name="datepicker"
+                                >
+                    </div>
+
+
                     <div class="fieldContainers">
                         <label  class="editLabels"
                                 for="zipcode">Zipcode: </label>
@@ -268,4 +288,18 @@
             </div>
         </div>
     </body>
+
+     <script>
+
+        $(function() {
+            var date = new Date();
+            $("#datepicker").multiDatesPicker({
+
+            addDates: [date.setDate(14), date.setDate(19)]
+            });
+        });
+
+    </script>
+
+
 </html>
