@@ -76,7 +76,7 @@
                 margin-right:100px;
             }
 
-            #street_address, #city, #state, #zipcode, #default_num_spots {
+            #street_address, #city, #state, #zipcode, #datepicker, #default_num_spots {
                 background-color:white;
                 display:inline-block;
                 width:200px;
@@ -233,17 +233,6 @@
                             <option value="WY">Wyoming</option></select>
                     </div>
 
-
-                    <div class="fieldContainers">
-                        <label  class="editLabels"
-                                for="datepicker">Dates: </label>
-                        <input  id="datepicker"
-                                type="text"
-                                name="datepicker"
-                                >
-                    </div>
-
-
                     <div class="fieldContainers">
                         <label  class="editLabels"
                                 for="zipcode">Zipcode: </label>
@@ -251,6 +240,15 @@
                                 type="text"
                                 name="zipcode"
                                 value="{{form.zipcode.value}}">
+                    </div>
+
+                    <div class="fieldContainers">
+                        <label  class="editLabels"
+                                for="datepicker">Available Dates: </label>
+                        <input  id="datepicker"
+                                type="text"
+                                name="datepicker"
+                                >
                     </div>
 
                     <div class="fieldContainers">
