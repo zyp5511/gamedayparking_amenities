@@ -303,8 +303,8 @@
     </body>
 
      <script>
-         var date_list = {{ dates|safe }}
-        $(function(date_list) {
+         var date_list = {{dates|safe}}
+        $(function() {
             var today = new Date();
             $("#datepicker").multiDatesPicker({
             minDate: 0,
@@ -312,15 +312,6 @@
             });
         });
 
-
-        $(function(date_list) {
-            var today = new Date();
-            var date = new Date();
-            $("#datepicker2").multiDatesPicker({
-            minDate: 0,
-            addDates: date_list
-            });
-        });
     </script>
 
 
