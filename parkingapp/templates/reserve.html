@@ -295,7 +295,21 @@
                 margin-bottom:25px;
                 border-style:solid;
                 border-width:1px;
-                border-color:grey;
+                border-color:lightblue;
+                border-radius:3px;
+            }
+
+            #number_spots {
+                display:block;
+                width:300px;
+                height:35px;
+                margin-left:auto;
+                margin-right:auto;
+                padding-left:5px;
+                margin-bottom:25px;
+                border-style:solid;
+                border-width:1px;
+                border-color:lightblue;
                 border-radius:3px;
             }
 
@@ -309,14 +323,16 @@
                 margin-bottom:20px;
                 border-style:solid;
                 border-width:1px;
-                border-color:grey;
+                border-color:lightblue;
+                border-radius:3px;
             }
 
             #confirmButton {
                 background-color:#4da5ff;
+                color:white;
                 width:120px;
-                height:30px;
-                margin-right:8px;
+                height:40px;
+                margin-left:8px;
                 border-style:solid;
                 border-width:1px;
                 border-color:#4da5ff;
@@ -325,8 +341,8 @@
 
             #popUpCancel {
                 width:120px;
-                height:30px;
-                margin-left:8px;
+                height:40px;
+                margin-right:8px;
                 border-style:solid;
                 border-width:1px;
                 border-color:lightgrey;
@@ -446,26 +462,17 @@
                                     <p>(Please Provide owner with Information below)</p>
 
                                     <input type="hidden" name="pid" value={{parkingspot.id}}> 
-                                   <select name="number_spots" id="number_spots">
-                                      <option value="1">1</option>
-                                      <option value="2">2</option>
-                                      <option value="3">3</option>
-                                      <option value="4">4</option>
-                                      <option value="5">5</option>
-                                      <option value="6">6</option>
-                                      <option value="7">7</option>
-                                      <option value="8">8</option>
-                                      <option value="9">9</option>
-                                      <option value="10">10</option>
-                                      <option value="11">11</option>
-                                      <option value="12">12</option>
-                                    </select>
 
                                     <input  type="text" 
                                             name="dp1"
                                             id="dp1"
                                             class="datepicker"
                                             value="00/00/00">
+
+                                    <input  type="text" 
+                                            name="number_spots"
+                                            id="number_spots"
+                                            placeholder="Number of Desired Spots">
 
                                     <textarea   id="message"
                                                 name="message"
