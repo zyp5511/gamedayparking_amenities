@@ -233,7 +233,7 @@ def finalize_reserve(request):
         receiver = parkingspot.owner.extended_user.main_user
         message = Message.objects.create(message=message, subject=subject, is_reservation=True, sender=sender, receiver=receiver, date=datetime.datetime.now() )
         print message.sender
-        res_message = ResMessage.objects.create(message=message, parkingspot=parkingspot, res_date=date)
+        res_message = ResMessage.objects.create(message=message, parkingspot=parkingspot, res_date=date, num_spots=num_spots)
         msg = "Parking Request Sent"
         request.session['message'] = "Reservation Request Sent Successfully"
         request.session['message_type'] = True

@@ -118,7 +118,7 @@ def request_response(request):
       pspot = res_msg.parkingspot
       date = date.strftime('%m/%d/%Y')
       m_user = get_object_or_404(ExtendedUser, main_user=res_msg.message.sender)
-      if pspot.get_num_spots(date) > 0:
+      if pspot.get_num_spots(date) >= res_msg.num_spots:
         # attempt to charge user before accepting them
         if pspot.cost > 0:
           try:
@@ -152,16 +152,17 @@ def request_response(request):
             request.session['message_type'] = success
             return redirect(profile)
           res_msg.transaction_id = charge.id
-          res_msg.is_approved = True
-          res_msg.has_responded = True
+        res_msg.is_approved = True
+        res_msg.has_responded = True
+        for _ in range(res_msg.num_spots):
           pspot.reserve_spot(res_msg.message.sender,date)
-          subject = "Congratulations!  Your parking spot request has been approved."
-          message = "You've successfully booked a parking spot at %s %s, %s for the date: %s." % (pspot.street_address, pspot.city, pspot.state, date)
-          messageO = Message.objects.create(message=message, subject=subject, is_reservation=False, sender=res_msg.message.receiver, receiver=res_msg.message.sender)
-          messageO.save()
-          res_msg.save()
-          msg = "Parking spot approved successfully."
-          success = True
+        subject = "Congratulations!  Your parking spot(s) request has been approved."
+        message = "You've successfully booked a parking spot at %s %s, %s for the date: %s." % (pspot.street_address, pspot.city, pspot.state, date)
+        messageO = Message.objects.create(message=message, subject=subject, is_reservation=False, sender=res_msg.message.receiver, receiver=res_msg.message.sender)
+        messageO.save()
+        res_msg.save()
+        msg = "Parking spot(s) approved successfully."
+        success = True
       else:
         msg = "You've overbooked for that date, or you haven't opened that date for booking.  You can increase your number of spots available."
         success = False

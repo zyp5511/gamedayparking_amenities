@@ -27,6 +27,7 @@ class ResMessage(models.Model):
   has_responded = models.BooleanField(default=False)
   reviewed = models.ForeignKey(Review, null=True, blank=True)
   transaction_id = models.CharField(max_length=255, null=True, blank=True)
+  num_spots = models.IntegerField(default=1)
 
   def __str__(self):
     return "%s -> %s, %s" % (self.message.sender, self.message.receiver, self.parkingspot)
