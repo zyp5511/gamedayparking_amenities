@@ -12,7 +12,7 @@ class Message(models.Model):
   subject = models.CharField(max_length=80, blank=True)
   message = models.CharField(max_length=1000, blank=True)
   read = models.BooleanField(default=False)
-  date = models.DateTimeField(auto_now_add=True, auto_now=False, blank=True, null=True)
+  date = models.DateField(auto_now_add=True, auto_now=False, blank=True, null=True)
   is_reservation = models.BooleanField(default=False)
 
   def __str__(self):
