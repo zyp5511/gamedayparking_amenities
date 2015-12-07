@@ -147,8 +147,7 @@ def spotmodify(request):
             print opend
         except:
             print 'none found'
-        opend = opend.split(',')
-        print opend
+        opend = opend.split(', ')
         for date in opend:
             instance.open_date(date)
         if form.is_valid():
