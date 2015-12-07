@@ -8,7 +8,7 @@
         
         <link   rel="stylesheet" 
                 href="{% static "bower_components/bootstrap/dist/css/bootstrap.min.css" %}">
-
+          <link href ="css/datepicker.css" rel="stylesheet" type="text/css"/>
         <link rel="stylesheet" href="//code.jquery.com/ui/1.11.4/themes/smoothness/jquery-ui.css">
      
         <script src="{% static "bower_components/jquery/dist/jquery.min.js" %}"></script>
@@ -253,6 +253,15 @@
 
                     <div class="fieldContainers">
                         <label  class="editLabels"
+                                for="datepicker2">Unavailable Dates: </label>
+                        <input  id="datepicker2"
+                                type="text"
+                                name="datepicker2"
+                                >
+                    </div>
+
+                    <div class="fieldContainers">
+                        <label  class="editLabels"
                                 for="default_num_spots">Number of Spots: </label>
                         <input  id="default_num_spots"
                                 type="text"
@@ -290,13 +299,22 @@
      <script>
 
         $(function() {
-            var date = new Date();
+            var today = new Date();
             $("#datepicker").multiDatesPicker({
-
-            addDates: [date.setDate(14), date.setDate(19)]
+            minDate: 0,
+            addDates: ['12/11/2015', '12/12/2015']
             });
         });
 
+
+        $(function() {
+            var today = new Date();
+            var date = new Date();
+            $("#datepicker2").multiDatesPicker({
+            minDate: 0,
+            addDates: ['12/11/2015', '12/12/2015']
+            });
+        });
     </script>
 
 
