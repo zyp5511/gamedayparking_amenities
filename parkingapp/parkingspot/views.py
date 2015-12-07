@@ -140,8 +140,6 @@ def spotmodify(request):
         instance = get_object_or_404(ParkingSpot, id=pid) #TODO, switch to ID
         form = ParkingSpotEdit(request.POST, request.FILES, instance=instance)
         form.owner = a_user
-        dates = instance.get_date_array()
-        dates = json.dumps(dates)
         opend = []
         try:
             opend = request.POST['opendates']
@@ -151,6 +149,8 @@ def spotmodify(request):
         opend = opend.split(', ')
         for date in opend:
             instance.open_date(date)
+        dates = instance.get_date_array()
+        dates = json.dumps(dates)
         if form.is_valid():
             form.photos = form.cleaned_data['photos']
             form.save()
