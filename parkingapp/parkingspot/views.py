@@ -139,21 +139,19 @@ def spotmodify(request):
     if request.method == 'POST':
         pid = int(request.POST['send'])
         instance = get_object_or_404(ParkingSpot, id=pid) #TODO, switch to ID
-        print "GOT HERE"
         form = ParkingSpotEdit(request.POST, request.FILES, instance=instance)
         form.owner = a_user
-        print form
+        dates = instance.get_date_array()
         if form.is_valid():
             form.photos = form.cleaned_data['photos']
             form.save()
-            return render(request, "editspot.html", {'form': form, 'pid': pid, 'instance': instance})
+            return render(request, "editspot.html", {'form': form, 'pid': pid, 'instance': instance, "dates": dates})
     elif request.method == 'GET':
         pid=int(request.GET['edit'])
         instance = get_object_or_404(ParkingSpot, id=pid) #TODO, switch to ID
-        print instance.id
+        dates = instance.get_date_array()
         form = ParkingSpotEdit(instance=instance)
-        print form
-    return render(request, "editspot.html", {'form': form, 'pid': pid, 'instance': instance})
+    return render(request, "editspot.html", {'form': form, 'pid': pid, 'instance': instance, "dates": dates})
 
 
 def newspot(request):

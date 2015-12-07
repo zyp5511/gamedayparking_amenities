@@ -49,7 +49,6 @@ def admin_page(request, message=None, success=None):
   except:
     return redirect('/home')
   parking_list = ParkingSpot.objects.filter(owner=a_user)
-  print parking_list
 
 
 def profile(request):
