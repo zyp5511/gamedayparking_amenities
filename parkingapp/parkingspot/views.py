@@ -14,7 +14,7 @@ from userprof.models import ExtendedUser, AdminUser
 from django.contrib.auth.models import User
 from parkingspot.forms import ParkingSpotEdit, ParkingSpotAdd
 import os
-
+import json
 
 from django.contrib.auth.decorators import login_required
 from django.utils.six.moves.urllib.parse import urlparse
@@ -141,6 +141,16 @@ def spotmodify(request):
         form = ParkingSpotEdit(request.POST, request.FILES, instance=instance)
         form.owner = a_user
         dates = instance.get_date_array()
+        opend = []
+        try:
+            opend = request.POST['opendates']
+            print opend
+        except:
+            print 'none found'
+        opend = opend.split(',')
+        print opend
+        for date in opend:
+            instance.open_date(date)
         if form.is_valid():
             form.photos = form.cleaned_data['photos']
             form.save()
@@ -150,6 +160,7 @@ def spotmodify(request):
         print pid
         instance = get_object_or_404(ParkingSpot, id=pid) #TODO, switch to ID
         dates = instance.get_date_array()
+        dates = json.dumps(dates)
         form = ParkingSpotEdit(instance=instance)
     return render(request, "editspot.html", {'form': form, 'pid': pid, 'instance': instance, "dates": dates})
 
