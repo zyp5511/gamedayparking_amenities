@@ -141,6 +141,16 @@ def spotmodify(request):
         form = ParkingSpotEdit(request.POST, request.FILES, instance=instance)
         form.owner = a_user
         dates = instance.get_date_array()
+        opend = []
+        try:
+            opend = request.POST['opendates']
+            print opend
+        except:
+            print 'none found'
+        opend = opend.split(',')
+        print opend
+        for date in opend:
+            instance.open_date(date)
         if form.is_valid():
             form.photos = form.cleaned_data['photos']
             form.save()
