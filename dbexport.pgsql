@@ -515,7 +515,7 @@ CREATE TABLE message_message (
     subject character varying(80) NOT NULL,
     message character varying(1000) NOT NULL,
     read boolean NOT NULL,
-    date timestamp with time zone,
+    date date,
     is_reservation boolean NOT NULL,
     receiver_id integer NOT NULL,
     sender_id integer NOT NULL
@@ -981,6 +981,7 @@ ALTER TABLE ONLY socialaccount_socialtoken ALTER COLUMN id SET DEFAULT nextval('
 --
 
 COPY account_emailaddress (id, email, verified, "primary", user_id) FROM stdin;
+1	mprouve@optonline.net	f	t	2
 \.
 
 
@@ -988,7 +989,7 @@ COPY account_emailaddress (id, email, verified, "primary", user_id) FROM stdin;
 -- Name: account_emailaddress_id_seq; Type: SEQUENCE SET; Schema: public; Owner: test
 --
 
-SELECT pg_catalog.setval('account_emailaddress_id_seq', 1, false);
+SELECT pg_catalog.setval('account_emailaddress_id_seq', 1, true);
 
 
 --
@@ -996,6 +997,7 @@ SELECT pg_catalog.setval('account_emailaddress_id_seq', 1, false);
 --
 
 COPY account_emailconfirmation (id, created, sent, key, email_address_id) FROM stdin;
+1	2015-12-07 14:56:20.159203-06	2015-12-07 14:56:20.168551-06	cknllkkchqm76cjto3v4swqa6slqlheuxdrvt98clewwwrbksmuncrmyfbwqbr9i	1
 \.
 
 
@@ -1003,7 +1005,7 @@ COPY account_emailconfirmation (id, created, sent, key, email_address_id) FROM s
 -- Name: account_emailconfirmation_id_seq; Type: SEQUENCE SET; Schema: public; Owner: test
 --
 
-SELECT pg_catalog.setval('account_emailconfirmation_id_seq', 1, false);
+SELECT pg_catalog.setval('account_emailconfirmation_id_seq', 1, true);
 
 
 --
@@ -1110,7 +1112,8 @@ SELECT pg_catalog.setval('auth_permission_id_seq', 54, true);
 --
 
 COPY auth_user (id, password, last_login, is_superuser, username, first_name, last_name, email, is_staff, is_active, date_joined) FROM stdin;
-1	pbkdf2_sha256$20000$WBgvgUXmTSDL$pi2fAfy/Xj98jCbLENQlfAntPduXlje7F0ZVR4P4yy0=	2015-12-06 20:39:31.190213-06	t	mprouve			marcoprouve@gmail.com	t	t	2015-12-06 20:39:03.887286-06
+2	!ZiKS97zPo2vsXoZu1wrmoGga2zVFsK2UQMDtE9zq	2015-12-07 14:56:20.181156-06	f	marco	Marco	Prouve	mprouve@optonline.net	f	t	2015-12-07 14:56:20.116563-06
+1	pbkdf2_sha256$20000$WBgvgUXmTSDL$pi2fAfy/Xj98jCbLENQlfAntPduXlje7F0ZVR4P4yy0=	2015-12-07 15:04:01.72941-06	t	mprouve			marcoprouve@gmail.com	t	t	2015-12-06 20:39:03.887286-06
 \.
 
 
@@ -1133,7 +1136,7 @@ SELECT pg_catalog.setval('auth_user_groups_id_seq', 1, false);
 -- Name: auth_user_id_seq; Type: SEQUENCE SET; Schema: public; Owner: test
 --
 
-SELECT pg_catalog.setval('auth_user_id_seq', 1, true);
+SELECT pg_catalog.setval('auth_user_id_seq', 2, true);
 
 
 --
@@ -1180,6 +1183,15 @@ COPY django_admin_log (id, action_time, object_id, object_repr, action_flag, cha
 22	2015-12-06 21:44:51.751576-06	3	221 Langdon St.	2	Changed amenities and parking_spot_avail.	12	1
 23	2015-12-06 21:44:59.33804-06	2	614 Langdon St.	2	Changed amenities, default_num_spots and parking_spot_avail.	12	1
 24	2015-12-06 21:45:07.493749-06	1	420 Langdon St.	2	Changed amenities, default_num_spots and parking_spot_avail.	12	1
+25	2015-12-06 22:02:42.450421-06	6	633 N Henry Street	2	Changed state, amenities and parking_spot_avail.	12	1
+26	2015-12-06 23:04:42.618228-06	8	613 N. Frances St.	2	Changed amenities and parking_spot_avail.	12	1
+27	2015-12-06 23:04:50.279611-06	7	621 N. Frances St.	2	Changed amenities and parking_spot_avail.	12	1
+28	2015-12-06 23:04:57.970488-06	6	633 N Henry Street	2	Changed amenities and parking_spot_avail.	12	1
+29	2015-12-06 23:05:12.178551-06	5	222 Langdon St.	2	Changed amenities and parking_spot_avail.	12	1
+30	2015-12-06 23:05:26.406613-06	4	437 N. Frances St.	2	Changed amenities and parking_spot_avail.	12	1
+31	2015-12-06 23:05:35.561574-06	3	221 Langdon St.	2	Changed amenities and parking_spot_avail.	12	1
+32	2015-12-06 23:05:42.758905-06	2	614 Langdon St.	2	Changed amenities and parking_spot_avail.	12	1
+33	2015-12-06 23:05:53.316252-06	1	420 Langdon St.	2	Changed amenities and parking_spot_avail.	12	1
 \.
 
 
@@ -1187,7 +1199,7 @@ COPY django_admin_log (id, action_time, object_id, object_repr, action_flag, cha
 -- Name: django_admin_log_id_seq; Type: SEQUENCE SET; Schema: public; Owner: test
 --
 
-SELECT pg_catalog.setval('django_admin_log_id_seq', 24, true);
+SELECT pg_catalog.setval('django_admin_log_id_seq', 33, true);
 
 
 --
@@ -1249,6 +1261,7 @@ COPY django_migrations (id, app, name, applied) FROM stdin;
 19	sites	0001_initial	2015-12-06 20:37:39.044588-06
 20	socialaccount	0001_initial	2015-12-06 20:37:39.283837-06
 21	review	0002_auto_20151207_0351	2015-12-06 21:51:17.536707-06
+22	message	0003_auto_20151207_0711	2015-12-07 01:11:35.995769-06
 \.
 
 
@@ -1256,7 +1269,7 @@ COPY django_migrations (id, app, name, applied) FROM stdin;
 -- Name: django_migrations_id_seq; Type: SEQUENCE SET; Schema: public; Owner: test
 --
 
-SELECT pg_catalog.setval('django_migrations_id_seq', 21, true);
+SELECT pg_catalog.setval('django_migrations_id_seq', 22, true);
 
 
 --
@@ -1264,7 +1277,6 @@ SELECT pg_catalog.setval('django_migrations_id_seq', 21, true);
 --
 
 COPY django_session (session_key, session_data, expire_date) FROM stdin;
-952lob73iu28qpeldvkvbz8gjnvshqd8	NTUxMGZiNmQ1NmEyZmQzMzhlNzIxYzE0OTIzYzllNDEyOWFmMWYxMzp7Il9hdXRoX3VzZXJfaWQiOiIxIiwiX2F1dGhfdXNlcl9iYWNrZW5kIjoiZGphbmdvLmNvbnRyaWIuYXV0aC5iYWNrZW5kcy5Nb2RlbEJhY2tlbmQiLCJfbWVzc2FnZXMiOiJbW1wiX19qc29uX21lc3NhZ2VcIiwwLDI1LFwiVGhlIHBhcmtpbmcgc3BvdCBcXFwiMjIyIExhbmdkb24gU3QuXFxcIiB3YXMgY2hhbmdlZCBzdWNjZXNzZnVsbHkuXCJdLFtcIl9fanNvbl9tZXNzYWdlXCIsMCwyNSxcIlRoZSBwYXJraW5nIHNwb3QgXFxcIjQzNyBOLiBGcmFuY2VzIFN0LlxcXCIgd2FzIGNoYW5nZWQgc3VjY2Vzc2Z1bGx5LlwiXSxbXCJfX2pzb25fbWVzc2FnZVwiLDAsMjUsXCJUaGUgcGFya2luZyBzcG90IFxcXCIyMjEgTGFuZ2RvbiBTdC5cXFwiIHdhcyBjaGFuZ2VkIHN1Y2Nlc3NmdWxseS5cIl0sW1wiX19qc29uX21lc3NhZ2VcIiwwLDI1LFwiVGhlIHBhcmtpbmcgc3BvdCBcXFwiNjE0IExhbmdkb24gU3QuXFxcIiB3YXMgY2hhbmdlZCBzdWNjZXNzZnVsbHkuXCJdLFtcIl9fanNvbl9tZXNzYWdlXCIsMCwyNSxcIlRoZSBwYXJraW5nIHNwb3QgXFxcIjQyMCBMYW5nZG9uIFN0LlxcXCIgd2FzIGNoYW5nZWQgc3VjY2Vzc2Z1bGx5LlwiXSxbXCJfX2pzb25fbWVzc2FnZVwiLDAsMjUsXCJUaGUgcGFya2luZyBzcG90IFxcXCI2MjEgTi4gRnJhbmNlcyBTdC5cXFwiIHdhcyBjaGFuZ2VkIHN1Y2Nlc3NmdWxseS5cIl0sW1wiX19qc29uX21lc3NhZ2VcIiwwLDI1LFwiVGhlIHBhcmtpbmcgc3BvdCBcXFwiNjIxIE4uIEZyYW5jZXMgU3QuXFxcIiB3YXMgY2hhbmdlZCBzdWNjZXNzZnVsbHkuXCJdLFtcIl9fanNvbl9tZXNzYWdlXCIsMCwyNSxcIlRoZSBwYXJraW5nIHNwb3QgXFxcIjYzMyBOIEhlbnJ5IFN0cmVldFxcXCIgd2FzIGNoYW5nZWQgc3VjY2Vzc2Z1bGx5LlwiXSxbXCJfX2pzb25fbWVzc2FnZVwiLDAsMjUsXCJUaGUgcGFya2luZyBzcG90IFxcXCI2MjEgTi4gRnJhbmNlcyBTdC5cXFwiIHdhcyBjaGFuZ2VkIHN1Y2Nlc3NmdWxseS5cIl0sW1wiX19qc29uX21lc3NhZ2VcIiwwLDI1LFwiVGhlIHBhcmtpbmcgc3BvdCBcXFwiNjMzIE4gSGVucnkgU3RyZWV0XFxcIiB3YXMgY2hhbmdlZCBzdWNjZXNzZnVsbHkuXCJdLFtcIl9fanNvbl9tZXNzYWdlXCIsMCwyNSxcIlRoZSBwYXJraW5nIHNwb3QgXFxcIjYyMSBOLiBGcmFuY2VzIFN0LlxcXCIgd2FzIGNoYW5nZWQgc3VjY2Vzc2Z1bGx5LlwiXSxbXCJfX2pzb25fbWVzc2FnZVwiLDAsMjUsXCJUaGUgcGFya2luZyBzcG90IFxcXCI2MzMgTiBIZW5yeSBTdHJlZXRcXFwiIHdhcyBjaGFuZ2VkIHN1Y2Nlc3NmdWxseS5cIl0sW1wiX19qc29uX21lc3NhZ2VcIiwwLDI1LFwiVGhlIHBhcmtpbmcgc3BvdCBcXFwiMjIyIExhbmdkb24gU3QuXFxcIiB3YXMgY2hhbmdlZCBzdWNjZXNzZnVsbHkuXCJdLFtcIl9fanNvbl9tZXNzYWdlXCIsMCwyNSxcIlRoZSBwYXJraW5nIHNwb3QgXFxcIjYyMSBOLiBGcmFuY2VzIFN0LlxcXCIgd2FzIGNoYW5nZWQgc3VjY2Vzc2Z1bGx5LlwiXSxbXCJfX2pzb25fbWVzc2FnZVwiLDAsMjUsXCJUaGUgcGFya2luZyBzcG90IFxcXCI0MzcgTi4gRnJhbmNlcyBTdC5cXFwiIHdhcyBjaGFuZ2VkIHN1Y2Nlc3NmdWxseS5cIl0sW1wiX19qc29uX21lc3NhZ2VcIiwwLDI1LFwiVGhlIHBhcmtpbmcgc3BvdCBcXFwiMjIxIExhbmdkb24gU3QuXFxcIiB3YXMgY2hhbmdlZCBzdWNjZXNzZnVsbHkuXCJdLFtcIl9fanNvbl9tZXNzYWdlXCIsMCwyNSxcIlRoZSBwYXJraW5nIHNwb3QgXFxcIjIyMSBMYW5nZG9uIFN0LlxcXCIgd2FzIGNoYW5nZWQgc3VjY2Vzc2Z1bGx5LlwiXSxbXCJfX2pzb25fbWVzc2FnZVwiLDAsMjUsXCJUaGUgcGFya2luZyBzcG90IFxcXCI2MTQgTGFuZ2RvbiBTdC5cXFwiIHdhcyBjaGFuZ2VkIHN1Y2Nlc3NmdWxseS5cIl0sW1wiX19qc29uX21lc3NhZ2VcIiwwLDI1LFwiVGhlIHBhcmtpbmcgc3BvdCBcXFwiNDIwIExhbmdkb24gU3QuXFxcIiB3YXMgY2hhbmdlZCBzdWNjZXNzZnVsbHkuXCJdXSIsIl9hdXRoX3VzZXJfaGFzaCI6IjY5ZWEzZTI2ZjBhMWNiYTQwNTRiMGE2N2U5NzYxNzljZmY4MmY2YmIifQ==	2015-12-20 21:54:50.0761-06
 \.
 
 
@@ -1289,16 +1301,32 @@ SELECT pg_catalog.setval('django_site_id_seq', 1, true);
 --
 
 COPY message_message (id, subject, message, read, date, is_reservation, receiver_id, sender_id) FROM stdin;
-2	Reservation Request	I want one.	f	2015-12-06 21:34:51.461541-06	t	1	1
-3	Your payment information is out of date	\n              mprouve attempted to approve your  reservation request for a parking spot at 222 Langdon St., but was unable to\n              becuase your payment information was rejected. Please update your payment information, which can be done so\n              through your user profile settings\n              	f	2015-12-06 21:34:56.607103-06	f	1	1
-4	Congratulations!  Your parking spot(s) request has been approved.	You've successfully booked a parking spot at 222 Langdon St. Madison, WI for the date: 12/30/2015.	f	2015-12-06 21:37:33.222088-06	f	1	1
-5	Reservation Request	I want 2 spots.	f	2015-12-06 21:39:19.075923-06	t	1	1
-6	Reservation Request	I want 1 spot.	f	2015-12-06 21:39:29.283743-06	t	1	1
-7	Reservation Request	I want 5 spots please	f	2015-12-06 21:45:35.235986-06	t	1	1
-8	Reservation Request	I want 3 Please	f	2015-12-06 21:45:58.617669-06	t	1	1
-9	Congratulations!  Your parking spot(s) request has been approved.	You've successfully booked a parking spot at 633 N Henry Street Madison, WI for the date: 12/06/2015.	f	2015-12-06 21:46:09.671195-06	f	1	1
-10	Congratulations!  Your parking spot(s) request has been approved.	You've successfully booked a parking spot at 621 N. Frances St. Madison, WI for the date: 12/06/2015.	f	2015-12-06 21:46:14.432745-06	f	1	1
-11	Your request for a parking spot could not be fulfilled.	We're sorry.  We were unable to book a parking spot at 437 N. Frances St. Madison, WI for the date: 2015-12-30 00:00:00+00:00.	f	2015-12-06 21:53:19.494692-06	f	1	1
+2	Reservation Request	I want one.	f	2015-12-07	t	1	1
+3	Your payment information is out of date	\n              mprouve attempted to approve your  reservation request for a parking spot at 222 Langdon St., but was unable to\n              becuase your payment information was rejected. Please update your payment information, which can be done so\n              through your user profile settings\n              	f	2015-12-07	f	1	1
+4	Congratulations!  Your parking spot(s) request has been approved.	You've successfully booked a parking spot at 222 Langdon St. Madison, WI for the date: 12/30/2015.	f	2015-12-07	f	1	1
+5	Reservation Request	I want 2 spots.	f	2015-12-07	t	1	1
+6	Reservation Request	I want 1 spot.	f	2015-12-07	t	1	1
+7	Reservation Request	I want 5 spots please	f	2015-12-07	t	1	1
+8	Reservation Request	I want 3 Please	f	2015-12-07	t	1	1
+9	Congratulations!  Your parking spot(s) request has been approved.	You've successfully booked a parking spot at 633 N Henry Street Madison, WI for the date: 12/06/2015.	f	2015-12-07	f	1	1
+10	Congratulations!  Your parking spot(s) request has been approved.	You've successfully booked a parking spot at 621 N. Frances St. Madison, WI for the date: 12/06/2015.	f	2015-12-07	f	1	1
+11	Your request for a parking spot could not be fulfilled.	We're sorry.  We were unable to book a parking spot at 437 N. Frances St. Madison, WI for the date: 2015-12-30 00:00:00+00:00.	f	2015-12-07	f	1	1
+12	Reservation Request	I would Like 3 please.	f	2015-12-07	t	1	1
+13	Congratulations!  Your parking spot(s) request has been approved.	You've successfully booked a parking spot at 633 N Henry Street Madison, WI for the date: 12/30/2015.	f	2015-12-07	f	1	1
+14	Reservation Request	I would like 2 spots please.	f	2015-12-07	t	1	1
+15	Reservation Request	I would like 2 spots please.	f	2015-12-07	t	1	1
+16	Congratulations!  Your parking spot(s) request has been approved.	You've successfully booked a parking spot at 621 N. Frances St. Madison, WI for the date: 12/06/2015.	f	2015-12-07	f	1	1
+17	Congratulations!  Your parking spot(s) request has been approved.	You've successfully booked a parking spot at 437 N. Frances St. Madison, WI for the date: 12/30/2015.	f	2015-12-07	f	1	1
+18	RE: Congratulations!  Your parking spot(s) request has been approved.	\r\n\r\n\r\n-------------------------------------------------\r\nYou've successfully booked a parking spot at 437 N. Frances St. Madison, WI for the date: 12/30/2015.	f	2015-12-07	f	1	1
+19	RE: RE: Congratulations!  Your parking spot(s) request has been approved.	\r\n\r\n\r\n-------------------------------------------------\r\n\r\n\r\n\r\n-------------------------------------------------\r\nYou've successfully booked a parking spot at 437 N. Frances St. Madison, WI for the date: 12/30/2015.	f	2015-12-07	f	1	1
+20	RE: RE: RE: Congratulations!  Your parking spot(s) request has been approved.	\r\n\r\n\r\n-------------------------------------------------\r\n\r\n\r\n\r\n-------------------------------------------------\r\n\r\n\r\n\r\n-------------------------------------------------\r\nYou've successfully booked a parking spot at 437 N. Frances St. Madison, WI for the date: 12/30/2015.	f	2015-12-07	f	1	1
+21	RE: Congratulations!  Your parking spot(s) request has been approved.	\r\n\r\n\r\n-------------------------------------------------\r\nYou've successfully booked a parking spot at 437 N. Frances St. Madison, WI for the date: 12/30/2015.	f	2015-12-07	f	1	1
+22	RE: Your payment information is out of date	hey\r\n\r\n\r\n-------------------------------------------------\r\n\r\n              mprouve attempted to approve your  reservation request for a parking spot at 222 Langdon St., but was unable to\r\n              becuase your payment information was rejected. Please update your payment information, which can be done so\r\n              through your user profile settings\r\n              	f	2015-12-07	f	1	1
+23	Reservation Request	Hello.  It's me.\r\n	f	2015-12-07	t	1	1
+24	Reservation Request	message to owner	f	2015-12-07	t	1	1
+25	Congratulations!  Your parking spot(s) request has been approved.	You've successfully booked a parking spot at 633 N Henry Street Madison, WI for the date: 12/06/2015.	f	2015-12-07	f	1	1
+27	Reservation Request	Hello.	f	2015-12-07	t	1	1
+28	Congratulations!  Your parking spot(s) request has been approved.	You've successfully booked a parking spot at 633 N Henry Street Madison, WI for the date: 12/30/2015.	f	2015-12-07	f	1	1
 \.
 
 
@@ -1306,7 +1334,7 @@ COPY message_message (id, subject, message, read, date, is_reservation, receiver
 -- Name: message_message_id_seq; Type: SEQUENCE SET; Schema: public; Owner: test
 --
 
-SELECT pg_catalog.setval('message_message_id_seq', 11, true);
+SELECT pg_catalog.setval('message_message_id_seq', 28, true);
 
 
 --
@@ -1315,10 +1343,16 @@ SELECT pg_catalog.setval('message_message_id_seq', 11, true);
 
 COPY message_resmessage (id, res_date, is_approved, has_responded, transaction_id, num_spots, message_id, parkingspot_id, reviewed_id) FROM stdin;
 2	2015-12-29 18:00:00-06	t	t	ch_17FFoeLAT2RWkw5PaipB55cE	1	2	5	\N
-4	2015-12-29 18:00:00-06	f	f	\N	1	6	4	\N
 6	2015-12-05 18:00:00-06	t	t	ch_17FFx4LAT2RWkw5P5b6DZTsL	3	8	7	1
 5	2015-12-05 18:00:00-06	t	t	ch_17FFwzLAT2RWkw5PMjkcAPRZ	5	7	6	2
 3	2015-12-29 18:00:00-06	f	t	\N	2	5	4	\N
+7	2015-12-29 18:00:00-06	t	t	ch_17FH98LAT2RWkw5PNz1Ibk7Y	3	12	6	\N
+8	2015-12-05 18:00:00-06	t	t	ch_17FHw2LAT2RWkw5PKDtopgey	2	14	7	\N
+4	2015-12-29 18:00:00-06	t	t	ch_17FHwULAT2RWkw5PPzhJAuZL	1	6	4	\N
+10	2015-12-29 18:00:00-06	f	f	\N	4	23	3	\N
+11	2015-12-29 18:00:00-06	f	f	\N	1	24	7	\N
+9	2015-12-05 18:00:00-06	t	t	ch_17FW0ULAT2RWkw5PyuGjDLS4	2	15	6	\N
+13	2015-12-29 18:00:00-06	t	t	ch_17FWAcLAT2RWkw5PrpOFPKP0	2	27	6	\N
 \.
 
 
@@ -1326,7 +1360,7 @@ COPY message_resmessage (id, res_date, is_approved, has_responded, transaction_i
 -- Name: message_resmessage_id_seq; Type: SEQUENCE SET; Schema: public; Owner: test
 --
 
-SELECT pg_catalog.setval('message_resmessage_id_seq', 6, true);
+SELECT pg_catalog.setval('message_resmessage_id_seq', 13, true);
 
 
 --
@@ -1334,14 +1368,14 @@ SELECT pg_catalog.setval('message_resmessage_id_seq', 6, true);
 --
 
 COPY parkingspot_parkingspot (id, street_address, city, state, zipcode, location, description, amenities, cost, photos, default_num_spots, parking_spot_avail, owner_id) FROM stdin;
-6	633 N Henry Street	Madison	WI	53706	0101000020E6100000BBDC161B295956C08B4061F5EC894540	ryans spot	{"electricity":false,"grill":false,"bathroom":false,"yard":false,"table":false}	2	photos/6/homeBackground1.jpg	10	{"dates":{"12/30/2015":{"max":10,"res":[]},"12/06/2015":{"max":10,"res":[1,1,1,1,1]}}}	1
-5	222 Langdon St.	Madison	WI	53706	0101000020E6100000588B4F01305956C05DA79196CA894540	NoneThis is a description.This is a description.This is a description.This is a description.This is a description.This is a description.This is a description.This is a description.This is a description.This is a description.	{"electricity":false,"grill":false,"bathroom":false,"yard":false,"table":false}	3	photos/5/homeBackground1.jpg	10	{"dates":{"12/30/2015":{"max":10,"res":[1]}}}	1
-7	621 N. Frances St.	Madison	WI	53706	0101000020E610000076C4211B485956C09CFA40F2CE894540	This is a description.This is a description.This is a description.This is a description.This is a description.This is a description.This is a description.	{"electricity":false,"grill":false,"bathroom":false,"yard":false,"table":false}	1	photos/7/woodBackground_yTfY7Mn.jpg	10	{"dates":{"12/30/2015":{"max":10,"res":[]},"12/06/2015":{"max":10,"res":[1,1,1]}}}	1
-4	437 N. Frances St.	Madison	WI	53706	0101000020E6100000C37BB372545956C00798F90E7E894540	This is a description.This is a description.This is a description.This is a description.This is a description.This is a description.This is a description.This is a description.This is a description.This is a description.	{"electricity":false,"grill":false,"bathroom":false,"yard":false,"table":false}	4	photos/4/lightsBackground.jpg	10	{"dates":{"12/30/2015":{"max":10,"res":[]}}}	1
-3	221 Langdon St.	Madison	WI	53706	0101000020E61000009352D0ED255956C064AF777FBC894540	This is a description. This is a description.This is a description.This is a description.This is a description.This is a description.This is a description.This is a description.	{"electricity":false,"grill":false,"bathroom":false,"yard":false,"table":false}	5	photos/3/field.jpg	10	{"dates":{"12/30/2015":{"max":10,"res":[]}}}	1
-2	614 Langdon St.	Madison	WI	53706	0101000020E610000019E0826C595956C01155F833BC894540	This is a description.This is a description.This is a description.	{"electricity":false,"grill":false,"bathroom":false,"yard":false,"table":false}	6	photos/2/lightsBackground.jpg	10	{"dates":{"12/30/2015":{"max":10,"res":[]}}}	1
-1	420 Langdon St.	Madison	WI	53706	0101000020E6100000B61D09EA4A5956C0B6B28EF4B3894540	This is a description. This is a description. This is a description. This is a description. This is a description. This is a description. This is a description. This is a description. This is a description. This is a description.	{"electricity":false,"grill":false,"bathroom":false,"yard":false,"table":false}	7	photos/1/homeBackground1.jpg	10	{"dates":{"12/30/2015":{"max":10,"res":[]}}}	1
-8	613 N. Frances St.	Madison	WI	53706	0101000020E61000005E9CF86A475956C029B4ACFBC7894540	This is a Description. This is a Description. This is a Description. This is a Description. This is a Description. This is a Description. 	{"electricity":false,"grill":false,"bathroom":false,"yard":false,"table":false}	8	photos/8/woodBackground.jpg	10	{"dates":{}}	1
+7	621 N. Frances St.	Madison	WI	53706	0101000020E610000076C4211B485956C09CFA40F2CE894540	This is a description.This is a description.This is a description.This is a description.This is a description.This is a description.This is a description.	{"electricity":false,"grill":false,"bathroom":false,"yard":false,"table":false}	1	photos/7/woodBackground_yTfY7Mn.jpg	10	{"dates":{"12/30/2015":{"max":10,"res":[]},"12/06/2015":{"max":10,"res":[1,1,1,1,1]}}}	1
+5	222 Langdon St.	Madison	WI	53706	0101000020E6100000588B4F01305956C05DA79196CA894540	NoneThis is a description.This is a description.This is a description.This is a description.This is a description.This is a description.This is a description.This is a description.This is a description.This is a description.	{"electricity":true,"grill":true,"bathroom":true,"yard":true,"table":true}	3	photos/5/homeBackground1.jpg	10	{"dates":{"12/30/2015":{"max":10,"res":[1]}}}	1
+3	221 Langdon St.	Madison	WI	53706	0101000020E61000009352D0ED255956C064AF777FBC894540	This is a description. This is a description.This is a description.This is a description.This is a description.This is a description.This is a description.This is a description.	{"electricity":false,"grill":false,"bathroom":true,"yard":true,"table":false}	5	photos/3/field.jpg	10	{"dates":{"12/30/2015":{"max":10,"res":[]}}}	1
+4	437 N. Frances St.	Madison	WI	53706	0101000020E6100000C37BB372545956C00798F90E7E894540	This is a description.This is a description.This is a description.This is a description.This is a description.This is a description.This is a description.This is a description.This is a description.This is a description.	{"electricity":false,"grill":true,"bathroom":true,"yard":true,"table":false}	4	photos/4/lightsBackground.jpg	10	{"dates":{"12/31/2015":{"max":10,"res":[]},"12/30/2015":{"max":10,"res":[1]}}}	1
+2	614 Langdon St.	Madison	WI	53706	0101000020E610000019E0826C595956C01155F833BC894540	This is a description.This is a description.This is a description.	{"electricity":false,"grill":false,"bathroom":false,"yard":true,"table":true}	6	photos/2/lightsBackground.jpg	10	{"dates":{"12/30/2015":{"max":10,"res":[]}}}	1
+1	420 Langdon St.	Madison	WI	53706	0101000020E6100000B61D09EA4A5956C0B6B28EF4B3894540	This is a description. This is a description. This is a description. This is a description. This is a description. This is a description. This is a description. This is a description. This is a description. This is a description.	{"electricity":false,"grill":false,"bathroom":true,"yard":false,"table":true}	7	photos/1/homeBackground1.jpg	10	{"dates":{"12/30/2015":{"max":10,"res":[]}}}	1
+8	613 N. Frances St.	Madison	AL	53706	0101000020E61000005E9CF86A475956C029B4ACFBC7894540	This is a Description. This is a Description. This is a Description. This is a Description. This is a Description. This is a Description. 	{"electricity":false,"grill":true,"bathroom":false,"yard":true,"table":false}	8	photos/8/woodBackground.jpg	10	{"dates":{"":{"max":10,"res":[]}}}	1
+6	633 N Henry Street	Madison	WI	53706	0101000020E6100000BBDC161B295956C08B4061F5EC894540	ryans spot	{"electricity":true,"grill":false,"bathroom":false,"yard":false,"table":false}	2	photos/6/homeBackground1.jpg	10	{"dates":{"12/31/2015":{"max":10,"res":[]},"12/29/2015":{"max":10,"res":[]},"12/30/2015":{"max":10,"res":[1,1,1,1,1]},"12/06/2015":{"max":10,"res":[1,1,1,1,1,1,1]}}}	1
 \.
 
 
@@ -1374,6 +1408,7 @@ SELECT pg_catalog.setval('review_review_id_seq', 2, true);
 --
 
 COPY socialaccount_socialaccount (id, provider, uid, last_login, date_joined, extra_data, user_id) FROM stdin;
+1	facebook	10154320941381102	2015-12-07 14:56:20.129186-06	2015-12-07 14:56:20.129206-06	{"first_name": "Marco", "last_name": "Prouve", "verified": true, "name": "Marco Prouve", "locale": "en_US", "gender": "male", "email": "mprouve@optonline.net", "link": "https://www.facebook.com/app_scoped_user_id/10154320941381102/", "timezone": -6, "updated_time": "2015-06-15T04:52:43+0000", "id": "10154320941381102"}	2
 \.
 
 
@@ -1381,7 +1416,7 @@ COPY socialaccount_socialaccount (id, provider, uid, last_login, date_joined, ex
 -- Name: socialaccount_socialaccount_id_seq; Type: SEQUENCE SET; Schema: public; Owner: test
 --
 
-SELECT pg_catalog.setval('socialaccount_socialaccount_id_seq', 1, false);
+SELECT pg_catalog.setval('socialaccount_socialaccount_id_seq', 1, true);
 
 
 --
@@ -1421,6 +1456,7 @@ SELECT pg_catalog.setval('socialaccount_socialapp_sites_id_seq', 1, true);
 --
 
 COPY socialaccount_socialtoken (id, token, token_secret, expires_at, account_id, app_id) FROM stdin;
+1	CAAGVT5TZAnBQBAIpujniBdj6LR5bbBNYf2cm56hZAcgVJua5Ghanh7R2QCFvCn897CU5a7ZAHgujE5t9PVgIY7DObsHNWWsnwRjOhpRd5ZAl7sVqE4CPHF8MHuL5ZBq3pLSVfwaAQpqZAWCkiQYRpnVqqfT08R3gh71giBVol01QGhZA4250b4Sxm6Fh5wzJ61E2o1bsexlf1KUZBWozGOtJ92G7HZBd6UR2MBLN4m7F7cgTAnoFP9y377u7ZA0Al7UagdwZBJFF0vUmbFfA3jiJjR3Qw48gI8DoD1OPvbySpwOWwZDZD		\N	1	1
 \.
 
 
@@ -1428,7 +1464,7 @@ COPY socialaccount_socialtoken (id, token, token_secret, expires_at, account_id,
 -- Name: socialaccount_socialtoken_id_seq; Type: SEQUENCE SET; Schema: public; Owner: test
 --
 
-SELECT pg_catalog.setval('socialaccount_socialtoken_id_seq', 1, false);
+SELECT pg_catalog.setval('socialaccount_socialtoken_id_seq', 1, true);
 
 
 --
@@ -1454,6 +1490,7 @@ t	1
 
 COPY userprof_extendeduser (main_user_id, stripe_id) FROM stdin;
 1	cus_7UEHxIu7i3VJWc
+2	\N
 \.
 
 
