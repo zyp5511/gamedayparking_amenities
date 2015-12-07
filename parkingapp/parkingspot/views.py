@@ -148,6 +148,7 @@ def spotmodify(request):
             return render(request, "editspot.html", {'form': form, 'pid': pid, 'instance': instance, "dates": dates})
     elif request.method == 'GET':
         pid=int(request.GET['edit'])
+        print pid
         instance = get_object_or_404(ParkingSpot, id=pid) #TODO, switch to ID
         dates = instance.get_date_array()
         form = ParkingSpotEdit(instance=instance)
