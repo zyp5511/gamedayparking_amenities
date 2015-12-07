@@ -194,7 +194,9 @@ class UserprofSelenium(StaticLiveServerTestCase):
         self.selenium.find_element_by_id("message").send_keys("test message")
         self.selenium.find_element_by_id("confirmButton").click()
         success = self.selenium.find_element_by_id("success1")
-        self.selenium.get("{}{}".format(self.live_server_url, '/reservations/'))
+        self.selenium.find_element_by_class_name("dropdown-toggle").click()
+        self.selenium.find_element_by_class_name("glyphicon-user").click()
+        self.selenium.find_element_by_class_name("glyphicon-list-alt").click()
         pending = self.selenium.find_elements_by_xpath('//tr')
         rows = [x.text for x in pending]
         self.assertTrue(any("Pending {}".format(test_spot.street_address) in s for s in rows))
