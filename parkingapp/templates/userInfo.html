@@ -1013,102 +1013,100 @@
                     </ul>
 
                     <table class="table">
-                        {%if history%}
-                                <form method="post" action='../review/' enctype="multipart/form-data" >
-                                    {%csrf_token%}
-                                
-                                    <tr>
-                                        <td class="resHistoryHeaderCell">Seller</td>
-                                        <td class="resHistoryHeaderCell">Stay</td>
-                                        <td class="resHistoryHeaderCell">Review</td>
-                                    </tr>
+                        {%if history%}                                
+                            <tr>
+                                <td class="resHistoryHeaderCell">Seller</td>
+                                <td class="resHistoryHeaderCell">Stay</td>
+                                <td class="resHistoryHeaderCell">Review</td>
+                            </tr>
 
-                                    {% for res in history%}
-                                        <tr>
-                                            <td class="historyOwnerCell"><b>{{res.message.receiver}}</b></td>
-
-                                            <td class="historyStayCell">
-                                                <i>{{res.res_date}}</i>
-                                                <br />
-                                                {{res.parkingspot.street_address}}
-                                            </td>
-
-                                            {% if not res.reviewed%}
-                                                <td class="reviewCell">
-                                                    <button name="review" 
-                                                            type="button" 
-                                                            id="review" 
-                                                            value="{{res.id}}"
-                                                            onClick="pop('{{res.id}}')">Write Review</button>
-                                                </td>
-                                            {% else%}
-                                                <td class="reviewCell">Already Reviewed</td>
-                                            {% endif %}
-                                        </tr>
-
-                                        <div id="{{res.id}}" class="ontop">
-                                            <div class="reviewPopup">
-                                                <div id="reviewPopUpHeader">
-                                                <span><u>Write Review for: {{res.parkingspot.street_address}}</u></span>
-                                            </div>
-
-                                            <div id="reviewPopUpMainContainer">
-                                                <form class="reviewForm" action="../review/" method="post">
-                                                    <div class="fieldContainers">
-                                                        <label  class="inputLabels"
-                                                                for="ratingSelector">Rating: </label>
-                                                        <select id="ratingSelector" 
-                                                                name="ratingSelector" 
-                                                                class="form-control">
-                                                            <option value="1">1 Star</option>
-                                                            <option value="2">2 Stars</option>
-                                                            <option value="3">3 Stars</option>
-                                                            <option value="4">4 Stars</option>
-                                                            <option value="5">5 Stars</option>
-                                                        </select>
-                                                    </div>
-
-                                                    <div class="fieldContainers">
-                                                        <label  class="inputLabels"
-                                                                for="reviewTitle">Review Title: </label>
-                                                        <input  type="text" 
-                                                                name="reviewTitle"
-                                                                id="reviewTitle"
-                                                                class="reviewTitle"
-                                                                placeholder="Title Here">
-                                                    </div>
-
-                                                    <br/>
-
-                                                    <div class="fieldContainers">
-                                                        <label  class="inputLabels"
-                                                                for="reviewMessage">Review: </label>
-                                                        <textarea   id="reviewMessage"
-                                                                    name="reviewmessage"
-                                                                    maxlength="3000"
-                                                                    placeholder="Write a review..."></textarea>
-                                                    </div>
-
-                                                    <hr>
-                                                    
-                                                    <button id="reviewCancel" 
-                                                            type="button"
-                                                            onClick="hide('{{res.id}}')">Cancel</button>
-
-                                                    <button id="reviewButton" 
-                                                            type="submit">Confirm Review</button>
-                                                    {% csrf_token%}
-                                                </form>
-                                            </div>
-                                            </div>
-                                        </div>
-                                    {% endfor %}
-                                </form>
-                            {%else%}
+                            {% for res in history%}
                                 <tr>
-                                    <td><center>No Reservation History</center></td>
+                                    <td class="historyOwnerCell"><b>{{res.message.receiver}}</b></td>
+
+                                    <td class="historyStayCell">
+                                        <i>{{res.res_date}}</i>
+                                        <br />
+                                        {{res.parkingspot.street_address}}
+                                    </td>
+
+                                    {% if not res.reviewed%}
+                                        <td class="reviewCell">
+                                            <button name="review" 
+                                                    type="button" 
+                                                    id="review" 
+                                                    value="{{res.id}}"
+                                                    onClick="pop('{{res.id}}')">Write Review</button>
+                                        </td>
+                                    {% else%}
+                                        <td class="reviewCell">Already Reviewed</td>
+                                    {% endif %}
                                 </tr>
-                            {%endif%}
+
+                                <div id="{{res.id}}" class="ontop">
+                                    <div class="reviewPopup">
+                                        <div id="reviewPopUpHeader">
+                                        <span><u>Write Review for: {{res.parkingspot.street_address}}</u></span>
+                                    </div>
+
+                                    <div id="reviewPopUpMainContainer">
+                                        <form class="reviewForm" action="../submit_review/" method="post">
+                                            <div class="fieldContainers">
+                                                <label  class="inputLabels"
+                                                        for="ratingSelector">Rating: </label>
+                                                <select id="ratingSelector" 
+                                                        name="ratingSelector" 
+                                                        class="form-control">
+                                                    <option value="1">1 Star</option>
+                                                    <option value="2">2 Stars</option>
+                                                    <option value="3">3 Stars</option>
+                                                    <option value="4">4 Stars</option>
+                                                    <option value="5">5 Stars</option>
+                                                </select>
+                                            </div>
+
+                                            <div class="fieldContainers">
+                                                <label  class="inputLabels"
+                                                        for="reviewTitle">Review Title: </label>
+                                                <input  type="text" 
+                                                        name="reviewTitle"
+                                                        id="reviewTitle"
+                                                        class="reviewTitle"
+                                                        placeholder="Title Here">
+                                            </div>
+
+                                            <br/>
+
+                                            <div class="fieldContainers">
+                                                <label  class="inputLabels"
+                                                        for="reviewMessage">Review: </label>
+                                                <textarea   id="reviewMessage"
+                                                            name="reviewmessage"
+                                                            maxlength="3000"
+                                                            placeholder="Write a review..."></textarea>
+                                            </div>
+
+                                            <hr>
+                                            
+                                            <button id="reviewCancel" 
+                                                    type="button"
+                                                    onClick="hide('{{res.id}}')">Cancel</button>
+
+                                            <button id="reviewButton"
+                                                    name="reviewButton"
+                                                    value = "{{res.id}}" 
+                                                    type="submit">Confirm Review</button>
+                                            {% csrf_token%}
+                                        </form>
+                                    </div>
+                                    </div>
+                                </div>
+                            {% endfor %}
+                        {%else%}
+                            <tr>
+                                <td><center>No Reservation History</center></td>
+                            </tr>
+                        {%endif%}
                     </table>
                 </div>
                 <!-- END RESERVATION HISTORY TAB -->

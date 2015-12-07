@@ -76,7 +76,14 @@
                 margin-right:100px;
             }
 
-            #street_address, #city, #state, #zipcode, #datepicker, #datepicker2,#default_num_spots {
+            #street_address, 
+            #city, 
+            #state, 
+            #zipcode, 
+            #datepicker, 
+            #datepicker2, 
+            #default_num_spots, 
+            #cost {
                 background-color:white;
                 display:inline-block;
                 width:200px;
@@ -247,17 +254,7 @@
                                 for="datepicker">Available Dates: </label>
                         <input  id="datepicker"
                                 type="text"
-                                name="opendates"
-                                >
-                    </div>
-
-                    <div class="fieldContainers">
-                        <label  class="editLabels"
-                                for="datepicker2">Unavailable Dates: </label>
-                        <input  id="datepicker2"
-                                type="text"
-                                name="closedates"
-                                >
+                                name="opendates">
                     </div>
 
                     <div class="fieldContainers">
@@ -267,6 +264,15 @@
                                 type="text"
                                 name="default_num_spots"
                                 value="{{form.default_num_spots.value}}">
+                    </div>
+
+                    <div class="fieldContainers">
+                        <label  class="editLabels"
+                                for="cost">Price: </label>
+                        <input  id="cost"
+                                type="text"
+                                name="cost"
+                                value="{{form.cost.value}}">
                     </div>
 
                     <hr>
