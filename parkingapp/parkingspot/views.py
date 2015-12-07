@@ -141,6 +141,7 @@ def spotmodify(request):
         form = ParkingSpotEdit(request.POST, request.FILES, instance=instance)
         form.owner = a_user
         dates = instance.get_date_array()
+        dates = json.dumps(dates)
         opend = []
         try:
             opend = request.POST['opendates']
