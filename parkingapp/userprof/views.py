@@ -16,7 +16,6 @@ def update_payment(request):
     current_user = request.user
     m_user = get_object_or_404(ExtendedUser, main_user=current_user)
     if not m_user.stripe_id:
-        print "no customer id"
         customer = stripe.Customer.create(
             description = "Gameday UserID = {}".format(current_user.id),
             metadata = {
@@ -49,7 +48,6 @@ def admin_page(request, message=None, success=None):
   except:
     return redirect('/home')
   parking_list = ParkingSpot.objects.filter(owner=a_user)
-  print parking_list
 
 
 def profile(request):
@@ -69,8 +67,7 @@ def profile(request):
         incoming_requests = ResMessage.objects.filter(message__receiver=current_user, has_responded=False).order_by('res_date')
         admin_user = True
     except:
-        print "Exception: Not admin user, no incoming requests"
-    print "incoming requests: %s" % incoming_requests
+        pass
     messages = Message.objects.filter(receiver=current_user, is_reservation=False).order_by('-date')
     outgoing_requests = ResMessage.objects.filter(message__sender=current_user).order_by('res_date')
     now = datetime.datetime.now()

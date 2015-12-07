@@ -85,15 +85,36 @@ def create_allauth_user(email):
 # Create your tests here
 class UserprofModelsTests(TestCase):
 
+    def create_and_open_spot(self):
+        owner = create_allauth_user("owner@test.com")
+        test_spot = ParkingSpot.objects.create(
+            street_address = "400 Morning Oaks Ct",
+            city = "Ellisville",
+            state = "MO",
+            zipcode = 63021,
+            location = Point(-90.586876, 38.592703),
+            owner = admin_user,
+            description = "Missouri Parking Spot",
+            default_num_spots = 5
+        )
+        test_spot1.save()
+        test_spot1.open_date('12/31/2016')
+        return test_spot1
+
     def test_allauth_user_creation(self):
         user = create_allauth_user("test@test.com")
         self.assertEqual(user.email, "test@test.com")
+
+    def make_reservation_complete(self):
+        request_user = create_allauth_user("test@test.com")
+        spot = create_and_open_spot(self)
+
 
     def test_destroy_user(self):
         pass
 
 class UserprofSelenium(StaticLiveServerTestCase):
-    
+
     client = Client()
 
     @classmethod
@@ -110,9 +131,9 @@ class UserprofSelenium(StaticLiveServerTestCase):
 
     def test_1_sign_up(self):
         self.selenium.get("{}{}".format(self.live_server_url, '/home/'))
-        login = self.selenium.find_element_by_link_text("Login")
+        login = self.selenium.find_element_by_class_name("glyphicon-log-in")
         login.click()
-        sign_up = self.selenium.find_element_by_link_text("Sign Up")
+        sign_up = self.selenium.find_element_by_link_text("sign up")
         sign_up.click()
         username = self.selenium.find_element_by_id("id_username")
         email = self.selenium.find_element_by_id("id_email")
@@ -124,23 +145,24 @@ class UserprofSelenium(StaticLiveServerTestCase):
         pass1.send_keys("testpass")
         pass2.send_keys("testpass")
         submit.click()
-        nav_bar_link = self.selenium.find_element_by_link_text("testuser")
-        self.assertEqual("testuser", nav_bar_link.text)
+        nav_bar_link = self.selenium.find_element_by_class_name("dropdown-toggle")
+        self.assertEqual("testuser", nav_bar_link.text.strip())
 
     def test_2_sign_out(self):
         self.test_1_sign_up()
         self.selenium.get("{}{}".format(self.live_server_url, '/home/'))
-        logout = self.selenium.find_element_by_link_text("Logout")
+        self.selenium.find_element_by_class_name("dropdown-toggle").click()
+        logout = self.selenium.find_element_by_class_name("glyphicon-log-out")
         logout.click()
-        sign_out = self.selenium.find_element_by_link_text("Sign Out")
-        sign_out.click()
+        logout = self.selenium.find_element_by_xpath("//button")
+        logout.click()
         self.assertTrue(len(self.selenium.find_elements_by_link_text("testuser")) == 0 )
 
     def test_3_profile_messages(self):
         self.test_1_sign_up()
         self.selenium.get("{}{}".format(self.live_server_url, '/home/'))
-        prof = self.selenium.find_element_by_link_text("testuser")
-        prof.click()
+        self.selenium.find_element_by_class_name("dropdown-toggle").click()
+        self.selenium.find_element_by_class_name("glyphicon-user").click()
 
     def test_4_reservation_request(self):
         user = User.objects.create()
@@ -179,7 +201,6 @@ class UserprofSelenium(StaticLiveServerTestCase):
         for p in pending:
             print p.text
 
-        
 
     def login(self):
         username = 'testuser'

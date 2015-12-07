@@ -20,6 +20,7 @@ class ParkingSpotTests(TestCase):
         #allauth_user = create_allauth_user("rschaefer@wisc.edu")
         self.extended_user = ExtendedUser.objects.create(
             main_user = self.user,
+            stripe_id = None
         )
         self.extended_user.save()
         admin_user = AdminUser.objects.create(
@@ -68,7 +69,7 @@ class ParkingSpotTests(TestCase):
 
     def test_zero_ratings(self):
         rating = self.test_spot1.get_avg_rating()
-        self.assertEqual(None, rating)
+        self.assertEqual(0, rating)
 
 
     def test_one_rating(self):
@@ -140,3 +141,4 @@ class ParkingSpotTests(TestCase):
     def clear_dates(self, spot):
         spot.dates = '{"dates":{}}'
         spot.save()
+
