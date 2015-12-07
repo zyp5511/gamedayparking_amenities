@@ -41,6 +41,11 @@ class ParkingSpot(models.Model):
             self.save()
             return 0
 
+    def get_date_array(self):
+        date_array = []
+        for date in self.parking_spot_avail['dates']:
+            date_array.append(date)
+        return date_array
 
     """Gets number of spots reserved"""
     def get_num_spots_reserved(self, date):
