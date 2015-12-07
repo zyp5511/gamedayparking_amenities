@@ -23,7 +23,6 @@ from django.utils.six.moves.urllib.parse import urlparse
 def home(request):
     # get Point from request IP address
     message = request.session.pop('message', None)
-    print message
     g = GeoIP()
     ip = request.META.get('REMOTE_ADDR', None)
     if ip:
@@ -170,7 +169,6 @@ def newspot(request):
     if request.method == 'POST':
         instance = ParkingSpot(owner=a_user)
         form = ParkingSpotAdd(request.POST, request.FILES, instance=instance)
-        print form
         form.owner = a_user
         if form.is_valid():
             instance.save()
@@ -200,7 +198,6 @@ def reserve_request(request):
     date_list = parkingspot.get_all_spots_available()
     date_list.sort(key=lambda x: datetime.datetime.strptime(x[0], '%m/%d/%Y'))
     reviews = parkingspot.review_set.all()
-    print reviews
     parkingspot.default_num_spots = parkingspot.get_num_spots(request.GET['date'])
     context = {"parkingspot": parkingspot,
                 "date_list": date_list,
@@ -229,10 +226,8 @@ def finalize_reserve(request):
         date = "{}-{}-{}".format(date[2], date[0], date[1])
         subject = "Reservation Request"
         sender = request.user
-        print sender
         receiver = parkingspot.owner.extended_user.main_user
         message = Message.objects.create(message=message, subject=subject, is_reservation=True, sender=sender, receiver=receiver, date=datetime.datetime.now() )
-        print message.sender
         res_message = ResMessage.objects.create(message=message, parkingspot=parkingspot, res_date=date, num_spots=num_spots)
         msg = "Parking Request Sent"
         request.session['message'] = "Reservation Request Sent Successfully"
