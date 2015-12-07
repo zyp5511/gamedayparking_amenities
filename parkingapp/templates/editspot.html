@@ -76,7 +76,7 @@
                 margin-right:100px;
             }
 
-            #street_address, #city, #state, #zipcode, #datepicker, #default_num_spots {
+            #street_address, #city, #state, #zipcode, #datepicker, #datepicker2,#default_num_spots {
                 background-color:white;
                 display:inline-block;
                 width:200px;
@@ -247,7 +247,7 @@
                                 for="datepicker">Available Dates: </label>
                         <input  id="datepicker"
                                 type="text"
-                                name="datepicker"
+                                name="opendates"
                                 >
                     </div>
 
@@ -256,7 +256,7 @@
                                 for="datepicker2">Unavailable Dates: </label>
                         <input  id="datepicker2"
                                 type="text"
-                                name="datepicker2"
+                                name="closedates"
                                 >
                     </div>
 
@@ -297,22 +297,22 @@
     </body>
 
      <script>
-
-        $(function() {
+         var date_list = {{ dates|safe }}
+        $(function(date_list) {
             var today = new Date();
             $("#datepicker").multiDatesPicker({
             minDate: 0,
-            addDates: ['12/11/2015', '12/12/2015']
+            addDates: date_list
             });
         });
 
 
-        $(function() {
+        $(function(date_list) {
             var today = new Date();
             var date = new Date();
             $("#datepicker2").multiDatesPicker({
             minDate: 0,
-            addDates: ['12/11/2015', '12/12/2015']
+            addDates: date_list
             });
         });
     </script>
