@@ -1013,10 +1013,7 @@
                     </ul>
 
                     <table class="table">
-                        {%if history%}
-                                <form method="post" action='../review/' enctype="multipart/form-data" >
-                                    {%csrf_token%}
-                                
+                        {%if history%}                                
                                     <tr>
                                         <td class="resHistoryHeaderCell">Seller</td>
                                         <td class="resHistoryHeaderCell">Stay</td>
@@ -1053,7 +1050,7 @@
                                             </div>
 
                                             <div id="reviewPopUpMainContainer">
-                                                <form class="reviewForm" action="../review/" method="post">
+                                                <form class="reviewForm" action="../submit_review/" method="post">
                                                     <div class="fieldContainers">
                                                         <label  class="inputLabels"
                                                                 for="ratingSelector">Rating: </label>
@@ -1095,7 +1092,9 @@
                                                             type="button"
                                                             onClick="hide('{{res.id}}')">Cancel</button>
 
-                                                    <button id="reviewButton" 
+                                                    <button id="reviewButton"
+                                                            name="reviewButton"
+                                                            value = "{{res.id}}" 
                                                             type="submit">Confirm Review</button>
                                                     {% csrf_token%}
                                                 </form>
@@ -1103,7 +1102,6 @@
                                             </div>
                                         </div>
                                     {% endfor %}
-                                </form>
                             {%else%}
                                 <tr>
                                     <td><center>No Reservation History</center></td>
